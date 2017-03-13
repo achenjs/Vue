@@ -32,12 +32,13 @@
 				<div class="grid-content bg-purple-light">
 					<el-col :span="24" class="breadcrumb-container">
 						<el-breadcrumb separator="->" class="breadcrumb-inner">
-							<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+							<el-breadcrumb-item class="grid-title" v-for="item in $route.matched" :key="item.path">
 								{{ item.name }}
 							</el-breadcrumb-item>
 						</el-breadcrumb>
 					</el-col>
-					<el-col :span="24" class="content-wrapper">
+          <div class="itemName"><span>{{$route.name}}</span></div>
+          <el-col :span="24" class="content-wrapper">
 						<transition>
 							<router-view></router-view>
 						</transition>
@@ -325,12 +326,27 @@ import header from '../components/header/header.vue'
 					margin-bottom: 15px;
 					background-color: #ffffff;
 					.breadcrumb-inner {
-
+            line-height: 50px;
+            padding-left: 30px;
 					}
 				}
+        .itemName {
+          padding: 0 30px;
+          background-color: #ffffff;
+          color: #027ee5;
+          font-size: 20px;
+          span {
+            display: inline-block;
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px solid #b9b9ba;
+          }
+        }
 				.content-wrapper {
+          padding: 30px 30px;
 					background-color: #ffffff;
 					box-sizing: border-box;
+          height: 500px;
 				}
 			}
 		}

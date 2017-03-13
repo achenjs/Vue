@@ -47,6 +47,7 @@ export default {
         axios.get('http://172.16.46.53:5000/main/api/v1/captcha').then((result) => {
             this.imgUrl = result.data
         })
+        document.cookie = 'name' + '=' + 'achen';
     },
     methods: {
         captcha() {

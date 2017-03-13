@@ -41,41 +41,11 @@ compiler.plugin('compilation', function (compilation) {
 
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
-  // var options = proxyTable[context]
-  // if (typeof options === 'string') {
-  //   options = { target: options }
-  // }
-  // app.use(proxyMiddleware(options.filter || context, options))
   var options = proxyTable[context]
   if (typeof options === 'string') {
-    options = {
-      target: options,
-      onProxyRes(proxyRes, req, res) {
-        //set-cookie:JSESSIONID=6F766ED2EEEBEAA9245F7F908A848857; Path=/webserver/; HttpOnly
-
-        var oldCookie = proxyRes.headers['set-cookie']
-        if(oldCookie== null || oldCookie.length==0){
-          delete proxyRes.headers['set-cookie']
-          return
-        }
-        console.log(oldCookie)
-        var oldCookieItems = oldCookie[0].split(';')
-        var newCookie = ''
-        for(var i=0; i < oldCookieItems.length; ++i){
-          if(newCookie.length >0)
-            newCookie += ';'
-          if(oldCookieItems[i].indexOf('Path=') >= 0)
-            newCookie += 'Path=/'
-          else
-            newCookie += oldCookieItems[i]
-        }
-        proxyRes.headers['set-cookie'] = [newCookie]
-        //proxyRes.headers['x-addedygc'] = 'foobar';     // add new header to response
-        //delete proxyRes.headers['connection'];       // remove header from response
-      }
-    }
+    options = { target: options }
   }
-  app.use(proxyMiddleware(context, options))
+  app.use(proxyMiddleware(options.filter || context, options))
 })
 
 // handle fallback for HTML5 history API
