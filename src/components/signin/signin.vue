@@ -55,8 +55,15 @@ export default {
           })
         },
         signin() {
-            $.post('http://172.16.46.53:5000/admin/api/v1/', this.form, (result) => {
-              console.log(result)
+            var _this = this
+            $.ajax({
+              url: 'http://172.16.46.53:5000/admin/api/v1/',
+              type: 'post',
+              contentType:'application/json',
+              data: JSON.stringify(this.form),
+              success: function (result) {
+                _this.$router.push('/home')
+              }
             })
 //            axios.post('http://172.16.46.53:5000/admin/api/v1/', this.form)
 //              .then((result) => {
