@@ -55,11 +55,17 @@ export default {
           })
         },
         signin() {
-            axios.post('http://172.16.46.53:5000/admin/api/v1/', this.form)
-              .then((result) => {
-                console.log(result.data)
-              })
-//            this.$router.push('/home')
+            $.post('http://172.16.46.53:5000/admin/api/v1/', this.form, (result) => {
+              console.log(result)
+            })
+//            axios.post('http://172.16.46.53:5000/admin/api/v1/', this.form)
+//              .then((result) => {
+//                  console.log(result)
+////                this.$router.push('/home')
+//              })
+//              .catch((err) => {
+//
+//              })
         }
     }
 }

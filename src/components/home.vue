@@ -14,7 +14,7 @@
 						北京天投科技信息....
 					</div>
 					<div class="email">
-						<img src="../assets/images/email.png" alt="图片"><span>hellowwc@aliyun.com</span>
+						<img src="../assets/images/email.png" alt="图片"><span :title="User.email">{{User.email}}</span>
 					</div>
 				</div>
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo home-menu" @open="handleopen" @close="handleclose" @select="handleselect"
@@ -49,15 +49,29 @@
 </template>
 
 <script>
+import axios from 'axios'
 import header from '../components/header/header.vue'
 	export default {
 		data() {
 			return {
 				sysUserName: '',
 				sysUserAvatar: '',
-				User: {},
+				User: {
+				  email: '',
+          name: ''
+        },
 			}
 		},
+    created() {
+		  $.get('http://172.16.46.53:5000/admin/api/v1/profile', (result) => {
+		    console.log(result)
+      })
+//		  axios.get('http://172.16.46.53:5000/admin/api/v1/profile')
+//        .then((result) => {
+//		        var data = result.data.result
+//            this.User.email = data.email
+//        })
+    },
 		methods: {
 			onSubmit() {
 				console.log('submit!');
@@ -199,7 +213,12 @@ import header from '../components/header/header.vue'
 							vertical-align: middle;
 						}
 						span {
+              display: inline-block;
 							font-size: 14px;
+              width: 145px;
+              white-space:nowrap;
+              overflow:hidden;
+              text-overflow:ellipsis;
 						}
 					}
 				}
@@ -306,7 +325,7 @@ import header from '../components/header/header.vue'
 					margin-bottom: 15px;
 					background-color: #ffffff;
 					.breadcrumb-inner {
-						
+
 					}
 				}
 				.content-wrapper {
