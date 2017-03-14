@@ -58,21 +58,21 @@ import header from '../components/header/header.vue'
 				sysUserName: '',
 				sysUserAvatar: '',
 				User: {
-				  email: '',
-          name: ''
-        },
+					email: '',
+					name: ''
+        		},
 			}
 		},
-    created() {
+    	created() {
 		  $.get('http://172.16.46.53:5000/admin/api/v1/profile', (result) => {
 		    console.log(result)
-      })
+		  })
 //		  axios.get('http://172.16.46.53:5000/admin/api/v1/profile')
 //        .then((result) => {
 //		        var data = result.data.result
 //            this.User.email = data.email
 //        })
-    },
+    	},
 		methods: {
 			onSubmit() {
 				console.log('submit!');
@@ -117,52 +117,6 @@ import header from '../components/header/header.vue'
 		top: 0px;
 		bottom: 0px;
 		width: 100%;
-		.header {
-			height: 60px;
-			line-height: 60px;
-			background: #000;
-			color: #ffffff;
-			.line {
-				display: inline-block;
-				height: 30px;
-				vertical-align: top;
-				margin-top: 15px;
-				border-left: 1px solid #ffffff;
-				color: #ffffff;
-			}
-			.userinfo {
-				color: #ffffff;
-				text-align: right;
-				padding-right: 35px;
-				span {
-					margin: 0 15px;
-					cursor: pointer;
-					&:nth-of-type(1) {
-						cursor: inherit;
-					}
-				}
-			}
-			.logo {
-				font-size: 22px;
-				img {
-					width: 110px;
-					vertical-align: middle;
-					margin: 0 60px;
-				}
-				span {
-					font-size: 20px;
-					.line {
-						display: inline-block;
-						height: 30px;
-						vertical-align: top;
-						margin-top: 15px;
-						border-left: 1px solid #ffffff;
-						color: #ffffff;
-						margin-right: 30px;
-					}
-				}
-			}
-		}
 		.main {
 			background-color: rgb(239, 239, 239);
 			position: absolute;
@@ -180,7 +134,11 @@ import header from '../components/header/header.vue'
 						width: 80px;
 						height: 80px;
 						margin: 20px auto;
-						border-radius: 50%;
+						overflow: hiddle;
+						img {
+							border: none;
+							border-radius: 50%;
+						}
 					}
 					.name {
 						margin-bottom: 20px;
@@ -202,11 +160,11 @@ import header from '../components/header/header.vue'
 						}
 					}
 					.company {
-						fonts-size: 16px;
+						font-size: 14px;
 						margin-bottom: 20px;
 					}
 					.email {
-						margin-bottom: 30px;
+						margin-bottom: 20px;
 						img {
 							width: 34px;
 							height: 28px;
@@ -214,12 +172,12 @@ import header from '../components/header/header.vue'
 							vertical-align: middle;
 						}
 						span {
-              display: inline-block;
+             				display: inline-block;
 							font-size: 14px;
-              width: 145px;
-              white-space:nowrap;
-              overflow:hidden;
-              text-overflow:ellipsis;
+							width: 145px;
+							white-space:nowrap;
+							overflow:hidden;
+							text-overflow:ellipsis;
 						}
 					}
 				}
@@ -326,27 +284,27 @@ import header from '../components/header/header.vue'
 					margin-bottom: 15px;
 					background-color: #ffffff;
 					.breadcrumb-inner {
-            line-height: 50px;
-            padding-left: 30px;
+						line-height: 50px;
+						padding-left: 30px;
 					}
 				}
-        .itemName {
-          padding: 0 30px;
-          background-color: #ffffff;
-          color: #027ee5;
-          font-size: 20px;
-          span {
-            display: inline-block;
-            width: 100%;
-            height: 50px;
-            border-bottom: 1px solid #b9b9ba;
-          }
-        }
+				.itemName {
+					padding: 0 30px;
+					background-color: #ffffff;
+					color: #027ee5;
+					font-size: 20px;
+					span {
+						display: inline-block;
+						width: 100%;
+						height: 50px;
+						border-bottom: 1px solid #b9b9ba;
+					}
+				}
 				.content-wrapper {
-          padding: 30px 30px;
+         			padding: 30px 30px;
 					background-color: #ffffff;
 					box-sizing: border-box;
-          height: 500px;
+          			height: 500px;
 				}
 			}
 		}

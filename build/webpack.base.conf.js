@@ -21,8 +21,12 @@ module.exports = {
   ],
   devServer: {
     proxy: {
-      '/api': {
-        target: 'http://172.16.46.53:5000/admin/api/v1',
+      '/api/*': {
+        target: {
+          host: '172.16.46.53',
+          protocol: 'http',
+          port: 5000
+        },
         secure: false
       }
     }

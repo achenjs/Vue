@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import signin from '@/components/signin/signin.vue'
 import Home from '@/components/home.vue'
 import admin_list from '@/pages/admin_list.vue'
-import Page2 from '@/pages/page2.vue'
+import admin_new from '@/pages/admin_new.vue'
 import Page3 from '@/pages/page3.vue'
 import Page4 from '@/pages/page4.vue'
 import Page5 from '@/pages/page5.vue'
@@ -47,7 +47,7 @@ export default new Router({
       component: Home,
       children: [
         {path: '/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
-        {path: '/page2', component: Page2, iconCls: 'icon-page2', name: '开通新账户'},
+        {path: '/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
         {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
       ]
     },

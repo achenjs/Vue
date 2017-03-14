@@ -44,6 +44,7 @@ export default{
     height: 60px;
     line-height: 60px;
     background: #000;
+    font-size: 12px;
     color: #ffffff;
     .line {
         display: inline-block;
@@ -73,7 +74,7 @@ export default{
             margin: 0 60px;
         }
         span {
-            font-size: 20px;
+            font-size: 16px;
             .line {
                 display: inline-block;
                 height: 30px;
