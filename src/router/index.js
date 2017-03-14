@@ -5,7 +5,7 @@ import Home from '@/components/home.vue'
 import admin_list from '@/pages/admin_list.vue'
 import admin_new from '@/pages/admin_new.vue'
 import Page3 from '@/pages/page3.vue'
-import Page4 from '@/pages/page4.vue'
+import project_list from '@/pages/project_list.vue'
 import Page5 from '@/pages/page5.vue'
 import Page6 from '@/pages/page6.vue'
 import Page7 from '@/pages/page7.vue'
@@ -57,7 +57,7 @@ export default new Router({
       iconCls: 'icon-project',
       component: Home,
       children: [
-        {path: '/page4', component: Page4, iconCls: 'icon-page4', name: '项目列表'},
+        {path: '/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
         {path: '/page5', component: Page5, iconCls: 'icon-page5', name: '阶段管理'},
         {path: '/page6', component: Page6, iconCls: 'icon-page6', name: '交付物管理'}
       ]
