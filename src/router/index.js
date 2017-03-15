@@ -4,18 +4,23 @@ import signin from '@/components/signin/signin.vue'
 import Home from '@/components/home.vue'
 import admin_list from '@/pages/admin_list.vue'
 import admin_new from '@/pages/admin_new.vue'
-import Page3 from '@/pages/page3.vue'
+// import Page3 from '@/pages/page3.vue'
 import project_list from '@/pages/project_list.vue'
-import Page5 from '@/pages/page5.vue'
-import Page6 from '@/pages/page6.vue'
-import Page7 from '@/pages/page7.vue'
-import Page8 from '@/pages/page8.vue'
-import Page9 from '@/pages/page9.vue'
-import Page10 from '@/pages/page10.vue'
-import Page11 from '@/pages/page11.vue'
-import Page12 from '@/pages/page12.vue'
-import Page13 from '@/pages/page13.vue'
-import Page14 from '@/pages/page14.vue'
+import stage_manage from '@/pages/stage_manage.vue'
+import attachments from '@/pages/attachments.vue'
+import comment_list from '@/pages/comment_list.vue'
+import service_category from '@/pages/service_category.vue'
+import service_item from '@/pages/service_item.vue'
+import service_custom from '@/pages/service_custom.vue'
+import deliverable_list from '@/pages/deliverable_list.vue'
+import indent_list from '@/pages/indent_list.vue'
+import managers from '@/pages/managers.vue'
+import department from '@/pages/department.vue'
+import role from '@/pages/role.vue'
+import permissions from '@/pages/permissions.vue'
+import bill_list from '@/pages/bill_list.vue'
+import settings from '@/pages/settings.vue'
+import bp_list from '@/pages/bp_list.vue'
 import NotFound from '@/pages/notFound.vue'
 
 Vue.use(Router)
@@ -48,7 +53,7 @@ export default new Router({
       children: [
         {path: '/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
         {path: '/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
-        {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
+        // {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
       ]
     },
     {
@@ -58,8 +63,9 @@ export default new Router({
       component: Home,
       children: [
         {path: '/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
-        {path: '/page5', component: Page5, iconCls: 'icon-page5', name: '阶段管理'},
-        {path: '/page6', component: Page6, iconCls: 'icon-page6', name: '交付物管理'}
+        {path: '/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
+        {path: '/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
+        {path: '/comment_list', component: comment_list, name: '点评记录'}
       ]
     },
     {
@@ -68,8 +74,8 @@ export default new Router({
       iconCls: 'icon-server',
       component: Home,
       children: [
-        {path: '/page7', component: Page7, iconCls: 'icon-page7', name: '服务包类别管理'},
-        {path: '/page8', component: Page8, iconCls: 'icon-page8', name: '服务项管理'},
+        {path: '/service_category', component: service_category, iconCls: 'icon-page7', name: '服务包类别管理'},
+        {path: '/service_item', component: service_item, iconCls: 'icon-page8', name: '服务项管理'},
       ]
     },
     {
@@ -78,7 +84,7 @@ export default new Router({
       iconCls: 'icon-custom',
       component: Home,
       children: [
-        {path: '/page9', component: Page9, iconCls: 'icon-page9', name: '定制化需求管理列表'}
+        {path: '/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
       ]
     },
     {
@@ -87,16 +93,24 @@ export default new Router({
       iconCls: 'icon-examine',
       component: Home,
       children: [
-        {path: '/page10', component: Page10, iconCls: 'icon-page10', name: '交付物列表'}
+        {path: '/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'}
       ]
     },
     {
       path: '/home',
-      name: '服务单管理',
+      name: '订单管理',
       iconCls: 'icon-serverList',
       component: Home,
       children: [
-        {path: '/page11', component: Page11, iconCls: 'icon-page11', name: '服务单列表'}
+        {path: '/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表'}
+      ]
+    },
+    {
+      path: '/home',
+      name: '交易管理',
+      component: Home,
+      children: [
+        {path: '/bill_list', component: bill_list, name: '消费记录'}
       ]
     },
     {
@@ -105,8 +119,11 @@ export default new Router({
       iconCls: 'icon-system',
       component: Home,
       children: [
-        {path: '/page12', component: Page12, iconCls: 'icon-page12', name: '操作员管理'},
-        {path: '/page13', component: Page13, iconCls: 'icon-page13', name: '角色及权限管理'}
+        {path: '/managers', component: managers, iconCls: 'icon-page12', name: '操作员管理'},
+        {path: '/department', component: department, iconCls: 'icon-page13', name: '部门管理'},
+        {path: '/role', component: role, name: '角色管理'},
+        {path: '/permissions', component: permissions, name: '权限管理'},
+        {path: '/settings', component: settings, name: '修改密码'}
       ]
     },
      {
@@ -115,7 +132,7 @@ export default new Router({
       iconCls: 'icon-BP',
       component: Home,
       children: [
-        {path: '/page14', component: Page14, iconCls: 'icon-page14', name: 'BP列表'},
+        {path: '/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
       ]
     },
     {

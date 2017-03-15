@@ -1,0 +1,46 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 1000;
+  background-color: rgba(112, 112, 112, .3);
+  .modal-dialog {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, 0);
+    width: 690px;
+    background: #fff;
+    .modal-header {
+      padding-left: 20px;
+      height: 40px;
+      line-height: 40px;
+      background-color: rgb(247, 247, 247);
+      margin-bottom: 30px;
+    }
+    .modal-content {
+      width: 50%;
+      margin: 0 auto;
+      label {
+        display: block;
+        margin: 10px 0 5px 0;
+      }
+      .el-select {
+          width: 100%;
+      }
+    }
+    .modal-footer {
+      margin: 20px 0;
+      text-align: center;
+    }
+  }
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .6s;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0;
+}

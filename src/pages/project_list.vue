@@ -3,36 +3,30 @@
     <div class="admin_line admin_line_1 clearfix">
       <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">会员编号</label>
-          <el-input placeholder="会员编号"></el-input>
+          <label for="">项目编号</label>
+          <el-input placeholder="项目编号"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">会员名称</label>
-          <el-input placeholder="会员名称"></el-input>
+          <label for="">项目名称</label>
+          <el-input placeholder="项目名称"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">邮箱账号</label>
-          <el-input placeholder="邮箱账号" type="email"></el-input>
+          <label for="">负责人</label>
+          <el-input placeholder="负责人" type="email"></el-input>
         </div>
       </el-col>
     </div>
     <div class="admin_line admin_line_2 clearfix">
-      <el-col :span="8">
+       <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">企业名称</label>
-          <el-input placeholder="企业名称"></el-input>
-        </div>
-      </el-col>
-      <el-col :span="8">
-        <div style="width: 80%;">
-          <label for="">会员身份</label>
-          <el-select v-model="identityValue" placeholder="请选择">
+          <label for="">所属行业</label>
+          <el-select v-model="industryValue" placeholder="请选择">
             <el-option
-            v-for="item in identitys"
+            v-for="item in industrys"
             :label="item.label"
             :value="item.value"
             :key="item.value">
@@ -42,10 +36,23 @@
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">所属行业</label>
-          <el-select v-model="industryValue" placeholder="请选择">
+          <label for="">所在阶段</label>
+          <el-select v-model="stateValue" placeholder="请选择">
             <el-option
-            v-for="item in industrys"
+            v-for="item in states"
+            :label="item.label"
+            :value="item.value"
+            :key="item.value">
+            </el-option>
+          </el-select>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div style="width: 80%;">
+          <label for="">风险状况</label>
+          <el-select v-model="risksValue" placeholder="请选择">
+            <el-option
+            v-for="item in risks"
             :label="item.label"
             :value="item.value"
             :key="item.value">
@@ -59,6 +66,24 @@
         <div style="width: 80%;">
           <label for="">联系手机</label>
           <el-input placeholder=""></el-input>
+        </div>
+      </el-col>
+      <el-col :span="14">
+        <div style="width: 80%;">
+          <label for="">创建时间</label>
+          <el-date-picker
+            v-model="dateValue0"
+            type="date"
+            placeholder="选择日期"
+            :picker-options="pickerOptions0">
+          </el-date-picker>
+          <span>至</span>
+          <el-date-picker
+            v-model="dateValue1"
+            type="date"
+            placeholder="选择日期"
+            :picker-options="pickerOptions1">
+          </el-date-picker>
         </div>
       </el-col>
     </div>
@@ -76,22 +101,42 @@ import table from '../components/table/table.vue'
 export default {
   data () {
     return {
-      identitys: [{
+      pickerOptions0: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;
+        }
+      },
+      pickerOptions1: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;
+        }
+      },
+      industrys: [{
             value: '选项1',
             label: '项目方'
         }, {
             value: '选项2',
             label: '投资人'
       }],
-      industrys: [{
+      states: [{
         value: '选项1',
         label: '项目方',
       }, {
         value: '选项2',
         label: '投资人',
       }],
+      risks: [{
+        value: '选项1',
+        label: '项目方',
+      }, {
+        value: '选项2',
+        label: '投资人',
+      }],
+      stateValue: '',
       industryValue: '',
-      identityValue: '',
+      risksValue: '',
+      dateValue0: '',
+      dateValue1: '',
       value1: '',
       value2: '',
     }
@@ -113,7 +158,7 @@ export default {
     }
   }
    .query {
-      margin-top: 30px;
+      margin: 30px 0;
       text-align: center;
       span {
           display: inline-block;
