@@ -19,18 +19,6 @@ module.exports = {
       "windows.jQuery": "jquery"
     })
   ],
-  devServer: {
-    proxy: {
-      '/api/*': {
-        target: {
-          host: '172.16.46.53',
-          protocol: 'http',
-          port: 5000
-        },
-        secure: false
-      }
-    }
-  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

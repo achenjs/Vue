@@ -1,44 +1,66 @@
 <template>
   <el-table
     :data="tableData"
+    v-loading="loading"
+    element-loading-text="拼命加载中"
     border
     style="width: 100%">
     <el-table-column
       align="center"
       fixed
-      prop="date"
-      label="日期"
-      width="150">
+      prop="id"
+      label="会员编号">
     </el-table-column>
     <el-table-column
       align="center"
       prop="name"
-      label="姓名"
-      width="120">
+      label="会员名称">
     </el-table-column>
     <el-table-column
       align="center"
-      prop="province"
-      label="省份"
-      width="120">
+      prop="email"
+      label="邮箱账号">
     </el-table-column>
     <el-table-column
       align="center"
-      prop="city"
-      label="市区"
-      width="120">
+      prop="phone"
+      label="手机号">
     </el-table-column>
     <el-table-column
       align="center"
-      prop="address"
-      label="地址"
-      width="300">
+      prop="wechat"
+      label="微信账号">
     </el-table-column>
     <el-table-column
       align="center"
-      prop="zip"
-      label="邮编"
-      width="120">
+      prop="company"
+      label="公司及职位">
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="gender"
+      label="性别">
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="company_name"
+      label="企业名称">
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="company_industry"
+      label="所属行业">
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="resume"
+      label="投资身份"
+      width="80">
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="gmt_create"
+      label="注册日期">
     </el-table-column>
     <el-table-column
       align="center"
@@ -57,41 +79,20 @@
   export default {
     methods: {
       handleClick() {
-        console.log(1);
+        
       }
     },
-
+    props: {
+      tableData: {
+        type: Array
+      },
+      loading: {
+        type: Boolean
+      }
+    },
     data() {
       return {
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }]
+
       }
     }
   }

@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 export default {
     data () {
@@ -45,22 +44,30 @@ export default {
       }
     },
     created () {
-        axios.get('http://172.16.46.53:5000/main/api/v1/captcha').then((result) => {
-          this.imgUrl = result.data
+        var _this = this
+        $.ajax({
+          url: '/main/api/v1/captcha',
+          type: 'get',
+          success: function (result) {
+            _this.imgUrl = result
+          }
         })
-        // document.cookie = 'admin='+'1-1492133244-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
-        // document.cookie = 'apl='+'6367bf67-cd17-4330-b6be-febcb42eafc8.44mjeG7xfkZ4ovUoqdwEERxevDU'
     },
     methods: {
         captcha() {
-          axios.get('http://172.16.46.53:5000/main/api/v1/captcha').then((result) => {
-            this.imgUrl = result.data
+          var _this = this
+          $.ajax({
+            url: '/main/api/v1/captcha',
+            type: 'get',
+            success: function (result) {
+              _this.imgUrl = result
+            }
           })
         },
         signin() {
             var _this = this
             $.ajax({
-              url: 'http://172.16.46.53:5000/admin/api/v1/',
+              url: '/admin/api/v1/',
               type: 'post',
               contentType:'application/json',
               data: JSON.stringify(this.form),
@@ -68,14 +75,6 @@ export default {
                 _this.$router.push('/home')
               }
             })
-//            axios.post('http://172.16.46.53:5000/admin/api/v1/', this.form)
-//              .then((result) => {
-//                  console.log(result)
-////                this.$router.push('/home')
-//              })
-//              .catch((err) => {
-//
-//              })
         }
     }
 }

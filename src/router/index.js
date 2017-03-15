@@ -30,7 +30,7 @@ export default new Router({
     {
       path: '/',
       name: '',
-      redirect: '/signin',
+      component: signin,
       hidden: true
     },
     {

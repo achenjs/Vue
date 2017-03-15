@@ -12,7 +12,7 @@
             <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+            <el-button type="primary" @click="submitForm()">提交</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -26,38 +26,30 @@
         if (!value) {
           return callback(new Error('原密码不能为空!'));
         }
-        setTimeout(() => {
-          if (!Number.isInteger(value)) {
-            callback(new Error('请输入数字值'));
-          } else {
-            callback();
-          }
-        }, 1000);
-      };
+      }
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
         } else {
           if (this.ruleForm2.checkPass !== '') {
-            this.$refs.ruleForm2.validateField('checkPass');
+            this.$refs.ruleForm2.validateField('checkPass')
           }
-          callback();
+          callback()
         }
-      };
+      }
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请再次输入密码'));
+          callback(new Error('请再次输入密码'))
         } else if (value !== this.ruleForm2.pass) {
-          callback(new Error('两次输入密码不一致!'));
+          callback(new Error('两次输入密码不一致!'))
         } else {
-          callback();
+          callback()
         }
       };
       return {
         ruleForm2: {
-          pass: '',
-          checkPass: '',
-          originalPass: ''
+          old_pwd: '',
+          new_pwd: '',
         },
         rules2: {
           pass: [
@@ -74,14 +66,15 @@
     },
     methods: {
       submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
+        $.ajax({
+          url: '/admin/api/v1/reset_password',
+          type: 'post',
+          contentType: 'application/json',
+          data: JSON.stringify(this.ruleForm2),
+          success: function(result) {
+            console.log(result)
           }
-        });
+        })
       }
     }
   }

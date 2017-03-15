@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import header from '../components/header/header.vue'
 import profile from '../assets/json/profile'
 	export default {
@@ -64,14 +63,15 @@ import profile from '../assets/json/profile'
 			}
 		},
   	created() {
-		  axios.get('http://172.16.46.53:5000/admin/api/v1/profile')
-	     .then((result) => {
-		       var data = result.data.result
-	         this.User.email = data.email
-	     })
-			// var data = profile.result
-			// this.User.email = data.email
-			// this.User.name = data.name
+			var _this = this
+			 $.ajax({
+				 url: '/admin/api/v1/profile',
+				 success: function (result) {
+					 var data = result.result
+	         _this.User.email = data.email
+					 _this.User.name = data.name
+				 }
+			 })
   	},
 		methods: {
 			onSubmit() {
@@ -99,13 +99,7 @@ import profile from '../assets/json/profile'
 			}
 		},
 		mounted() {
-			var user = sessionStorage.getItem('user')
-			if (user) {
-				user = JSON.parse(user)
-				this.User = user
-				this.sysUserName = user.name || ''
-				this.sysUserAvatar = user.avatar || ''
-			}
+			
 		},
 		components: { 'v-header': header }
 	}

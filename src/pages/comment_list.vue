@@ -3,63 +3,75 @@
       <div class="">
         <el-table
         :data="tableData"
+        v-loading="loading"
+        element-loading-text="拼命加载中"
         style="width: 100%">
           <el-table-column
             align="center"
-            prop="date"
-            label="日期"
-            width="180">
+            prop="id"
+            label="编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            label="姓名"
-            width="180">
+            label="项目名称">
           </el-table-column>
           <el-table-column
             align="center"
             prop="address"
-            label="地址">
+            label="点评人">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="address"
+            label="点评内容">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="address"
+            label="时间">
           </el-table-column>
         </el-table>
       </div>
+      <v-pages :total="total" v-on:currentChange="query"></v-pages>
    </div>
 </template>
 
 <script>
+import pages from '../components/pages/pages.vue'
 export default {
     data() {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        tableData: [],
         addShow: false,
-        states: [{
-          value: '选项1',
-          label: '启用',
-        }, {
-          value: '选项2',
-          label: '禁用',
-        }],
         stateValue: '',
+        loading: false,
+        total: 1
       }
     },
+    created() {
+      var _this = this
+      $.ajax({
+        url: '/admin/api/v1/comments?page=1',
+        beforeSend: function() {
+          _this.loading = true
+        },
+        success: function(result) {
+          var data = result.result
+          _this.loading = false
+          _this.total = data.total
+          _this.tableData = data.items
+        }
+      })
+    },
     methods: {
+      reset() {
+        for(var name in this.$data.form) {
+          this.$data.form[name] = ''
+        }
+      },
       addOpen() {
+        this.reset()
         this.addShow = true
       },
       cancel() {
@@ -67,7 +79,25 @@ export default {
       },
       ensure() {
         this.addShow = false
+      },
+      query(page) {
+        var _this = this
+        $.ajax({
+          url: '/admin/api/v1/comments?page=' + page,
+          beforeSend: function() {
+            _this.loading = true
+          },
+          success: function(result) {
+            var data = result.result
+            _this.loading = false
+            _this.total = data.total
+            _this.tableData = data.items
+          }
+        })
       }
+    },
+    components: {
+      'v-pages': pages
     }
   }
 </script>

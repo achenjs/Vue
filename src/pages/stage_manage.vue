@@ -6,23 +6,23 @@
       <div class="">
         <el-table
         :data="tableData"
+        v-loading="loading"
+        element-loading-text="拼命加载中"
         style="width: 100%">
           <el-table-column
             align="center"
-            prop="date"
-            label="日期"
-            width="180">
+            prop="id"
+            label="阶段编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            label="姓名"
-            width="180">
+            label="阶段名称">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="address"
-            label="地址">
+            prop="description"
+            label="阶段描述">
           </el-table-column>
         </el-table>
       </div>
@@ -34,11 +34,11 @@
             </div>
             <div class="modal-content">
               <label for="">阶段名称</label>
-              <el-input placeholder="阶段名称"></el-input>
+              <el-input placeholder="阶段名称" v-model="form.name"></el-input>
               <label for="">阶段描述</label>
-              <el-input placeholder="阶段描述"></el-input>
+              <el-input placeholder="阶段描述" v-model="form.description"></el-input>
               <label for="">状态</label>
-              <el-select v-model="stateValue" placeholder="请选择">
+              <el-select v-model="form.status" placeholder="请选择">
                 <el-option
                 v-for="item in states"
                 :label="item.label"
@@ -54,51 +54,95 @@
           </div>
         </div>
       </transition>
+      <v-pages :total="total" v-on:currentChange="query"></v-pages>
    </div>
 </template>
 
 <script>
+import pages from '../components/pages/pages.vue'
 export default {
     data() {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        tableData: [],
         addShow: false,
         states: [{
-          value: '选项1',
+          value: true,
           label: '启用',
         }, {
-          value: '选项2',
+          value: false,
           label: '禁用',
         }],
-        stateValue: '',
+        form: {
+          name: '',
+          description: '',
+          status: true
+        },
+        loading: false,
+        total: 1
       }
     },
+    created() {
+      var _this = this
+      $.ajax({
+        url: '/admin/api/v1/phases?page=1',
+        beforeSend: function() {
+          _this.loading = true
+        },
+        success: function(result) {
+          var data = result.result
+          _this.loading = false
+          _this.total = data.total
+          _this.tableData = data.items
+        }
+      })
+    },
     methods: {
+      reset() {
+        for(var name in this.$data.form) {
+          this.$data.form[name] = ''
+        }
+      },
       addOpen() {
+        this.reset()
         this.addShow = true
       },
       cancel() {
         this.addShow = false
       },
       ensure() {
-        this.addShow = false
+        var _this = this
+        $.ajax({
+          url: '/admin/api/v1/service_categories',
+          type: 'post',
+          contentType: 'application/json',
+          data: JSON.stringify(this.form),
+          success: function(result) {
+            this.addShow = false
+            _this.$message({
+              message: '创建成功!',
+              type: 'success'
+            })
+          }
+        })
+      },
+      query(page) {
+        var _this = this
+        $.ajax({
+          url: '/admin/api/v1/phases?page=' + page,
+          beforeSend: function() {
+            _this.loading = true
+          },
+          success: function(result) {
+            var data = result.result
+            _this.loading = false
+            _this.total = data.total
+            _this.tableData = data.items
+          }
+        })
       }
+    },
+    components: {
+      'v-pages': pages
     }
   }
 </script>

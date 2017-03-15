@@ -51,41 +51,36 @@
          border
          style="width: 100%">
          <el-table-column
-            align="center"
+           align="center"
            fixed
-           prop="date"
-           label="日期"
-           width="150">
+           prop="id"
+           label="编号">
          </el-table-column>
          <el-table-column
-            align="center"
+           align="center"
            prop="name"
-           label="姓名"
+           label="项目名称"
            width="120">
          </el-table-column>
          <el-table-column
-            align="center"
+           align="center"
            prop="province"
-           label="省份"
-           width="120">
+           label="阶段">
          </el-table-column>
          <el-table-column
-            align="center"
+           align="center"
            prop="city"
-           label="市区"
-           width="120">
+           label="交付物名称">
          </el-table-column>
          <el-table-column
-            align="center"
+           align="center"
            prop="address"
-           label="地址"
-           width="300">
+           label="交付时间">
          </el-table-column>
          <el-table-column
-            align="center"
-           prop="zip"
-           label="邮编"
-           width="120">
+           align="center"
+           prop="status"
+           label="状态">
          </el-table-column>
          <el-table-column
             align="center"

@@ -6,23 +6,28 @@
       <div class="">
         <el-table
         :data="tableData"
+        v-loading="loading"
+        element-loading-text="拼命加载中"
         style="width: 100%">
           <el-table-column
             align="center"
-            prop="date"
-            label="日期"
-            width="180">
+            prop="id"
+            label="编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            label="姓名"
-            width="180">
+            label="权限名称">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="address"
-            label="地址">
+            prop="description"
+            label="权限描述">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="status"
+            label="状态">
           </el-table-column>
         </el-table>
       </div>
@@ -34,11 +39,11 @@
             </div>
             <div class="modal-content">
               <label for="">权限名称</label>
-              <el-input placeholder="权限名称"></el-input>
+              <el-input placeholder="权限名称" v-model="form.name"></el-input>
               <label for="">权限描述</label>
-              <el-input placeholder="权限描述"></el-input>
+              <el-input placeholder="权限描述" v-model="form.description"></el-input>
               <label for="">状态</label>
-              <el-select v-model="jurisdictionValue" placeholder="请选择">
+              <el-select v-model="form.status" placeholder="请选择">
                 <el-option
                 v-for="item in jurisdictions"
                 :label="item.label"
@@ -61,43 +66,73 @@
 export default {
     data() {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        tableData: [],
         addShow: false,
         jurisdictions: [{
-          value: '选项1',
+          value: true,
           label: '启用',
         }, {
-          value: '选项2',
+          value: false,
           label: '禁用',
         }],
-        jurisdictionValue: '',
+        form: {
+          name: '',
+          description: '',
+          status: true
+        },
+        loading: false
       }
     },
+    created() {
+      var _this = this
+      //  获取所有权限
+      $.ajax({
+        url: '/admin/api/v1/permissions',
+        beforeSend: function() {
+          _this.loading = true
+        },
+        success: function(result) {
+          _this.loading = false
+          var data = result.result
+          for(var i=0; i<data.items.length; i++) {
+            if (data.items[i].status == true) {
+              data.items[i].status = 'true'
+            } else {
+              data.items[i].status = 'false'
+            }
+          }
+          _this.tableData = data.items
+        }
+      })
+    },
     methods: {
+      reset() {
+        for(var name in this.$data.form) {
+          this.$data.form[name] = ''
+        }
+      },
       addOpen() {
+        this.reset()
         this.addShow = true
       },
       cancel() {
         this.addShow = false
       },
       ensure() {
-        this.addShow = false
+        var _this = this
+        $.ajax({
+          url: '/admin/api/v1/permissions',
+          type: 'post',
+          contentType:'application/json',
+          data: JSON.stringify(this.form),
+          success: function(result) {
+            _this.$message({
+              message: '创建成功!',
+              type: 'success'
+            })
+            this.addShow = false
+          }
+        })
       }
     }
   }

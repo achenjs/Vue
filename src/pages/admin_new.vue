@@ -17,13 +17,13 @@
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">姓名</label>
-          <el-input placeholder=""></el-input>
+          <el-input placeholder="姓名"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">邮箱</label>
-          <el-input placeholder="" type="email"></el-input>
+          <el-input placeholder="邮箱" type="email"></el-input>
         </div>
       </el-col>
     </div>
@@ -52,10 +52,10 @@ export default {
     data () {
         return {
             options: [{
-                value: '选项1',
+                value: '项目方',
                 label: '项目方'
             }, {
-                value: '选项2',
+                value: '投资人',
                 label: '投资人'
             }],
             value: ''
