@@ -4,29 +4,29 @@
        <el-col :span="8">
         <div style="width: 80%;">
           <label for="">项目名称</label>
-          <el-input placeholder="项目名称"></el-input>
+          <el-input placeholder="项目名称" v-model="form.project_name"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
        <div style="width: 80%;">
          <label for="">订单号</label>
-        <el-input placeholder="订单号"></el-input>
+        <el-input placeholder="订单号" v-model="form.id"></el-input>
        </div>
      </el-col>
    </div>
    <div class="deliverable_inline clearfix">
-     <el-col :span="12">
+     <el-col :span="16">
        <div style="width: 80%;">
          <label for="">交易日期</label>
          <el-date-picker
-           v-model="dateValue0"
+           v-model="form.starttime"
            type="date"
            placeholder="选择日期"
            :picker-options="pickerOptions0">
          </el-date-picker>
          <span>至</span>
          <el-date-picker
-           v-model="dateValue1"
+           v-model="form.endtime"
            type="date"
            placeholder="选择日期"
            :picker-options="pickerOptions1">
@@ -35,7 +35,7 @@
      </el-col>
      </div>
      <div class="buttons">
-       <el-button class="query" type="primary">查询</el-button>
+       <el-button class="query" type="primary" @click="query">查询</el-button>
        <el-button class="export" type="primary">导出</el-button>
      </div>
      <div class="deliverable_table">
@@ -45,57 +45,37 @@
          style="width: 100%">
          <el-table-column
             align="center"
-           fixed
-           prop="date"
-           label="日期"
-           width="150">
+           prop="id"
+           label="订单号">
          </el-table-column>
          <el-table-column
             align="center"
-           prop="name"
-           label="姓名"
-           width="120">
+           prop="project_name"
+           label="项目名称">
          </el-table-column>
          <el-table-column
             align="center"
-           prop="province"
-           label="省份"
-           width="120">
+           prop="service_name"
+           label="服务名称">
          </el-table-column>
          <el-table-column
             align="center"
-           prop="city"
-           label="市区"
-           width="120">
+           prop="price"
+           label="金额">
          </el-table-column>
          <el-table-column
             align="center"
-           prop="address"
-           label="地址"
-           width="300">
-         </el-table-column>
-         <el-table-column
-            align="center"
-           prop="zip"
-           label="邮编"
-           width="120">
-         </el-table-column>
-         <el-table-column
-            align="center"
-           fixed="right"
-           label="操作"
-           width="100">
-           <template scope="scope">
-             <el-button type="text" size="small">查看</el-button>
-             <el-button type="text" size="small">编辑</el-button>
-           </template>
+           prop="gmt_create"
+           label="下单时间">
          </el-table-column>
        </el-table>
      </div>
+     <v-pages :total="total" v-on:currentChange="query"></v-pages>
    </div>
 </template>
 
 <script>
+import pages from '../components/pages/pages.vue'
 export default {
   data () {
     return {
@@ -109,46 +89,69 @@ export default {
           return time.getTime() < Date.now() - 8.64e7;
         }
       },
-      deliverables: [{
-            value: '选项1',
-            label: '项目方'
-        }, {
-            value: '选项2',
-            label: '投资人'
-      }],
-      deliverableValue: '',
-      dateValue0: '',
-      dateValue1: '',
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }]
+      form: {
+        project_name: '',
+        id: '',
+        starttime: '',
+        endtime: ''
+      },
+      tableData: [],
+      total: 1,
+      loading: false
     }
+  },
+  created() {
+    var _this = this
+    $.ajax({
+      url: '/admin/api/v1/bills?page=1',
+      beforeSend: function() {
+        _this.loading = true
+      },
+      success: function(result) {
+        _this.loading = false
+        var data = result.result
+        _this.total = data.total
+        _this.tableData = data.items
+      }
+    })
+  },
+  methods: {
+    query(page) {
+      var _this = this
+      var page
+      if (typeof page != 'object') {
+        page = page
+      } else {
+        page = 1
+      }
+      if (this.form.starttime === '') {
+        this.form.starttime = ''
+      } else {
+        var starttime = new Date(this.form.starttime)
+        this.form.starttime = starttime.getFullYear() + '-' + (starttime.getMonth() + 1) + '-' + starttime.getDate()
+      }
+      if (this.form.endtime === '') {
+        this.form.endtime = ''
+      } else {
+        var endtime = new Date(this.form.endtime)
+        this.form.endtime = endtime.getFullYear() + '-' + (endtime.getMonth() + 1) + '-' + endtime.getDate()
+      }
+      $.ajax({
+        url: '/admin/api/v1/bills?id='+this.form.id+'&project_name='+this.form.project_name+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
+        beforeSend: function() {
+          _this.loading = true
+        },
+        success: function(result) {
+          _this.loading = false
+          var data = result.result
+          _this.total = data.total
+          _this.tableData = data.items
+        }
+      })
+    }
+  },
+  components: {
+    'v-pages': pages
   }
 }
 </script>

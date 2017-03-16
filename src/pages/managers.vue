@@ -6,23 +6,33 @@
       <div class="">
         <el-table
         :data="tableData"
+        v-loading="loading"
+        element-loading-text="拼命加载中"
         style="width: 100%">
           <el-table-column
             align="center"
-            prop="date"
-            label="日期"
-            width="180">
+            prop="name"
+            label="姓名">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="name"
-            label="姓名"
-            width="180">
+            prop="dept_name"
+            label="部门">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="role_name"
+            label="角色">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="gmt_create"
+            label="登陆时间">
           </el-table-column>
           <el-table-column
             align="center"
             prop="address"
-            label="地址">
+            label="操作">
           </el-table-column>
         </el-table>
       </div>
@@ -34,31 +44,31 @@
             </div>
             <div class="modal-content">
               <label for="">姓名</label>
-              <el-input placeholder="姓名"></el-input>
+              <el-input placeholder="姓名" v-model="form.name"></el-input>
               <label for="">邮箱</label>
-              <el-input placeholder="邮箱" type="email"></el-input>
+              <el-input placeholder="邮箱" type="email" v-model="form.email"></el-input>
               <label for="">密码</label>
-              <el-input placeholder="密码" type="password"></el-input>
+              <el-input placeholder="密码" type="password" v-model="form.password"></el-input>
               <label for="">部门</label>
-              <el-select v-model="departmentValue" placeholder="请选择">
+              <el-select v-model="form.dept_id" placeholder="请选择">
                 <el-option
                 v-for="item in departments"
-                :label="item.label"
-                :value="item.value"
+                :label="item.name"
+                :value="item.id"
                 :key="item.value">
                 </el-option>
               </el-select>
               <label for="">角色</label>
-              <el-select v-model="roleValue" placeholder="请选择">
+              <el-select v-model="form.role_id" placeholder="请选择">
                 <el-option
                 v-for="item in roles"
-                :label="item.label"
-                :value="item.value"
+                :label="item.name"
+                :value="item.id"
                 :key="item.value">
                 </el-option>
               </el-select>
               <label for="">状态</label>
-              <el-select v-model="stateValue" placeholder="请选择">
+              <el-select v-model="form.status" placeholder="请选择">
                 <el-option
                 v-for="item in states"
                 :label="item.label"
@@ -74,62 +84,118 @@
           </div>
         </div>
       </transition>
+      <v-pages :total="total" v-on:currentChange="query"></v-pages>
    </div>
 </template>
 
 <script>
+import pages from '../components/pages/pages.vue'
 export default {
     data() {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
-        addShow: false,
-        departments: [{
-          value: '选项1',
-          label: '111'
-        }],
-        roles: [{
-            value: '选项1',
-            label: '11'
-        }],
+        form: {
+          status: '',
+          role_id: '',
+          email: '',
+          name: '',
+          password: '',
+          dept_id: ''
+        },
+        tableData: [],
+        departments: [],
         states: [{
-          value: '选项1',
-          label: '启用',
+          value: true,
+          label: '启用'
         }, {
-          value: '选项2',
-          label: '禁用',
+          value: false,
+          label: '禁用'
         }],
-        departmentValue: '',
-        roleValue: '',
-        stateValue: '',
+        roles: [],
+        loading: false,
+        total: 1,
+        addShow: false
       }
     },
+    created() {
+      var _this = this
+      //  操作员列表
+      $.ajax({
+        url: '/admin/api/v1/admins?page=1',
+        beforeSend: function() {
+          _this.loading = true
+        },
+        success: function(result) {
+          let data = result.result
+          _this.loading = false
+          _this.total = data.total
+          _this.tableData = data.items
+        }
+      })
+
+      //  部门列表
+      $.ajax({
+        url: '/admin/api/v1/departments?page=1',
+        success: function(result) {
+          let data = result.result
+          _this.departments = data.items
+        }
+      })
+
+      //  角色列表
+      $.ajax({
+        url: '/admin/api/v1/roles?page=1',
+        success: function(result) {
+          let data = result.result
+          _this.roles = data.items
+        }
+      })
+    },
     methods: {
+      reset() {
+        for(var name in this.$data.form) {
+          this.$data.form[name] = ''
+        }
+      },
       addOpen() {
+        this.reset()
         this.addShow = true
       },
       cancel() {
         this.addShow = false
       },
       ensure() {
-        this.addShow = false
-      }
-    }
+        var _this = this
+        $.ajax({
+          url: '/admin/api/v1/admins',
+          type: 'post',
+          contentType: 'application/json',
+          data: JSON.stringify(this.form),
+          success: function(result) {
+            _this.addShow = false
+            _this.$message({
+              message: result.message,
+              type: 'success'
+            })
+          }
+        })
+      },
+      query(page) {
+        var _this = this
+        $.ajax({
+          url: '/admin/api/v1/admins?page=' + page,
+          beforeSend: function() {
+            _this.loading = true
+          },
+          success: function(result) {
+            let data = result.result
+            _this.loading = false
+            _this.total = data.total
+            _this.tableData = data.items
+          }
+        })
+      },
+    },
+    components: { 'v-pages': pages }
   }
 </script>
 

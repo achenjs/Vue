@@ -130,7 +130,7 @@ export default {
               message: '创建成功!',
               type: 'success'
             })
-            this.addShow = false
+            _this.addShow = false
           }
         })
       }

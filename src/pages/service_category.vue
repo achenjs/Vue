@@ -100,9 +100,9 @@ export default {
           contentType: 'application/json',
           data: JSON.stringify(this.form),
           success: function(result) {
-            this.addShow = false
+            _this.addShow = false
             _this.$message({
-              message: '创建成功!',
+              message: result.message,
               type: 'success'
             })
           }

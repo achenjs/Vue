@@ -4,19 +4,19 @@
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">会员编号</label>
-          <el-input placeholder="会员编号" v-model="User.id"></el-input>
+          <el-input placeholder="会员编号" v-model="form.id"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">会员名称</label>
-          <el-input placeholder="会员名称" v-model="User.name"></el-input>
+          <el-input placeholder="会员名称" v-model="form.name"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">邮箱账号</label>
-          <el-input placeholder="邮箱账号" type="email" v-model="User.email"></el-input>
+          <el-input placeholder="邮箱账号" type="email" v-model="form.email"></el-input>
         </div>
       </el-col>
     </div>
@@ -24,41 +24,26 @@
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">企业名称</label>
-          <el-input placeholder="企业名称" v-model="User.company_name"></el-input>
-        </div>
-      </el-col>
-      <el-col :span="8">
-        <div style="width: 80%;">
-          <label for="">会员身份</label>
-          <el-select v-model="User.type" placeholder="请选择">
-            <el-option
-            v-for="item in identitys"
-            :label="item.label"
-            :value="item.value"
-            :key="item.value">
-            </el-option>
-          </el-select>
+          <el-input placeholder="企业名称" v-model="form.company_name"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">所属行业</label>
-          <el-select v-model="User.company_industry" placeholder="请选择">
+          <el-select v-model="form.company_industry" placeholder="请选择">
             <el-option
-            v-for="key,value in industries"
+            v-for="(key, index) in industries"
             :label="key"
-            :value="key"
-            :key="value">
+            :value="index"
+            :key="key">
             </el-option>
           </el-select>
         </div>
       </el-col>
-    </div>
-    <div class="admin_line admin_line_3 clearfix">
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">联系手机</label>
-          <el-input placeholder="联系手机" v-model="User.phone"></el-input>
+          <el-input placeholder="联系手机" v-model="form.phone"></el-input>
         </div>
       </el-col>
     </div>
@@ -68,6 +53,34 @@
     <div>
       <v-table :tableData="tableData" :loading="loading"></v-table>
     </div>
+    <transition name="fade">
+      <div class="modal" v-if="addShow">
+        <div class="modal-dialog">
+          <div class="modal-header">
+            <span>新建部门</span>
+          </div>
+          <div class="modal-content">
+            <label for="">部门名称</label>
+            <el-input placeholder="部门名称" v-model="form.name"></el-input>
+            <label for="">部门描述</label>
+            <el-input placeholder="部门描述" v-model="form.description"></el-input>
+            <label for="">状态</label>
+            <el-select v-model="form.status" placeholder="请选择">
+              <el-option
+              v-for="item in states"
+              :label="item.label"
+              :value="item.value"
+              :key="item.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="modal-footer">
+            <el-button type="primary" @click="ensure">确认</el-button>
+            <el-button type="primary" @click="cancel">取消</el-button>
+          </div>
+        </div>
+      </div>
+    </transition>
     <v-pages :total="total" v-on:currentChange="query"></v-pages>
   </div>
 </template>
@@ -78,26 +91,19 @@ import pages from '../components/pages/pages.vue'
 export default {
   data () {
     return {
-      User: {
+      form: {
         id: '',
         name: '',
         phone: '',
         email: '',
-        company_name: '',
         company_industry: '',
         type: ''
       },
-      identitys: [{
-        value: '项目方',
-        label: '项目方'
-      }, {
-        value: '投资人',
-        label: '投资人'
-      }],
       industries: {},
       tableData: [],
       total: 1,
-      loading: false
+      loading: false,
+      addShow: false
     }
   },
   created() {
@@ -112,7 +118,7 @@ export default {
     })
     //  会员列表
     $.ajax({
-      url: '/admin/api/v1/users?page=1',
+      url: '/admin/api/v1/users?id='+this.form.id+'&type='+this.form.type+'&name='+this.form.name+'&email='+this.form.email+'&phone='+this.form.phone+'&company_industry='+this.form.company_industry+'&page='+1,
       beforeSend: function() {
         _this.loading = true
       },
@@ -127,19 +133,26 @@ export default {
   methods: {
     query(page) {
       var _this = this
-      //  会员列表
-      if (typeof page === 'number') {
-        console.log(this.User)
+      var page
+      if (typeof page != object) {
+        page = page
       } else {
-        console.log(this.User)
+        page = 1
       }
-      // $.ajax({
-      //   url: '/admin/api/v1/users?page=' + page,
-      //   success: function(result) {
-      //     var data = result.result
-      //     _this.tableData = data.items
-      //   }
-      // })
+      //  会员列表
+      $.ajax({
+        url: '/admin/api/v1/users?id='+this.form.id+'&type='+this.form.type+'&name='+this.form.name+'&email='+this.form.email+'&phone='+this.form.phone+'&company_industry='+this.form.company_industry+'&page='+page,
+        success: function(result) {
+          var data = result.result
+          _this.tableData = data.items
+        }
+      })
+    },
+    ensure() {
+
+    },
+    cancel() {
+
     }
   },
   components: {

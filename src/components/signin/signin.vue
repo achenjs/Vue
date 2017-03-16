@@ -14,19 +14,9 @@
                 <p><label for="">验证码：</label><input type="text" placeholder="验证码" v-model="form.captcha" id="vcode"></p>
                 <p><span id="getImg"><img :src="imgUrl" style="width:30%; height:100%;"><label for="" id="changeOne"  @click="captcha">换一张</label></span></p>
                 <p><input type="button" class="btn btn-success" id="dls" value="登录" @click="signin"></p>
-            <!-- <div id="ts">
-                <p>密码错误</p>
-                <p>验证码错误</p>
-            </div> -->
             </form>
         </div>
-
     </div>
-    <!--  <div class="row footer">
-        <div class="col-md-12">
-            京审备案
-        </div>
-    </div> -->
 </div>
 </template>
 

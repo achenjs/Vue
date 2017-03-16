@@ -4,7 +4,6 @@ import signin from '@/components/signin/signin.vue'
 import Home from '@/components/home.vue'
 import admin_list from '@/pages/admin_list.vue'
 import admin_new from '@/pages/admin_new.vue'
-// import Page3 from '@/pages/page3.vue'
 import project_list from '@/pages/project_list.vue'
 import stage_manage from '@/pages/stage_manage.vue'
 import attachments from '@/pages/attachments.vue'
@@ -21,6 +20,7 @@ import permissions from '@/pages/permissions.vue'
 import bill_list from '@/pages/bill_list.vue'
 import settings from '@/pages/settings.vue'
 import bp_list from '@/pages/bp_list.vue'
+import bp_manage from '@/pages/bp_manage.vue'
 import NotFound from '@/pages/notFound.vue'
 
 Vue.use(Router)
@@ -133,6 +133,7 @@ export default new Router({
       component: Home,
       children: [
         {path: '/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
+        {path: '/bp_manage', name: '新建BP', component: bp_manage, hidden: true},
       ]
     },
     {

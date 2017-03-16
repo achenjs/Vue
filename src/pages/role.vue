@@ -86,25 +86,8 @@ import pages from '../components/pages/pages.vue'
 export default {
     data() {
       return {
-        tableData3: [{
-        "description": "管理员修改自己的密码",
-        "gmt_create": "2017-02-13T16:44:36+00:00",
-        "gmt_modified": "2017-02-13T16:50:40+00:00",
-        "id": 16,
-        "name": "重置密码",
-        "status": true,
-        "value": 1
-      },
-      {
-        "description": "创建管理员",
-        "gmt_create": "2017-02-13T16:44:36+00:00",
-        "gmt_modified": "2017-02-13T16:50:40+00:00",
-        "id": 17,
-        "name": "创建管理员",
-        "status": true,
-        "value": 2
-      },],
-        multipleSelection: [],
+        tableData3: [],
+        multipleSelection: {},
         tableData: [],
         addShow: false,
         form: {
@@ -125,7 +108,9 @@ export default {
     },
     methods: {
       handleSelectionChange(val) {
-        this.multipleSelection = val
+        console.log(val[0].id)
+        this.multipleSelection[val[0].id] = 1
+        console.log(this.multipleSelection)
       },
       handleClick(id) {
         var _this = this

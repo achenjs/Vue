@@ -53,12 +53,12 @@
          <el-table-column
            align="center"
            fixed
-           prop="id"
+           prop="attachment.id"
            label="编号">
          </el-table-column>
          <el-table-column
            align="center"
-           prop="name"
+           prop="attachment.name"
            label="项目名称"
            width="120">
          </el-table-column>
@@ -69,7 +69,7 @@
          </el-table-column>
          <el-table-column
            align="center"
-           prop="city"
+           prop="phase_name"
            label="交付物名称">
          </el-table-column>
          <el-table-column
@@ -111,45 +111,11 @@ export default {
           return time.getTime() < Date.now() - 8.64e7;
         }
       },
-      deliverables: [{
-            value: '选项1',
-            label: '项目方'
-        }, {
-            value: '选项2',
-            label: '投资人'
-      }],
+      deliverables: [],
       deliverableValue: '',
       dateValue0: '',
       dateValue1: '',
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }]
+      tableData: []
     }
   }
 }

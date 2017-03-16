@@ -1,48 +1,41 @@
 <template>
    <div class="admin_new">
-    <div class="admin_line admin_line_1 clearfix">
-      <el-col :span="8">
-        <div style="width: 80%;">
-          <label for="">会员角色</label>
-          <el-select v-model="value" placeholder="请选择">
-            <el-option
-            v-for="item in options"
-            :label="item.label"
-            :value="item.value"
-            :key="item.value">
-            </el-option>
-          </el-select>
-        </div>
-      </el-col>
-      <el-col :span="8">
+    <div class="admin_line clearfix">
+      <el-col :span="8" offset="8">
         <div style="width: 80%;">
           <label for="">姓名</label>
-          <el-input placeholder="姓名"></el-input>
+          <el-input placeholder="姓名" v-model="form.name"></el-input>
         </div>
       </el-col>
-      <el-col :span="8">
+    </div>
+    <div class="admin_line clearfix">
+      <el-col :span="8" offset="8">
         <div style="width: 80%;">
           <label for="">邮箱</label>
-          <el-input placeholder="邮箱" type="email"></el-input>
+          <el-input placeholder="邮箱" type="email" v-model="form.email"></el-input>
         </div>
       </el-col>
     </div>
-    <div class="admin_line admin_line_2 clearfix">
-      <el-col :span="8">
+    <div class="admin_line clearfix">
+      <el-col :span="8" :offset="8">
         <div style="width: 80%;">
           <label for="">密码</label>
-          <el-input placeholder="请输入您的密码" type="password"></el-input>
-        </div>
-      </el-col>
-      <el-col :span="8">
-        <div style="width: 80%;">
-          <label for="">备注</label>
-          <el-input placeholder="全部"></el-input>
+          <el-input placeholder="请输入您的密码" type="password" v-model="form.password"></el-input>
         </div>
       </el-col>
     </div>
-    <div class="openAccount">
-        <span>开通账户</span>
+    <div class="admin_line clearfix">
+      <el-col :span="8" offset="8">
+        <div style="width: 80%;">
+          <label for="">电话</label>
+          <el-input placeholder="电话" v-model="form.phone"></el-input>
+        </div>
+      </el-col>
+    </div>
+    <div class="admin_line clearfix">
+      <el-col :span="8" offset="8">
+        <span class="openAccount" @click="addUser">开通账户</span>
+      </el-col>
     </div>
   </div>
 </template>
@@ -51,15 +44,43 @@
 export default {
     data () {
         return {
-            options: [{
-                value: '项目方',
-                label: '项目方'
-            }, {
-                value: '投资人',
-                label: '投资人'
-            }],
-            value: ''
+          form: {
+            name: '',
+            email: '',
+            phone: '',
+            password: ''
+          }
         }
+    },
+    methods: {
+      reset() {
+        for(var name in this.$data.form) {
+          this.$data.form[name] = ''
+        }
+      },
+      addUser() {
+        var _this = this
+        if (this.form.name == '' && this.form.email == '' && this.form.phone == '' && this.form.password == '') {
+          _this.$message({
+            message: '请输入完整信息',
+            type: 'warning'
+          })
+        } else {
+          $.ajax({
+            url: '/admin/api/v1/users',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.reset()
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+            }
+          })
+        }
+      }
     }
 }
 </script>
@@ -82,16 +103,14 @@ export default {
   .openAccount {
       margin-top: 30px;
       text-align: center;
-      span {
-          display: inline-block;
-          font-size: 14px;
-          width: 300px;
-          height: 40px;
-          line-height: 40px;
-          cursor: pointer;
-          background-color: #027ee5;
-          color: #ffffff;
-      }
+      display: inline-block;
+      font-size: 14px;
+      width: 80%;
+      height: 40px;
+      line-height: 40px;
+      cursor: pointer;
+      background-color: #027ee5;
+      color: #ffffff;
   }
 }
 </style>

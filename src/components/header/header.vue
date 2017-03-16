@@ -4,7 +4,7 @@
             <img src="../../assets/images/logo.png" /> <span><i class="line"></i>首页</span>
         </el-col>
         <el-col :span="10" class="userinfo">
-            <span>hellowwc@aliyun.com</span><i class="line"></i>
+            <span>{{User.email}}</span><i class="line"></i>
             <span>个人中心</span><i class="line"></i>
             <span @click="logout">退出</span>
         </el-col>
@@ -35,7 +35,7 @@ export default{
                 console.log('错误!')
             });
         }
-    }  
+    }
 }
 </script>
 

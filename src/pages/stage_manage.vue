@@ -37,15 +37,34 @@
               <el-input placeholder="阶段名称" v-model="form.name"></el-input>
               <label for="">阶段描述</label>
               <el-input placeholder="阶段描述" v-model="form.description"></el-input>
-              <label for="">状态</label>
-              <el-select v-model="form.status" placeholder="请选择">
-                <el-option
-                v-for="item in states"
-                :label="item.label"
-                :value="item.value"
-                :key="item.value">
-                </el-option>
-              </el-select>
+              <label for="">交付物列表</label>
+              <el-table
+              :data="tableData1"
+              height="300"
+              scope="scope"
+              style="width: 100%">
+                <el-table-column
+                  type="selection">
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  prop="attachment.id"
+                  label="编号">
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  :show-overflow-tooltip=true
+                  prop="attachment.name"
+                  label="交付物名称">
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  :show-overflow-tooltip=true
+                  prop="attachment.description"
+                  label="描述">
+                </el-table-column>
+              </el-table>
+              <v-pages :total="total" v-on:currentChange="queryAttachment"></v-pages>
             </div>
             <div class="modal-footer">
               <el-button type="primary" @click="ensure">确认</el-button>
@@ -64,18 +83,12 @@ export default {
     data() {
       return {
         tableData: [],
+        tableData1: [],
         addShow: false,
-        states: [{
-          value: true,
-          label: '启用',
-        }, {
-          value: false,
-          label: '禁用',
-        }],
         form: {
           name: '',
           description: '',
-          status: true
+          attachments: ''
         },
         loading: false,
         total: 1
@@ -83,6 +96,7 @@ export default {
     },
     created() {
       var _this = this
+      //  阶段列表
       $.ajax({
         url: '/admin/api/v1/phases?page=1',
         beforeSend: function() {
@@ -93,6 +107,20 @@ export default {
           _this.loading = false
           _this.total = data.total
           _this.tableData = data.items
+        }
+      })
+
+      //  交付物列表
+      $.ajax({
+        url: '/admin/api/v1/user_attachments?page=1',
+        beforeSend: function() {
+          _this.loading = true
+        },
+        success: function(result) {
+          let data = result.result
+          _this.loading = false
+          _this.total = data.total
+          _this.tableData1 = data.items
         }
       })
     },
@@ -117,11 +145,11 @@ export default {
           contentType: 'application/json',
           data: JSON.stringify(this.form),
           success: function(result) {
-            this.addShow = false
             _this.$message({
-              message: '创建成功!',
+              message: result.message,
               type: 'success'
             })
+            _this.addShow = false
           }
         })
       },
@@ -137,6 +165,21 @@ export default {
             _this.loading = false
             _this.total = data.total
             _this.tableData = data.items
+          }
+        })
+      },
+      queryAttachment(page) {
+        var _this = this
+        $.ajax({
+          url: '/admin/api/v1/user_attachments?page=' + page,
+          beforeSend: function() {
+            _this.loading = true
+          },
+          success: function(result) {
+            let data = result.result
+            _this.loading = false
+            _this.total = data.total
+            _this.tableData1 = data.items
           }
         })
       }

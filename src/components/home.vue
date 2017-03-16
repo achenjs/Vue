@@ -11,7 +11,7 @@
 						<span>{{User.name}}</span><i>编辑资料</i>
 					</div>
 					<div class="company">
-						北京天投科技信息....
+						{{User.role_name}}
 					</div>
 					<div class="email">
 						<img src="../assets/images/email.png" alt="图片"><span :title="User.email">{{User.email}}</span>
@@ -58,7 +58,8 @@ import profile from '../assets/json/profile'
 				sysUserAvatar: '',
 				User: {
 					email: '',
-					name: ''
+					name: '',
+					role_name: ''
     		},
 			}
 		},
@@ -70,6 +71,7 @@ import profile from '../assets/json/profile'
 					 var data = result.result
 	         _this.User.email = data.email
 					 _this.User.name = data.name
+					 _this.User.role_name = data.role_name
 				 }
 			 })
   	},
@@ -99,7 +101,7 @@ import profile from '../assets/json/profile'
 			}
 		},
 		mounted() {
-			
+
 		},
 		components: { 'v-header': header }
 	}

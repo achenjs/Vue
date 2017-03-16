@@ -124,24 +124,19 @@ export default {
       },
       ensure() {
         var _this = this
-        const obj = {
-          name: this.name,
-          description: this.description,
-          status: this.stateValue
-        }
         $.ajax({
           url: '/admin/api/v1/departments',
           type: 'post',
           contentType: 'application/json',
-          data: JSON.stringify(obj),
+          data: JSON.stringify(this.form),
           success: function(result) {
+            _this.addShow = false
             _this.$message({
-              message: '创建成功!',
+              message: result.message,
               type: 'success'
             })
           }
         })
-        this.addShow = false
       },
     },
     components: { 'v-pages': pages }

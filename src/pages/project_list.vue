@@ -4,19 +4,19 @@
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">项目编号</label>
-          <el-input placeholder="项目编号"></el-input>
+          <el-input placeholder="项目编号" v-model="form.id"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">项目名称</label>
-          <el-input placeholder="项目名称"></el-input>
+          <el-input placeholder="项目名称" v-model="form.name"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">负责人</label>
-          <el-input placeholder="负责人" type="email"></el-input>
+          <el-input placeholder="负责人" v-model="form.contact_name"></el-input>
         </div>
       </el-col>
     </div>
@@ -24,12 +24,12 @@
        <el-col :span="8">
         <div style="width: 80%;">
           <label for="">所属行业</label>
-          <el-select v-model="industryValue" placeholder="请选择">
+          <el-select v-model="form.industry" placeholder="请选择">
             <el-option
-            v-for="item in industrys"
-            :label="item.label"
-            :value="item.value"
-            :key="item.value">
+            v-for="(key, index) in industries"
+            :label="key"
+            :value="index"
+            :key="key">
             </el-option>
           </el-select>
         </div>
@@ -37,49 +37,37 @@
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">所在阶段</label>
-          <el-select v-model="stateValue" placeholder="请选择">
+          <el-select v-model="form.phase_index" placeholder="请选择">
             <el-option
-            v-for="item in states"
-            :label="item.label"
-            :value="item.value"
-            :key="item.value">
+            v-for="item in phases"
+            :label="item.name"
+            :value="item.id"
+            :key="item.id">
             </el-option>
           </el-select>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">风险状况</label>
-          <el-select v-model="risksValue" placeholder="请选择">
-            <el-option
-            v-for="item in risks"
-            :label="item.label"
-            :value="item.value"
-            :key="item.value">
-            </el-option>
-          </el-select>
+          <label for="">联系手机</label>
+          <el-input placeholder="联系手机" v-model="form.contact_phone"></el-input>
         </div>
       </el-col>
     </div>
     <div class="admin_line admin_line_3 clearfix">
-      <el-col :span="8">
-        <div style="width: 80%;">
-          <label for="">联系手机</label>
-          <el-input placeholder=""></el-input>
-        </div>
-      </el-col>
       <el-col :span="14">
         <div style="width: 80%;">
           <label for="">创建时间</label>
           <el-date-picker
-            v-model="dateValue0"
+            format="yyyy-MM-dd"
+            v-model="form.starttime"
             type="date"
             placeholder="选择日期"
             :picker-options="pickerOptions0">
           </el-date-picker>
           <span>至</span>
           <el-date-picker
-            v-model="dateValue1"
+            v-model="form.endtime"
             type="date"
             placeholder="选择日期"
             :picker-options="pickerOptions1">
@@ -88,16 +76,69 @@
       </el-col>
     </div>
     <div class="query">
-      <span>查&nbsp;&nbsp;询</span>
+      <span @click="query">查&nbsp;&nbsp;询</span>
     </div>
-    <div>
-      <v-table></v-table>
-    </div>
+    <el-table
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    :data="tableData"
+    style="width: 100%">
+      <el-table-column
+        align="center"
+        prop="id"
+        label="项目编号">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="name"
+        label="项目名称">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="contact_name"
+        label="负责人">
+      </el-table-column>
+      <el-table-column
+        :show-overflow-tooltip=true
+        align="center"
+        prop="contact_phone"
+        label="手机号">
+      </el-table-column>
+      <el-table-column
+        :show-overflow-tooltip=true
+        align="center"
+        prop="gmt_create"
+        label="创建时间">
+      </el-table-column>
+      <el-table-column
+        :show-overflow-tooltip=true
+        align="center"
+        prop="industry"
+        label="所在行业">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="phase_index"
+        label="所在阶段">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop=""
+        label="审核">
+      </el-table-column>
+      <el-table-column
+        :show-overflow-tooltip=true
+        align="center"
+        prop="description"
+        label="部门描述">
+      </el-table-column>
+    </el-table>
+    <v-pages :total="total" v-on:currentChange="query"></v-pages>
   </div>
 </template>
 
 <script>
-import table from '../components/table/table.vue'
+import pages from '../components/pages/pages.vue'
 export default {
   data () {
     return {
@@ -111,37 +152,96 @@ export default {
           return time.getTime() < Date.now() - 8.64e7;
         }
       },
-      industrys: [{
-            value: '选项1',
-            label: '项目方'
-        }, {
-            value: '选项2',
-            label: '投资人'
-      }],
-      states: [{
-        value: '选项1',
-        label: '项目方',
-      }, {
-        value: '选项2',
-        label: '投资人',
-      }],
-      risks: [{
-        value: '选项1',
-        label: '项目方',
-      }, {
-        value: '选项2',
-        label: '投资人',
-      }],
+      form: {
+        id: '',
+        name: '',
+        contact_name: '',
+        industry: '',
+        phase_index: '',
+        contact_phone: '',
+        starttime: '',
+        endtime: ''
+      },
       stateValue: '',
-      industryValue: '',
       risksValue: '',
-      dateValue0: '',
-      dateValue1: '',
-      value1: '',
-      value2: '',
+      industries: [],
+      phases: [],
+      risks: [],
+      tableData: [],
+      loading: false,
+      total: 1
     }
   },
-  components: { 'v-table': table }
+  created() {
+    var _this = this
+    //  所属行业
+    $.ajax({
+      url: '/main/api/v1/industries',
+      success: function(result) {
+        var data = result.result
+        _this.industries = data.industries
+      }
+    })
+
+    //  阶段
+    $.ajax({
+      url: '/admin/api/v1/phases?page=1',
+      success: function(result) {
+        var data = result.result
+        _this.phases = data.items
+      }
+    })
+
+    //  项目列表
+    $.ajax({
+      url: '/admin/api/v1/projects?page=1',
+      beforeSend: function() {
+        _this.loading = true
+      },
+      success: function(result) {
+        let data = result.result
+        _this.loading = false
+        _this.total = data.total
+        _this.tableData = data.items
+      }
+    })
+  },
+  methods: {
+    query(page) {
+      var page
+      if (typeof page != 'object') {
+        page = page
+      } else {
+        page = 1
+      }
+      if (this.form.starttime === '') {
+        this.form.starttime = ''
+      } else {
+        var starttime = new Date(this.form.starttime)
+        this.form.starttime = starttime.getFullYear() + '-' + (starttime.getMonth() + 1) + '-' + starttime.getDate()
+      }
+      if (this.form.endtime === '') {
+        this.form.endtime = ''
+      } else {
+        var endtime = new Date(this.form.endtime)
+        this.form.endtime = endtime.getFullYear() + '-' + (endtime.getMonth() + 1) + '-' + endtime.getDate()
+      }
+      var _this = this
+      $.ajax({
+        url: '/admin/api/v1/projects?id='+ this.form.id +'&name='+ this.form.name +'&contact_name='+ this.form.contact_name +'&industry='+ this.form.industry +'&phase_index='+ this.form.phase_index +'&contact_phone='+ this.form.contact_phone +'&starttime='+ this.form.starttime +'&endtime='+ this.form.endtime +'&page=' + page,
+        beforeSend: function() {
+          _this.loading = true
+        },
+        success: function(result) {
+          let data = result.result
+          _this.loading = false
+          _this.total = data.total
+          _this.tableData = data.items
+        }
+      })
+    }
+  },
+  components: { 'v-pages': pages }
 }
 </script>
 
