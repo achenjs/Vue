@@ -12,14 +12,12 @@
           <el-table-column
             align="center"
             prop="id"
-            label="编号"
-            width="180">
+            label="编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            label="部门名称"
-            width="180">
+            label="部门名称">
           </el-table-column>
           <el-table-column
             align="center"

@@ -66,6 +66,7 @@ export default {
     },
     created() {
       var _this = this
+      //  获取所有服务项
       $.ajax({
         url: '/admin/api/v1/service_categories?page=1',
         beforeSend: function() {

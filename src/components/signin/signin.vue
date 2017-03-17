@@ -13,7 +13,7 @@
                 <p><label for="">密码：</label><input type="password" placeholder="密码" v-model="form.password" id="psw"></p>
                 <p><label for="">验证码：</label><input type="text" placeholder="验证码" v-model="form.captcha" id="vcode"></p>
                 <p><span id="getImg"><img :src="imgUrl" style="width:30%; height:100%;"><label for="" id="changeOne"  @click="captcha">换一张</label></span></p>
-                <p><input type="button" class="btn btn-success" id="dls" value="登录" @click="signin"></p>
+                <p><input type="button" class="btn btn-success" id="dls" value="登录" @keyup.enter="signin" @click="signin"></p>
             </form>
         </div>
     </div>

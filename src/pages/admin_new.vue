@@ -1,7 +1,7 @@
 <template>
    <div class="admin_new">
     <div class="admin_line clearfix">
-      <el-col :span="8" offset="8">
+      <el-col :span="8" :offset="8">
         <div style="width: 80%;">
           <label for="">姓名</label>
           <el-input placeholder="姓名" v-model="form.name"></el-input>
@@ -9,7 +9,7 @@
       </el-col>
     </div>
     <div class="admin_line clearfix">
-      <el-col :span="8" offset="8">
+      <el-col :span="8" :offset="8">
         <div style="width: 80%;">
           <label for="">邮箱</label>
           <el-input placeholder="邮箱" type="email" v-model="form.email"></el-input>
@@ -25,7 +25,7 @@
       </el-col>
     </div>
     <div class="admin_line clearfix">
-      <el-col :span="8" offset="8">
+      <el-col :span="8" :offset="8">
         <div style="width: 80%;">
           <label for="">电话</label>
           <el-input placeholder="电话" v-model="form.phone"></el-input>
@@ -33,7 +33,7 @@
       </el-col>
     </div>
     <div class="admin_line clearfix">
-      <el-col :span="8" offset="8">
+      <el-col :span="8" :offset="8">
         <span class="openAccount" @click="addUser">开通账户</span>
       </el-col>
     </div>

@@ -7,7 +7,7 @@ import admin_new from '@/pages/admin_new.vue'
 import project_list from '@/pages/project_list.vue'
 import stage_manage from '@/pages/stage_manage.vue'
 import attachments from '@/pages/attachments.vue'
-import comment_list from '@/pages/comment_list.vue'
+// import comment_list from '@/pages/comment_list.vue'
 import service_category from '@/pages/service_category.vue'
 import service_item from '@/pages/service_item.vue'
 import service_custom from '@/pages/service_custom.vue'
@@ -65,7 +65,7 @@ export default new Router({
         {path: '/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
         {path: '/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
         {path: '/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
-        {path: '/comment_list', component: comment_list, name: '点评记录'}
+        // {path: '/comment_list', component: comment_list, name: '点评记录'}
       ]
     },
     {
@@ -108,9 +108,10 @@ export default new Router({
     {
       path: '/home',
       name: '交易管理',
+      iconCls: 'icon-serverList',
       component: Home,
       children: [
-        {path: '/bill_list', component: bill_list, name: '消费记录'}
+        {path: '/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
       ]
     },
     {
@@ -121,9 +122,9 @@ export default new Router({
       children: [
         {path: '/managers', component: managers, iconCls: 'icon-page12', name: '操作员管理'},
         {path: '/department', component: department, iconCls: 'icon-page13', name: '部门管理'},
-        {path: '/role', component: role, name: '角色管理'},
-        {path: '/permissions', component: permissions, name: '权限管理'},
-        {path: '/settings', component: settings, name: '修改密码'}
+        {path: '/role', component: role, iconCls: 'icon-page11', name: '角色管理'},
+        {path: '/permissions', component: permissions, iconCls: 'icon-page7', name: '权限管理'},
+        {path: '/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
       ]
     },
      {

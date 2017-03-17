@@ -41,30 +41,35 @@
               <el-table
               :data="tableData1"
               height="300"
-              scope="scope"
+              row-key="id"
+              @select="changed"
               style="width: 100%">
-                <el-table-column
+                <template scope="scope">
+                  <el-table-column
+                  ref="selection"
                   type="selection">
-                </el-table-column>
-                <el-table-column
-                  align="center"
-                  prop="attachment.id"
-                  label="编号">
-                </el-table-column>
-                <el-table-column
-                  align="center"
-                  :show-overflow-tooltip=true
-                  prop="attachment.name"
-                  label="交付物名称">
-                </el-table-column>
-                <el-table-column
-                  align="center"
-                  :show-overflow-tooltip=true
-                  prop="attachment.description"
-                  label="描述">
-                </el-table-column>
+                  </el-table-column>
+                  <el-table-column
+                    align="center"
+                    prop="attachment.id"
+                    label="编号">
+                  </el-table-column>
+                  <el-table-column
+                    align="center"
+                    show-overflow-tooltip
+                    width="120"
+                    prop="attachment.name"
+                    label="交付物名称">
+                  </el-table-column>
+                  <el-table-column
+                    align="center"
+                    :show-overflow-tooltip=true
+                    prop="attachment.description"
+                    label="描述">
+                  </el-table-column>
+                </template>
               </el-table>
-              <v-pages :total="total" v-on:currentChange="queryAttachment"></v-pages>
+              <v-pages :total="total1" v-on:currentChange="queryAttachment"></v-pages>
             </div>
             <div class="modal-footer">
               <el-button type="primary" @click="ensure">确认</el-button>
@@ -91,7 +96,9 @@ export default {
           attachments: ''
         },
         loading: false,
-        total: 1
+        total: 1,
+        total1: 1,
+        selection: ''
       }
     },
     created() {
@@ -109,22 +116,11 @@ export default {
           _this.tableData = data.items
         }
       })
-
-      //  交付物列表
-      $.ajax({
-        url: '/admin/api/v1/user_attachments?page=1',
-        beforeSend: function() {
-          _this.loading = true
-        },
-        success: function(result) {
-          let data = result.result
-          _this.loading = false
-          _this.total = data.total
-          _this.tableData1 = data.items
-        }
-      })
     },
     methods: {
+      changed(selection, row) {
+        this.selection = selection
+      },
       reset() {
         for(var name in this.$data.form) {
           this.$data.form[name] = ''
@@ -133,14 +129,33 @@ export default {
       addOpen() {
         this.reset()
         this.addShow = true
+        var _this = this
+        //  交付物列表
+        $.ajax({
+          url: '/admin/api/v1/user_attachments?page=1',
+          beforeSend: function() {
+            _this.loading = true
+          },
+          success: function(result) {
+            let data = result.result
+            _this.loading = false
+            _this.total1 = data.total
+            _this.tableData1 = data.items
+          }
+        })
       },
       cancel() {
         this.addShow = false
       },
       ensure() {
         var _this = this
+        var arr = []
+        for (var i=0; i<this.selection.length; i++) {
+          arr.push(this.selection[i].id)
+        }
+        this.form.attachments = arr.join()
         $.ajax({
-          url: '/admin/api/v1/service_categories',
+          url: '/admin/api/v1/phases',
           type: 'post',
           contentType: 'application/json',
           data: JSON.stringify(this.form),
@@ -178,7 +193,7 @@ export default {
           success: function(result) {
             let data = result.result
             _this.loading = false
-            _this.total = data.total
+            _this.total1 = data.total
             _this.tableData1 = data.items
           }
         })

@@ -33,6 +33,10 @@
             align="center"
             prop="address"
             label="操作">
+            <template scope="scope">
+              <el-button @click="queryClick(scope.row.id)" type="text" size="small">查看</el-button>
+              <el-button @click="midClick(scope.row.id)" type="text" size="small">修改</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -50,7 +54,7 @@
               <label for="">密码</label>
               <el-input placeholder="密码" type="password" v-model="form.password"></el-input>
               <label for="">部门</label>
-              <el-select v-model="form.dept_id" placeholder="请选择">
+              <el-select v-model="form.dept_id" v-if="(id!=='')" placeholder="请选择">
                 <el-option
                 v-for="item in departments"
                 :label="item.name"
@@ -58,8 +62,9 @@
                 :key="item.value">
                 </el-option>
               </el-select>
+              <el-input placeholder="部门" v-else v-model="dept_name"></el-input>
               <label for="">角色</label>
-              <el-select v-model="form.role_id" placeholder="请选择">
+              <el-select v-model="form.role_id" placeholder="请选择" v-if="(id!=='')">
                 <el-option
                 v-for="item in roles"
                 :label="item.name"
@@ -67,6 +72,7 @@
                 :key="item.value">
                 </el-option>
               </el-select>
+              <el-input placeholder="角色" v-else v-model="role_name"></el-input>
               <label for="">状态</label>
               <el-select v-model="form.status" placeholder="请选择">
                 <el-option
@@ -78,7 +84,7 @@
               </el-select>
             </div>
             <div class="modal-footer">
-              <el-button type="primary" @click="ensure">确认</el-button>
+              <el-button type="primary" v-if="searchGet" @click="ensure">确认</el-button>
               <el-button type="primary" @click="cancel">取消</el-button>
             </div>
           </div>
@@ -113,7 +119,11 @@ export default {
         roles: [],
         loading: false,
         total: 1,
-        addShow: false
+        addShow: false,
+        role_name: '',
+        dept_name: '',
+        searchGet: true,
+        id: ''
       }
     },
     created() {
@@ -131,7 +141,6 @@ export default {
           _this.tableData = data.items
         }
       })
-
       //  部门列表
       $.ajax({
         url: '/admin/api/v1/departments?page=1',
@@ -140,7 +149,6 @@ export default {
           _this.departments = data.items
         }
       })
-
       //  角色列表
       $.ajax({
         url: '/admin/api/v1/roles?page=1',
@@ -158,26 +166,51 @@ export default {
       },
       addOpen() {
         this.reset()
+        this.id = ''
         this.addShow = true
       },
       cancel() {
+        this.id = ''
         this.addShow = false
       },
       ensure() {
         var _this = this
-        $.ajax({
-          url: '/admin/api/v1/admins',
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
-            _this.addShow = false
+        if (this.id === '') {
+          if (this.form.dept_id == '' && this.form.role_id == '') {
             _this.$message({
-              message: result.message,
-              type: 'success'
+              message: '角色和部门必选!',
+              type: 'warning'
+            })
+          } else {
+            $.ajax({
+              url: '/admin/api/v1/admins',
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+              }
             })
           }
-        })
+        } else {
+          $.ajax({
+            url: '/admin/api/v1/admins/' + this.id,
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.addShow = false
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+            }
+          })
+        }
       },
       query(page) {
         var _this = this
@@ -194,6 +227,29 @@ export default {
           }
         })
       },
+      //  查看
+      queryClick(id) {
+        var _this = this
+        this.searchGet = false
+        $.ajax({
+          url: '/admin/api/v1/admins/' + id,
+          success: function(result) {
+            _this.addShow = true
+            let data = result.result
+            _this.form.email = data.email
+            _this.form.name = data.name
+            _this.role_name = data.role_name
+            _this.dept_name = data.dept_name
+            _this.form.status = data.status
+          }
+        })
+      },
+      //  修改
+      midClick(id) {
+        this.id = id
+        this.reset()
+        this.addShow = true
+      }
     },
     components: { 'v-pages': pages }
   }

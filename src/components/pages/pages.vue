@@ -3,6 +3,7 @@
     <el-pagination
       v-show="total > 0"
       layout="prev, pager, next"
+      :current-page="currenPage"
       :total="total"
       v-on:current-change="currentChange">
     </el-pagination>
@@ -18,6 +19,10 @@ export default {
   },
   props: {
     total: {
+      type: Number,
+      default: 1
+    },
+    currenPage: {
       type: Number,
       default: 1
     }

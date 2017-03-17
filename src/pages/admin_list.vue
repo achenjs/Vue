@@ -4,19 +4,19 @@
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">会员编号</label>
-          <el-input placeholder="会员编号" v-model="form.id"></el-input>
+          <el-input placeholder="会员编号" v-model="query.id"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">会员名称</label>
-          <el-input placeholder="会员名称" v-model="form.name"></el-input>
+          <el-input placeholder="会员名称" v-model="query.name"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">邮箱账号</label>
-          <el-input placeholder="邮箱账号" type="email" v-model="form.email"></el-input>
+          <el-input placeholder="邮箱账号" type="email" v-model="query.email"></el-input>
         </div>
       </el-col>
     </div>
@@ -24,13 +24,13 @@
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">企业名称</label>
-          <el-input placeholder="企业名称" v-model="form.company_name"></el-input>
+          <el-input placeholder="企业名称" v-model="query.company_name"></el-input>
         </div>
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">所属行业</label>
-          <el-select v-model="form.company_industry" placeholder="请选择">
+          <el-select v-model="query.company_industry" placeholder="请选择">
             <el-option
             v-for="(key, index) in industries"
             :label="key"
@@ -43,34 +43,124 @@
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">联系手机</label>
-          <el-input placeholder="联系手机" v-model="form.phone"></el-input>
+          <el-input placeholder="联系手机" v-model="query.phone"></el-input>
         </div>
       </el-col>
     </div>
-    <div class="query" @click="query">
+    <div class="query" @click="search">
       <span>查&nbsp;&nbsp;询</span>
     </div>
-    <div>
-      <v-table :tableData="tableData" :loading="loading"></v-table>
-    </div>
+    <el-table
+      :data="tableData"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      border
+      style="width: 100%">
+      <el-table-column
+        align="center"
+        fixed
+        prop="id"
+        width="100"
+        label="会员编号">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="name"
+        show-overflow-tooltip
+        width="100"
+        label="会员名称">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="email"
+        show-overflow-tooltip
+        width="150"
+        label="邮箱账号">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="phone"
+        width="150"
+        show-overflow-tooltip
+        label="手机号">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="wechat"
+        show-overflow-tooltip
+        width="100"
+        label="微信账号">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="company"
+        width="150"
+        label="公司及职位">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="gender"
+        label="性别">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="company_name"
+        show-overflow-tooltip
+        width="150"
+        label="企业名称">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="company_industry"
+        width="150"
+        label="所属行业"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="resume"
+        label="投资身份"
+        width="150"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="gmt_create"
+        width="150"
+        show-overflow-tooltip
+        label="注册日期">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        fixed="right"
+        label="操作">
+        <template scope="scope">
+          <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <transition name="fade">
       <div class="modal" v-if="addShow">
         <div class="modal-dialog">
           <div class="modal-header">
-            <span>新建部门</span>
+            <span>详细信息</span>
           </div>
           <div class="modal-content">
-            <label for="">部门名称</label>
-            <el-input placeholder="部门名称" v-model="form.name"></el-input>
-            <label for="">部门描述</label>
-            <el-input placeholder="部门描述" v-model="form.description"></el-input>
-            <label for="">状态</label>
-            <el-select v-model="form.status" placeholder="请选择">
+            <label for="">会员名称</label>
+            <el-input placeholder="会员名称" v-model="form.name"></el-input>
+            <label for="">邮箱账号</label>
+            <el-input placeholder="邮箱账号" v-model="form.email"></el-input>
+            <label for="">手机号码</label>
+            <el-input placeholder="手机号码" v-model="form.phone"></el-input>
+            <label for="">企业名称</label>
+            <el-input placeholder="企业名称" v-model="form.company_name"></el-input>
+            <label for="">所属行业</label>
+            <el-select v-model="form.company_industry" placeholder="请选择">
               <el-option
-              v-for="item in states"
-              :label="item.label"
-              :value="item.value"
-              :key="item.value">
+              v-for="(item, index) in industries"
+              :label="item"
+              :value="index"
+              :key="index">
               </el-option>
             </el-select>
           </div>
@@ -81,25 +171,40 @@
         </div>
       </div>
     </transition>
-    <v-pages :total="total" v-on:currentChange="query"></v-pages>
+    <v-pages :total="total" v-on:currentChange="search"></v-pages>
   </div>
 </template>
 
 <script>
-import table from '../components/table/table.vue'
 import pages from '../components/pages/pages.vue'
 export default {
   data () {
     return {
-      form: {
+      query: {
         id: '',
         name: '',
         phone: '',
         email: '',
         company_industry: '',
+        company_name: '',
         type: ''
       },
+      form: {
+        name: '',
+        phone: '',
+        email: '',
+        company_industry: '',
+        company_name: ''
+      },
+      id: '',
       industries: {},
+      states: [{
+        value: true,
+        label: '启用'
+      }, {
+        value: false,
+        label: '禁用'
+      }],
       tableData: [],
       total: 1,
       loading: false,
@@ -118,45 +223,93 @@ export default {
     })
     //  会员列表
     $.ajax({
-      url: '/admin/api/v1/users?id='+this.form.id+'&type='+this.form.type+'&name='+this.form.name+'&email='+this.form.email+'&phone='+this.form.phone+'&company_industry='+this.form.company_industry+'&page='+1,
+      url: '/admin/api/v1/users?id='+this.query.id+'&type='+this.query.type+'&name='+this.query.name+'&email='+this.query.email+'&phone='+this.query.phone+'&company_industry='+this.query.company_industry+'&page='+1,
       beforeSend: function() {
         _this.loading = true
       },
       success: function(result) {
         var data = result.result
         _this.loading = false
+        for (var i in data.items) {
+          data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+        }
         _this.tableData = data.items
         _this.total = data.total
       }
     })
   },
   methods: {
-    query(page) {
+    reset() {
+      for(var name in this.$data.form) {
+        this.$data.form[name] = ''
+      }
+    },
+    search(page) {
       var _this = this
       var page
-      if (typeof page != object) {
+      if (typeof page != 'object') {
         page = page
       } else {
         page = 1
       }
       //  会员列表
       $.ajax({
-        url: '/admin/api/v1/users?id='+this.form.id+'&type='+this.form.type+'&name='+this.form.name+'&email='+this.form.email+'&phone='+this.form.phone+'&company_industry='+this.form.company_industry+'&page='+page,
+        url: '/admin/api/v1/users?id='+this.query.id+'&type='+this.query.type+'&name='+this.query.name+'&email='+this.query.email+'&phone='+this.query.phone+'&company_industry='+this.query.company_industry+'&page='+page,
+        beforeSend: function() {
+          _this.loading = true
+        },
         success: function(result) {
           var data = result.result
+          _this.loading = false
+          for (var i in data.items) {
+            data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+          }
           _this.tableData = data.items
         }
       })
     },
+    //  编辑信息
+    midClick(id) {
+      var _this = this
+      this.addShow = true
+      this.id = id
+      $.ajax({
+        url: '/admin/api/v1/users/' + id,
+        success: function(result) {
+          let data = result.result
+          _this.form.name = data.name
+          _this.form.email = data.email
+          _this.form.company_industry = data.company_industry
+          _this.form.company_name = data.company_name
+          _this.form.phone = data.phone
+        }
+      })
+    },
     ensure() {
-
+      var _this = this
+      if (this.id === '') {
+        this.addShow = false
+      } else {
+        $.ajax({
+          url: '/admin/api/v1/users/' + this.id,
+          type: 'post',
+          contentType: 'application/json',
+          data: JSON.stringify(this.form),
+          success: function(result) {
+            _this.addShow = false
+            _this.$message({
+              message: result.message,
+              type: 'success'
+            })
+          }
+        })
+      }
     },
     cancel() {
-
+      this.addShow = false
     }
   },
   components: {
-    'v-table': table,
     'v-pages': pages
   }
 }
@@ -187,6 +340,9 @@ export default {
           background-color: #027ee5;
           color: #ffffff;
       }
+  }
+  .modal-dialog {
+    width: 80% !important;
   }
 }
 </style>

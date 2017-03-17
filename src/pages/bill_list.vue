@@ -21,15 +21,13 @@
          <el-date-picker
            v-model="form.starttime"
            type="date"
-           placeholder="选择日期"
-           :picker-options="pickerOptions0">
+           placeholder="选择日期">
          </el-date-picker>
          <span>至</span>
          <el-date-picker
            v-model="form.endtime"
            type="date"
-           placeholder="选择日期"
-           :picker-options="pickerOptions1">
+           placeholder="选择日期">
          </el-date-picker>
        </div>
      </el-col>
@@ -79,16 +77,6 @@ import pages from '../components/pages/pages.vue'
 export default {
   data () {
     return {
-      pickerOptions0: {
-        disabledDate(time) {
-          return time.getTime() < Date.now() - 8.64e7;
-        }
-      },
-      pickerOptions1: {
-        disabledDate(time) {
-          return time.getTime() < Date.now() - 8.64e7;
-        }
-      },
       form: {
         project_name: '',
         id: '',
@@ -118,6 +106,7 @@ export default {
   methods: {
     query(page) {
       var _this = this
+      console.log()
       var page
       if (typeof page != 'object') {
         page = page
@@ -127,14 +116,12 @@ export default {
       if (this.form.starttime === '') {
         this.form.starttime = ''
       } else {
-        var starttime = new Date(this.form.starttime)
-        this.form.starttime = starttime.getFullYear() + '-' + (starttime.getMonth() + 1) + '-' + starttime.getDate()
+        this.form.starttime = Date.parse(new Date(this.form.starttime))
       }
       if (this.form.endtime === '') {
         this.form.endtime = ''
       } else {
-        var endtime = new Date(this.form.endtime)
-        this.form.endtime = endtime.getFullYear() + '-' + (endtime.getMonth() + 1) + '-' + endtime.getDate()
+        this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
       $.ajax({
         url: '/admin/api/v1/bills?id='+this.form.id+'&project_name='+this.form.project_name+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,

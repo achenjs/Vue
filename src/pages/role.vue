@@ -23,8 +23,8 @@
             label="操作"
             width="100">
             <template scope="scope">
-              <el-button @click="handleClick(scope.row.id)" type="text" size="small">查看</el-button>
-              <el-button type="text" size="small">编辑</el-button>
+              <el-button @click="queryClick(scope.row.id)" type="text" size="small">查看</el-button>
+              <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -41,7 +41,7 @@
               <label for="">角色描述</label>
               <el-input placeholder="角色描述" v-model="form.description"></el-input>
               <label for="">状态</label>
-              <el-select placeholder="请选择" v-model="form.roleValue">
+              <el-select placeholder="请选择" v-model="form.status">
                 <el-option
                 v-for="item in roles"
                 :label="item.label"
@@ -49,8 +49,9 @@
                 :key="item.value">
                 </el-option>
               </el-select>
-              <label for="">权限</label>
+              <label for="" v-if="searchGet">权限</label>
               <el-table
+                v-if="searchGet"
                 :data="tableData3"
                 height="200"
                 border
@@ -71,7 +72,7 @@
               </el-table>
             </div>
             <div class="modal-footer">
-              <el-button type="primary" @click="ensure">确认</el-button>
+              <el-button type="primary" v-if="searchGet" @click="ensure">确认</el-button>
               <el-button type="primary" @click="cancel">取消</el-button>
             </div>
           </div>
@@ -87,13 +88,13 @@ export default {
     data() {
       return {
         tableData3: [],
-        multipleSelection: {},
+        multipleSelection: '',
         tableData: [],
         addShow: false,
         form: {
           name: '',
           description: '',
-          roleValue: '',
+          status: '',
           permissions: ''
         },
         roles: [{
@@ -104,43 +105,94 @@ export default {
           label: '禁用',
         }],
         total: 1,
+        id: '',
+        searchGet: true
       }
     },
     methods: {
-      handleSelectionChange(val) {
-        console.log(val[0].id)
-        this.multipleSelection[val[0].id] = 1
-        console.log(this.multipleSelection)
+      reset() {
+        for(var name in this.$data.form) {
+          this.$data.form[name] = ''
+        }
       },
-      handleClick(id) {
+      handleSelectionChange(val) {
+        this.multipleSelection = val
+      },
+      queryClick(id) {
         var _this = this
         this.addShow = true
+        this.searchGet = false
         $.ajax({
           url: '/admin/api/v1/roles/' + id,
           success: function(result) {
             let data = result.result
             _this.form.name = data.name
             _this.form.description = data.description
-            _this.form.roleValue = data.status
+            _this.form.status = data.status
           }
         })
       },
-      addOpen() {
+      midClick(id) {
+        this.reset()
+        this.id = id
         this.addShow = true
+        this.searchGet = true
+      },
+      addOpen() {
+        this.id = ''
+        this.reset()
+        this.addShow = true
+        this.searchGet = true
       },
       cancel() {
         this.addShow = false
       },
       ensure() {
-        $.ajax({
-          url: '/admin/api/v1/roles',
-          type: 'post',
-          success: function(result) {
-            this.addShow = false
+        var _this = this
+        if (this.id === '') {
+          //  新建
+          var arr = []
+          for (var i=0; i<this.multipleSelection.length; i++) {
+            arr.push(this.multipleSelection[i].id)
           }
-        })
+          this.form.permissions = arr.join()
+          $.ajax({
+            url: '/admin/api/v1/roles',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.addShow = false
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+            }
+          })
+        } else {
+          //  修改
+          var arr = []
+          for (var i=0; i<this.multipleSelection.length; i++) {
+            arr.push(this.multipleSelection[i].id)
+          }
+          this.form.permissions = arr.join()
+          $.ajax({
+            url: '/admin/api/v1/roles/' + this.id,
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.addShow = false
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+            }
+          })
+        }
       },
       query(page) {
+        var _this = this
         $.ajax({
           url: '/admin/api/v1/roles?page=' + page,
           success: function(result) {
@@ -162,7 +214,6 @@ export default {
           _this.tableData = data.items
         }
       })
-
       //  所有权限
       $.ajax({
         url: '/admin/api/v1/permissions',
