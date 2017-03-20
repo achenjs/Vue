@@ -21,6 +21,7 @@ import bill_list from '@/pages/bill_list.vue'
 import settings from '@/pages/settings.vue'
 import bp_list from '@/pages/bp_list.vue'
 import bp_manage from '@/pages/bp_manage.vue'
+import bp_details from '@/pages/bp_details.vue'
 import NotFound from '@/pages/notFound.vue'
 
 Vue.use(Router)
@@ -136,6 +137,7 @@ export default new Router({
       children: [
         {path: '/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
         {path: '/bp_manage', name: '新建BP', component: bp_manage, hidden: true},
+        {path: '/bp_details', name: '修改BP', component: bp_details, hidden: true},
       ]
     },
     {

@@ -1,256 +1,246 @@
 <template lang="html">
-<div class="bp_manage">
-    <el-upload
-    class="upload-demo"
-    ref="upload"
-    action="https://jsonplaceholder.typicode.com/posts/"
-    :on-preview="handlePreview"
-    :on-remove="handleRemove"
-    :file-list="fileList"
-    :auto-upload="false">
-    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-    <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-  </el-upload>
-  <el-tabs type="border-card">
-    <el-tab-pane label="团队信息">
-      <div class="Modular">
-        <el-col :span="24">
-          <el-form :label-position="right" label-width="120px">
-            <el-form-item label="项目名称">
-              <el-input placeholder="项目名称"></el-input>
-            </el-form-item>
-            <el-form-item label="公司名称">
-              <el-input placeholder="公司名称" v-model="form.company_name"></el-input>
-            </el-form-item>
-            <el-form-item label="预期融资额(万元)">
-              <el-input placeholder="预期融资额(万元)"></el-input>
-            </el-form-item>
-            <el-form-item label="预期估值(万元)">
-              <el-input placeholder="预期估值(万元)"></el-input>
-            </el-form-item>
-            <el-form-item label="联系人">
-              <el-input placeholder="联系人"></el-input>
-            </el-form-item>
-            <el-form-item label="联系人职位">
-              <el-input placeholder="联系人职位"></el-input>
-            </el-form-item>
-            <el-form-item label="联系方式">
-              <el-input placeholder="联系方式"></el-input>
-            </el-form-item>
-            <el-form-item label="员工人数">
-              <el-input placeholder="员工人数"></el-input>
-            </el-form-item>
-            <el-form-item label="成立时间">
-              <el-input placeholder="成立时间"></el-input>
-            </el-form-item>
-            <el-form-item label="所属城市">
-              <el-input placeholder="所属城市" v-model="form.city"></el-input>
-            </el-form-item>
-            <el-form-item label="关联投资者">
-              <el-input placeholder="关联投资者"></el-input>
-            </el-form-item>
-            <el-form-item label="关联机构">
-              <el-input placeholder="关联机构"></el-input>
-            </el-form-item>
-            <el-form-item label="项目来源">
-              <el-input placeholder="项目来源"></el-input>
-            </el-form-item>
-            <el-form-item label="所属行业">
-              <el-input placeholder="所属行业"></el-input>
-            </el-form-item>
-            <el-form-item label="关键词">
-              <el-input placeholder="关键词"></el-input>
-            </el-form-item>
-            <el-form-item label="一句话介绍">
-              <el-input placeholder="一句话介绍"></el-input>
-            </el-form-item>
-            <el-form-item label="备注">
-              <el-input type="textarea" placeholder="备注" :maxlength="100" :rows="3"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </div>
-    </el-tab-pane>
-    <el-tab-pane label="团队分析">
-      <div class="Modular">
-        <el-col :span="24">
-          <el-form :label-position="right" label-width="120px">
-            <el-form-item label="全职/兼职情况">
-              <el-input placeholder="全职/兼职情况"></el-input>
-            </el-form-item>
-            <el-form-item label="CEO">
-              <el-input placeholder="CEO" v-model="form.ceo"></el-input>
-            </el-form-item>
-            <el-form-item label="技术负责人">
-              <el-input placeholder="技术负责人"></el-input>
-            </el-form-item>
-            <el-form-item label="市场负责人">
-              <el-input placeholder="市场负责人"></el-input>
-            </el-form-item>
-            <el-form-item label="行业资源">
-              <el-input placeholder="行业资源"></el-input>
-            </el-form-item>
-            <el-form-item label="目前股权结构">
-              <el-input placeholder="目前股权结构"></el-input>
-            </el-form-item>
-            <el-form-item label="团队描述及组成">
-              <el-input type="textarea" placeholder="团队描述及组成" :maxlength="100" :rows="3"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </div>
-    </el-tab-pane>
-    <el-tab-pane label="市场分析">
-      <div class="Modular">
-        <el-col :span="24">
-          <el-form :label-position="right" label-width="120px">
-            <el-form-item label="市场占有估算">
-              <el-input placeholder="市场占有估算"></el-input>
-            </el-form-item>
-            <el-form-item label="市场容量">
-              <el-input placeholder="市场容量"></el-input>
-            </el-form-item>
-            <el-form-item label="市场增量">
-              <el-input placeholder="市场增量"></el-input>
-            </el-form-item>
-            <el-form-item label="竞争对手分析">
-              <el-input type="textarea" placeholder="竞争对手分析" :maxlength="100" :rows="3"></el-input>
-            </el-form-item>
-            <el-form-item label="痛点及需求描述">
-              <el-input type="textarea" placeholder="痛点及需求描述" :maxlength="100" :rows="3"></el-input>
-            </el-form-item>
-            <el-form-item label="我们的资源匹配情况">
-              <el-input type="textarea" placeholder="我们的资源匹配情况" :maxlength="100" :rows="3"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </div>
-    </el-tab-pane>
-    <el-tab-pane label="投资亮点/关键技术">
-      <div class="Modular">
-        <el-col :span="24">
-          <el-form :label-position="right" label-width="120px">
-            <el-form-item label="产品形态">
-              <el-input placeholder="产品形态"></el-input>
-            </el-form-item>
-            <el-form-item label="主要营收来源">
-              <el-input placeholder="主要营收来源"></el-input>
-            </el-form-item>
-            <el-form-item label="营收状况">
-              <el-input placeholder="营收状况"></el-input>
-            </el-form-item>
-            <el-form-item label="目标客户">
-              <el-input placeholder="目标客户"></el-input>
-            </el-form-item>
-            <el-form-item label="获取用户方式">
-              <el-input placeholder="获取用户方式"></el-input>
-            </el-form-item>
-            <el-form-item label="核心技术">
-              <el-input placeholder="核心技术" v-model="form.tech"></el-input>
-            </el-form-item>
-            <el-form-item label="技术评估">
-              <el-input placeholder="技术评估"></el-input>
-            </el-form-item>
-            <el-form-item label="核心资源">
-              <el-input placeholder="核心资源" v-model="form.core_resource"></el-input>
-            </el-form-item>
-            <el-form-item label="近期业务规划">
-              <el-input placeholder="近期业务规划"></el-input>
-            </el-form-item>
-            <el-form-item label="中期业务规划">
-              <el-input placeholder="中期业务规划"></el-input>
-            </el-form-item>
-            <el-form-item label="未来定位">
-              <el-input placeholder="未来定位"></el-input>
-            </el-form-item>
-            <el-form-item label="商业模式描述">
-              <el-input type="textarea" placeholder="商业模式描述" :maxlength="100" :rows="3"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </div>
-    </el-tab-pane>
-    <el-tab-pane label="融资/需求方案">
-      <div class="Modular">
-        <el-col :span="24">
-          <el-form :label-position="right" label-width="120px">
-            <el-form-item label="需求描述">
-              <el-input placeholder="需求描述"></el-input>
-            </el-form-item>
-            <el-form-item label="需求依据">
-              <el-input placeholder="需求依据"></el-input>
-            </el-form-item>
-            <el-form-item label="融资计划">
-              <el-input placeholder="融资计划"></el-input>
-            </el-form-item>
-            <el-form-item label="目标客户">
-              <el-input placeholder="目标客户"></el-input>
-            </el-form-item>
-            <el-form-item label="财务预期营收">
-              <el-input placeholder="财务预期营收"></el-input>
-            </el-form-item>
-            <el-form-item label="风险及应对策略">
-              <el-input type="textarea" placeholder="风险及应对策略" :maxlength="100" :rows="3"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </div>
-    </el-tab-pane>
-    <el-tab-pane label="项目打分(10分制,无小数点)">
-      <div class="Modular">
-        <el-col :span="24">
-          <el-form :label-position="right" label-width="120px">
-            <el-form-item label="需求">
-              <el-input placeholder="需求"></el-input>
-            </el-form-item>
-            <el-form-item label="行业">
-              <el-input placeholder="行业"></el-input>
-            </el-form-item>
-            <el-form-item label="产品">
-              <el-input placeholder="产品"></el-input>
-            </el-form-item>
-            <el-form-item label="团队">
-              <el-input placeholder="团队"></el-input>
-            </el-form-item>
-            <el-form-item label="资源">
-              <el-input placeholder="资源"></el-input>
-            </el-form-item>
-            <el-form-item label="商业模式">
-              <el-input placeholder="商业模式"></el-input>
-            </el-form-item>
-            <el-form-item label="估值">
-              <el-input placeholder="估值"></el-input>
-            </el-form-item>
-            <el-form-item label="风险">
-              <el-input placeholder="风险"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </div>
-    </el-tab-pane>
-  </el-tabs>
-  <el-col :span="8" :offset="8" style="text-align: center; margin-top: 20px;">
-    <el-button type="primary" size="large">提交</el-button>
-  </el-col>
-</div>
+  <div class="bp_manage">
+    <input type="file" @change="uploadFile($event)" id="upLog">
+    <input type="hidden" id="hiddens" v-model="form.bp_url">
+    <div class="xs"></div>
+    <el-tabs type="border-card" style="margin-top: 30px;">
+      <el-tab-pane label="团队信息">
+        <div class="Modular">
+          <el-col :span="24">
+            <el-form :label-position="right" label-width="120px">
+              <el-form-item label="项目名称">
+                <el-input placeholder="项目名称" v-model="form.project_name"></el-input>
+              </el-form-item>
+              <el-form-item label="公司名称">
+                <el-input placeholder="公司名称" v-model="form.company_name"></el-input>
+              </el-form-item>
+              <el-form-item label="预期融资额(万元)">
+                <el-input placeholder="预期融资额(万元)" v-model="form.financing_sum"></el-input>
+              </el-form-item>
+              <el-form-item label="预期估值(万元)">
+                <el-input placeholder="预期估值(万元)" v-model="form.valuation"></el-input>
+              </el-form-item>
+              <el-form-item label="联系人">
+                <el-input placeholder="联系人" v-model="form.contact"></el-input>
+              </el-form-item>
+              <el-form-item label="联系人职位">
+                <el-input placeholder="联系人职位" v-model="form.contact_title"></el-input>
+              </el-form-item>
+              <el-form-item label="联系方式">
+                <el-input placeholder="联系方式" v-model="form.contact_phone"></el-input>
+              </el-form-item>
+              <el-form-item label="员工人数">
+                <el-input placeholder="员工人数" v-model="form.employees"></el-input>
+              </el-form-item>
+              <el-form-item label="成立时间">
+                <el-date-picker
+                  v-model="form.start_from"
+                  type="date"
+                  placeholder="成立时间">
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="所属城市">
+                <el-input placeholder="所属城市" v-model="form.city"></el-input>
+              </el-form-item>
+              <el-form-item label="关联投资者">
+                <el-input placeholder="关联投资者" v-model="form.investors"></el-input>
+              </el-form-item>
+              <el-form-item label="关联机构">
+                <el-input placeholder="关联机构" v-model="form.organization"></el-input>
+              </el-form-item>
+              <el-form-item label="项目来源">
+                <el-input placeholder="项目来源" v-model="form.source"></el-input>
+              </el-form-item>
+              <el-form-item label="所属行业">
+                <el-input placeholder="所属行业" v-model="form.Industry"></el-input>
+              </el-form-item>
+              <el-form-item label="关键词">
+                <el-input placeholder="关键词" v-model="form.tags"></el-input>
+              </el-form-item>
+              <el-form-item label="一句话介绍">
+                <el-input placeholder="一句话介绍" v-model="form.description"></el-input>
+              </el-form-item>
+              <el-form-item label="备注">
+                <el-input type="textarea" v-model="form.comment" placeholder="备注" :maxlength="100" :rows="3"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="团队分析">
+        <div class="Modular">
+          <el-col :span="24">
+            <el-form :label-position="right" label-width="120px">
+              <el-form-item label="全职/兼职情况">
+                <el-input placeholder="全职/兼职情况" v-model="form.full_time"></el-input>
+              </el-form-item>
+              <el-form-item label="CEO">
+                <el-input placeholder="CEO" v-model="form.ceo"></el-input>
+              </el-form-item>
+              <el-form-item label="技术负责人">
+                <el-input placeholder="技术负责人" v-model="form.cto"></el-input>
+              </el-form-item>
+              <el-form-item label="市场负责人">
+                <el-input placeholder="市场负责人" v-model="form.cmo"></el-input>
+              </el-form-item>
+              <el-form-item label="行业资源">
+                <el-input placeholder="行业资源" v-model="form.industry_resource"></el-input>
+              </el-form-item>
+              <el-form-item label="目前股权结构">
+                <el-input placeholder="目前股权结构" v-model="form.stock_structure"></el-input>
+              </el-form-item>
+              <el-form-item label="团队描述及组成">
+                <el-input type="textarea" v-model="form.team_desc" placeholder="团队描述及组成" :maxlength="100" :rows="3"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="市场分析">
+        <div class="Modular">
+          <el-col :span="24">
+            <el-form :label-position="right" label-width="120px">
+              <el-form-item label="市场占有估算">
+                <el-input placeholder="市场占有估算" v-model="form.market_rate"></el-input>
+              </el-form-item>
+              <el-form-item label="市场容量">
+                <el-input placeholder="市场容量" v-model="form.market_capacity"></el-input>
+              </el-form-item>
+              <el-form-item label="市场增量">
+                <el-input placeholder="市场增量" v-model="form.market_proficiency"></el-input>
+              </el-form-item>
+              <el-form-item label="竞争对手分析">
+                <el-input type="textarea" v-model="form.rival" placeholder="竞争对手分析" :maxlength="100" :rows="3"></el-input>
+              </el-form-item>
+              <el-form-item label="痛点及需求描述">
+                <el-input type="textarea" v-model="form.pain_point" placeholder="痛点及需求描述" :maxlength="100" :rows="3"></el-input>
+              </el-form-item>
+              <el-form-item label="我们的资源匹配情况">
+                <el-input type="textarea" v-model="form.our_resource" placeholder="我们的资源匹配情况" :maxlength="100" :rows="3"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="投资亮点/关键技术">
+        <div class="Modular">
+          <el-col :span="24">
+            <el-form :label-position="right" label-width="120px">
+              <el-form-item label="产品形态">
+                <el-input placeholder="产品形态" v-model="form.product_status"></el-input>
+              </el-form-item>
+              <el-form-item label="主要营收来源">
+                <el-input placeholder="主要营收来源" v-model="form.main_income"></el-input>
+              </el-form-item>
+              <el-form-item label="营收状况">
+                <el-input placeholder="营收状况" v-model="form.income_statue"></el-input>
+              </el-form-item>
+              <el-form-item label="目标客户">
+                <el-input placeholder="目标客户" v-model="form.dest_customers"></el-input>
+              </el-form-item>
+              <el-form-item label="获取用户方式">
+                <el-input placeholder="获取用户方式" v-model="form.customers_resource"></el-input>
+              </el-form-item>
+              <el-form-item label="核心技术">
+                <el-input placeholder="核心技术" v-model="form.core_tech"></el-input>
+              </el-form-item>
+              <el-form-item label="技术评估">
+                <el-input placeholder="技术评估" v-model="form.tech_evaluation"></el-input>
+              </el-form-item>
+              <el-form-item label="核心资源">
+                <el-input placeholder="核心资源" v-model="form.core_resource"></el-input>
+              </el-form-item>
+              <el-form-item label="近期业务规划">
+                <el-input placeholder="近期业务规划" v-model="form.recent_plan"></el-input>
+              </el-form-item>
+              <el-form-item label="中期业务规划">
+                <el-input placeholder="中期业务规划" v-model="form.future_plan"></el-input>
+              </el-form-item>
+              <el-form-item label="未来定位">
+                <el-input placeholder="未来定位" v-model="form.future_aim"></el-input>
+              </el-form-item>
+              <el-form-item label="商业模式描述">
+                <el-input type="textarea" v-model="form.business_mode" placeholder="商业模式描述" :maxlength="100" :rows="3"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="融资/需求方案">
+        <div class="Modular">
+          <el-col :span="24">
+            <el-form :label-position="right" label-width="120px">
+              <el-form-item label="需求描述">
+                <el-input placeholder="需求描述" v-model="form.needs_desc"></el-input>
+              </el-form-item>
+              <el-form-item label="需求依据">
+                <el-input placeholder="需求依据" v-model="form.needs_support"></el-input>
+              </el-form-item>
+              <el-form-item label="融资计划">
+                <el-input placeholder="融资计划" v-model="form.financing_plan"></el-input>
+              </el-form-item>
+              <el-form-item label="财务预期营收">
+                <el-input placeholder="财务预期营收" v-model="form.potential_income"></el-input>
+              </el-form-item>
+              <el-form-item label="风险及应对策略">
+                <el-input type="textarea" v-model="form.risk" placeholder="风险及应对策略" :maxlength="100" :rows="3"></el-input>
+              </el-form-item>
+              <el-form-item label="风险分析">
+                <el-input type="textarea" v-model="form.risk_detail" placeholder="风险分析" :maxlength="100" :rows="3"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="项目打分(10分制,无小数点)">
+        <div class="Modular">
+          <el-col :span="24">
+            <el-form :label-position="right" label-width="120px">
+              <el-form-item label="需求">
+                <el-input placeholder="需求" v-model="form.score_needs"></el-input>
+              </el-form-item>
+              <el-form-item label="行业">
+                <el-input placeholder="行业" v-model="form.score_industry"></el-input>
+              </el-form-item>
+              <el-form-item label="产品">
+                <el-input placeholder="产品" v-model="form.score_product"></el-input>
+              </el-form-item>
+              <el-form-item label="团队">
+                <el-input placeholder="团队" v-model="form.score_team"></el-input>
+              </el-form-item>
+              <el-form-item label="资源">
+                <el-input placeholder="资源" v-model="form.score_resource"></el-input>
+              </el-form-item>
+              <el-form-item label="商业模式">
+                <el-input placeholder="商业模式" v-model="form.score_mode"></el-input>
+              </el-form-item>
+              <el-form-item label="估值">
+                <el-input placeholder="估值" v-model="form.score_evaluation"></el-input>
+              </el-form-item>
+              <el-form-item label="风险">
+                <el-input placeholder="风险" v-model="form.score_risk"></el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
+    <el-col :span="8" :offset="8" style="text-align: center; margin-top: 20px;">
+      <el-button type="primary" size="large" @click="submitBP">提交</el-button>
+    </el-col>
+  </div>
 </template>
 
 <script>
+import upload from '../assets/js/upload'
   export default {
     data() {
       return {
         right: 'right',
-        fileList: [
-          {
-            name: 'food.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'},
-          {
-            name: 'food2.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}
-        ],
+        fileList: [],
+        fileType: '.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.rtf,.ppt,.bmp,.png,.jpg,.jpeg,.zip,.prt,.stp,.dxf,.dwg,.sch,.pcb,.dsn,.brd',
         form: {
-          "bp_url": 0,
+          "bp_url": "",
           "business_mode": "",
           "ceo": "",
           "city": "",
@@ -268,14 +258,14 @@
           "dest_customers": "",
           "employees": "",
           "financing_plan": "",
-          "financing_sum": 0,
+          "financing_sum": "",
           "full_time": "",
           "future_aim": "",
           "future_plan": "",
           "income_status": "",
           "industry": "",
           "industry_resource": "",
-          "investors": 0,
+          "investors": "",
           "main_income": "",
           "market_capacity": "",
           "market_proficiency": "",
@@ -292,14 +282,14 @@
           "risk": "",
           "risk_detail": "",
           "rival": "",
-          "score_evaluation": 0,
-          "score_industry": 0,
-          "score_mode": 0,
-          "score_needs": 0,
-          "score_product": 0,
-          "score_resource": 0,
-          "score_risk": 0,
-          "score_team": 0,
+          "score_evaluation": "",
+          "score_industry": "",
+          "score_mode": "",
+          "score_needs": "",
+          "score_product": "",
+          "score_resource": "",
+          "score_risk": "",
+          "score_team": "",
           "source": "",
           "start_from": "",
           "stock_structure": "",
@@ -307,19 +297,40 @@
           "team_desc": "",
           "tech_evaluation": "",
           "timestamp": "",
-          "valuation": 0
-        }
+          "valuation": ""
+        },
+        fileData: {}
       }
     },
+    created() {
+      console.log(this.$router.params)
+    },
     methods: {
-      submitUpload() {
-        this.$refs.upload.submit();
+      //  上传
+      uploadFile(ele) {
+        upload(ele.target)
       },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
+      //  创建BP
+      submitBP() {
+        var _this = this
+        this.form.bp_url = $("#hiddens").val()
+        if (this.form.start_from === '') {
+          this.form.start_from = ''
+        } else {
+          this.form.start_from = Date.parse(new Date(this.form.start_from))
+        }
+        $.ajax({
+          url: '/admin/api/v1/bps',
+          type: 'post',
+          contentType: 'application/json',
+          data: JSON.stringify(this.form),
+          success: function(result) {
+            _this.$message({
+              message: result.message,
+              type: 'success'
+            })
+          }
+        })
       }
     }
   }
@@ -327,17 +338,19 @@
 
 <style lang="scss">
 .bp_manage {
-  .Modular {
-    .title {
-      width: 100%;
-      height: 40px;
-      line-height: 40px;
-      background-color: #efefef;
-      text-align: center;
-      font-size: 20px;
-      clear: both;
-      margin-bottom: 5px;
-    }
+  .xs {
+    width:500px;
+    height:50px;
+    background:#fff;
+    position: fixed;
+    top:-50px;
+    left:50%;
+    margin-left:-250px;
+    z-index:4;
+    border-radius:6px;
+    border:1px solid #efefef;
+    line-height:50px;
+    padding-left:15px;
   }
 }
 </style>
