@@ -12,17 +12,22 @@
           <el-table-column
             align="center"
             prop="id"
-            label="编号">
+            label="编号"
+            width="100px"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            label="交付物名称">
+            label="交付物名称"
+            width="300px"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="description"
-            label="描述">
+            label="描述"
+            show-overflow-tooltip>
           </el-table-column>
         </el-table>
       </div>
@@ -111,19 +116,7 @@ export default {
       }
     },
     created() {
-      var _this = this
-      $.ajax({
-        url: '/admin/api/v1/attachments?page=1',
-        beforeSend: function() {
-          _this.loading = true
-        },
-        success: function(result) {
-          let data = result.result
-          _this.loading = false
-          _this.total = data.total
-          _this.tableData = data.items
-        }
-      })
+      this.query(1)
     },
     components: {
       'v-pages': pages

@@ -12,27 +12,36 @@
           <el-table-column
             align="center"
             prop="id"
-            label="编号">
+            label="编号"
+            width="100px"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            label="服务项名称">
+            label="服务项名称"
+            width="150px"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="desc"
-            label="服务项描述">
+            label="服务项描述"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="category_id"
-            label="类别">
+            label="类别"
+            width="150px"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="price"
-            label="报价">
+            label="报价"
+            width="150px"
+            show-overflow-tooltip>
           </el-table-column>
         </el-table>
       </div>

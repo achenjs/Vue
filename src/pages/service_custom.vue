@@ -8,27 +8,36 @@
        <el-table-column
          align="center"
          prop="id"
-         label="编号">
+         label="编号"
+         width="100px"
+         show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="title"
-         label="服务项名称">
+         label="服务项名称"
+         width="150px"
+         show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="description"
-         label="服务项描述">
+         label="服务项描述"
+         show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="project_name"
-         label="类别">
+         label="类别"
+         width="150px"
+         show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="price"
-         label="报价">
+         label="报价"
+         width="150px"
+         show-overflow-tooltip>
        </el-table-column>
      </el-table>
      <v-pages :total="total" v-on:currentChange="query"></v-pages>

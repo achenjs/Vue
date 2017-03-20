@@ -43,28 +43,37 @@
          style="width: 100%">
          <el-table-column
             align="center"
-           prop="id"
-           label="订单号">
+            prop="id"
+            label="订单号"
+            show-overflow-tooltip
+            width="100px">
          </el-table-column>
          <el-table-column
             align="center"
-           prop="project_name"
-           label="项目名称">
+            prop="project_name"
+            label="项目名称"
+            show-overflow-tooltip
+            width="150px">
          </el-table-column>
          <el-table-column
             align="center"
-           prop="service_name"
-           label="服务名称">
+            prop="service_name"
+            label="服务名称"
+            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
             align="center"
-           prop="price"
-           label="金额">
+            prop="price"
+            label="金额"
+            show-overflow-tooltip
+            width="150px">
          </el-table-column>
          <el-table-column
             align="center"
-           prop="gmt_create"
-           label="下单时间">
+            prop="gmt_create"
+            label="下单时间"
+            show-overflow-tooltip
+            width="150px">
          </el-table-column>
        </el-table>
      </div>
@@ -89,24 +98,11 @@ export default {
     }
   },
   created() {
-    var _this = this
-    $.ajax({
-      url: '/admin/api/v1/bills?page=1',
-      beforeSend: function() {
-        _this.loading = true
-      },
-      success: function(result) {
-        _this.loading = false
-        var data = result.result
-        _this.total = data.total
-        _this.tableData = data.items
-      }
-    })
+    this.query(1)
   },
   methods: {
     query(page) {
       var _this = this
-      console.log()
       var page
       if (typeof page != 'object') {
         page = page
@@ -132,6 +128,9 @@ export default {
           _this.loading = false
           var data = result.result
           _this.total = data.total
+          for (var i in data.items) {
+            data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+          }
           _this.tableData = data.items
         }
       })

@@ -71,8 +71,8 @@
        <el-button class="export" type="primary">导出</el-button>
      </div>
      <div class="" style="margin-bottom: 20px;">
-       <el-button type="primary" @click="query(1)">系统服务项</el-button>
-       <el-button type="primary" @click="SearchCustomService(1)">自定义服务项</el-button>
+       <el-button type="primary" class="tab-button" :class="{active: !isActive}" @click="tabQuery">系统服务项</el-button>
+       <el-button type="primary" class="tab-button" :class="{active: isActive}" @click="tabCustom">自定义服务项</el-button>
      </div>
      <div class="deliverable_table">
        <el-table
@@ -83,32 +83,42 @@
          <el-table-column
            align="center"
            prop="id"
-           label="订单号">
+           label="订单号"
+           width="100px"
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="title"
-           label="服务项">
+           label="服务项"
+           width="150px"
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="gmt_create"
-           label="下单时间">
+           label="下单时间"
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="status"
-           label="订单状态">
+           label="订单状态"
+           width="150px"
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="price"
-           label="订单金额">
+           label="订单金额"
+           width="150px"
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            fixed="right"
-           label="操作">
+           label="操作"
+           show-overflow-tooltip>
            <template scope="scope">
              <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
            </template>
@@ -125,9 +135,17 @@
              <label for="" v-if="isCustom">价格</label>
              <el-input placeholder="价格" v-if="isCustom" v-model="UserDetails.price"></el-input>
              <label for="" v-if="!isCustom">服务项</label>
-             <el-input placeholder="服务项" v-if="!isCustom" v-model="CustomDetails.title"></el-input>
+             <el-input placeholder="服务项" :disabled="true" v-if="!isCustom" v-model="CustomDetails.title"></el-input>
              <label for="">服务包类</label>
-             <el-select placeholder="请选择" v-model="details.category_id">
+             <el-select placeholder="请选择" v-if="isCustom" v-model="details.category_id">
+               <el-option
+               v-for="item in servers"
+               :label="item.name"
+               :value="item.id"
+               :key="item.id">
+               </el-option>
+             </el-select>
+             <el-select placeholder="请选择" v-if="!isCustom" :disabled="true" v-model="details.category_id">
                <el-option
                v-for="item in servers"
                :label="item.name"
@@ -173,16 +191,12 @@ export default {
       },
       conditions: [
         {
-          value: 'Ignoring',
-          label: '请求忽略'
+          value: 'Paid',
+          label: '已支付'
         },
         {
-          value: 'Ignored',
-          label: '已忽略'
-        },
-        {
-          value: 'Rejected',
-          label: '已驳回'
+          value: 'Canceled',
+          label: '已取消'
         },
         {
           value: 'Submitting',
@@ -218,7 +232,8 @@ export default {
       total: 1,
       isCustom: true,
       addShow: false,
-      id: ''
+      id: '',
+      isActive: false
     }
   },
   created() {
@@ -232,23 +247,20 @@ export default {
       }
     })
     //  系统服务项
-    $.ajax({
-      url: '/admin/api/v1/user_service_items?page=1',
-      beforeSend: function() {
-        _this.loading = true
-      },
-      success: function(result) {
-        let data = result.result
-        _this.loading = false
-        _this.total = data.total
-        for (var i in data.items) {
-          data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
-        }
-        _this.tableData = data.items
-      }
-    })
+    this.query(1)
   },
   methods: {
+    //  tab切换
+    tabQuery() {
+      this.currenPage = 1
+      this.isActive = false
+      this.query(1)
+    },
+    tabCustom() {
+      this.currenPage = 1
+      this.isActive = true
+      this.SearchCustomService(1)
+    },
     //  清空
     reset() {
       for(var name in this.$data.details) {
@@ -275,7 +287,28 @@ export default {
           var data = result.result
           _this.UserDetails.price = data.service_item.price
           _this.details.category_id = data.service_item.category_id
-          _this.details.status = data.service_item.status
+          var status = data.status
+          switch (status) {
+            case '已取消':
+              _this.details.status = 'Canceled'
+              break;
+            case '已支付':
+              _this.details.status = 'Paid'
+              break;
+            case '待提交':
+              _this.details.status = 'Submitting'
+              break;
+            case '已提交':
+              _this.details.status = 'Submitted'
+              break;
+            case '已确认':
+              _this.details.status = 'Confirmed'
+              break;
+            case '已完成':
+              _this.details.status = 'Finished'
+              break;
+          }
+          _this.details.status = data.status
         }
       })
     },
@@ -412,8 +445,6 @@ export default {
         //  修改自定义服务项
         var obj = {
           status: this.details.status,
-          title: this.CustomDetails.title,
-          category_id: this.details.category_id
         }
         var _this = this
         $.ajax({
@@ -455,6 +486,13 @@ export default {
   .buttons {
     margin: 30px 0;
     text-align: center;
+  }
+  .tab-button {
+    background-color: #dddddd;
+    border: none;
+  }
+  .tab-button.active {
+    background-color: #20a0ff;
   }
 }
 </style>

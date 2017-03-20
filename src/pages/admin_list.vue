@@ -222,21 +222,7 @@ export default {
       }
     })
     //  会员列表
-    $.ajax({
-      url: '/admin/api/v1/users?id='+this.query.id+'&type='+this.query.type+'&name='+this.query.name+'&email='+this.query.email+'&phone='+this.query.phone+'&company_industry='+this.query.company_industry+'&page='+1,
-      beforeSend: function() {
-        _this.loading = true
-      },
-      success: function(result) {
-        var data = result.result
-        _this.loading = false
-        for (var i in data.items) {
-          data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
-        }
-        _this.tableData = data.items
-        _this.total = data.total
-      }
-    })
+    this.search(1)
   },
   methods: {
     reset() {

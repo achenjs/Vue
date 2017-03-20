@@ -12,27 +12,36 @@
           <el-table-column
             align="center"
             prop="name"
-            label="姓名">
+            label="姓名"
+            width="100px"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="dept_name"
-            label="部门">
+            label="部门"
+            width="150px"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="role_name"
-            label="角色">
+            label="角色"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="gmt_create"
-            label="登陆时间">
+            width="150px"
+            label="登陆时间"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="address"
-            label="操作">
+            label="操作"
+            width="120px"
+            show-overflow-tooltip>
             <template scope="scope">
               <el-button @click="queryClick(scope.row.id)" type="text" size="small">查看</el-button>
               <el-button @click="midClick(scope.row.id)" type="text" size="small">修改</el-button>
@@ -129,18 +138,7 @@ export default {
     created() {
       var _this = this
       //  操作员列表
-      $.ajax({
-        url: '/admin/api/v1/admins?page=1',
-        beforeSend: function() {
-          _this.loading = true
-        },
-        success: function(result) {
-          let data = result.result
-          _this.loading = false
-          _this.total = data.total
-          _this.tableData = data.items
-        }
-      })
+      this.query(1)
       //  部门列表
       $.ajax({
         url: '/admin/api/v1/departments?page=1',
@@ -223,6 +221,9 @@ export default {
             let data = result.result
             _this.loading = false
             _this.total = data.total
+            for (var i in data.items) {
+              data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+            }
             _this.tableData = data.items
           }
         })

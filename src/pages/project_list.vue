@@ -193,18 +193,7 @@ export default {
     })
 
     //  项目列表
-    $.ajax({
-      url: '/admin/api/v1/projects?page=1',
-      beforeSend: function() {
-        _this.loading = true
-      },
-      success: function(result) {
-        let data = result.result
-        _this.loading = false
-        _this.total = data.total
-        _this.tableData = data.items
-      }
-    })
+    this.query(1)
   },
   methods: {
     query(page) {
@@ -217,14 +206,12 @@ export default {
       if (this.form.starttime === '') {
         this.form.starttime = ''
       } else {
-        var starttime = new Date(this.form.starttime)
-        this.form.starttime = starttime.getFullYear() + '-' + (starttime.getMonth() + 1) + '-' + starttime.getDate()
+        this.form.starttime = Date.parse(new Date(this.form.starttime))
       }
       if (this.form.endtime === '') {
         this.form.endtime = ''
       } else {
-        var endtime = new Date(this.form.endtime)
-        this.form.endtime = endtime.getFullYear() + '-' + (endtime.getMonth() + 1) + '-' + endtime.getDate()
+        this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
       var _this = this
       $.ajax({
@@ -236,6 +223,9 @@ export default {
           let data = result.result
           _this.loading = false
           _this.total = data.total
+          for (var i in data.items) {
+            data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+          }
           _this.tableData = data.items
         }
       })

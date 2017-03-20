@@ -50,19 +50,7 @@ export default {
       }
     },
     created() {
-      var _this = this
-      $.ajax({
-        url: '/admin/api/v1/comments?page=1',
-        beforeSend: function() {
-          _this.loading = true
-        },
-        success: function(result) {
-          var data = result.result
-          _this.loading = false
-          _this.total = data.total
-          _this.tableData = data.items
-        }
-      })
+      this.query(1)
     },
     methods: {
       reset() {

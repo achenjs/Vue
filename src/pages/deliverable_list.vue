@@ -40,7 +40,7 @@
      </el-col>
      </div>
      <div class="buttons">
-       <el-button class="query" type="primary">查询</el-button>
+       <el-button class="query" type="primary" @click="searchPage(1)">查询</el-button>
        <el-button class="export" type="primary">导出</el-button>
      </div>
      <div class="deliverable_table">
@@ -54,30 +54,36 @@
            align="center"
            fixed
            prop="id"
-           label="编号">
+           label="编号"
+           width="100px"
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="attachment_name"
            label="项目名称"
-           width="120">
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="phase_id"
-           label="阶段">
+           label="阶段"
+           width="120px"
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="phase_name"
            width="150"
-           label="交付物名称">
+           label="交付物名称"
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="gmt_create"
-           width="150"
-           label="交付时间">
+           width="150px"
+           label="交付时间"
+           show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
@@ -86,9 +92,10 @@
          </el-table-column>
          <el-table-column
             align="center"
-           fixed="right"
-           label="操作"
-           width="100">
+            fixed="right"
+            label="操作"
+            width="100"
+            show-overflow-tooltip>
            <template scope="scope">
              <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
            </template>
@@ -102,8 +109,6 @@
              <span>交付物详情</span>
            </div>
            <div class="modal-content">
-             <label for="">交付物名称</label>
-             <el-input placeholder="交付物名称" v-model="details.attachment_name"></el-input>
              <label for="">订单状态</label>
              <el-select placeholder="请选择" v-model="details.status">
                <el-option
@@ -132,16 +137,12 @@ export default {
     return {
       conditions: [
         {
-          value: 'Ignoring',
-          label: '请求忽略'
+          value: 'Paid',
+          label: '已支付'
         },
         {
-          value: 'Ignored',
-          label: '已忽略'
-        },
-        {
-          value: 'Rejected',
-          label: '已驳回'
+          value: 'Canceled',
+          label: '已取消'
         },
         {
           value: 'Submitting',
@@ -169,43 +170,28 @@ export default {
         attachment_name: ''
       },
       details: {
-        attachment_name: '',
         status: ''
       },
       tableData: [],
       loading: false,
       total: 1,
+      id: ''
     }
   },
   created() {
     //  获取交付物列表
-    var _this = this
-    $.ajax({
-      url: '/admin/api/v1/phases_attachments?page=1',
-      beforeSend: function() {
-        _this.loading = true
-      },
-      success: function(result) {
-        let data = result.result
-        _this.loading = false
-        _this.total = data.total
-        for (var i in data.items) {
-          data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
-        }
-        _this.tableData = data.items
-      }
-    })
+    this.searchPage(1)
   },
   methods: {
     //  点击编辑获取单个详情
     edit(id) {
       var _this = this
+      this.id = id
       this.addShow = true
       $.ajax({
         url: '/admin/api/v1/phases_attachments/' + id,
         success: function(result) {
           var data = result.result
-          _this.details.attachment_name = data.attachment_name
           _this.details.status = data.status
         }
       })
@@ -213,6 +199,22 @@ export default {
     //  分页查询
     searchPage(page) {
       var _this = this
+      var page
+      if (typeof page != 'object') {
+        page = page
+      } else {
+        page = 1
+      }
+      if (this.query.starttime === '') {
+        this.query.starttime = ''
+      } else {
+        this.query.starttime = Date.parse(new Date(this.query.starttime))
+      }
+      if (this.query.endtime === '') {
+        this.query.endtime = ''
+      } else {
+        this.query.endtime = Date.parse(new Date(this.query.endtime))
+      }
       $.ajax({
         url: '/admin/api/v1/phases_attachments?attachment_name='+ this.query.attachment_name +'&starttime='+ this.query.starttime +'&endtime='+ this.query.endtime +'&status='+ this.query.status +'&page=' + page,
         beforeSend: function() {
@@ -224,6 +226,27 @@ export default {
           _this.total = data.total
           for (var i in data.items) {
             data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+            var status = data.items[i].status
+            switch (status) {
+              case 'Paid':
+                data.items[i].status = '已支付'
+                break;
+              case 'Canceled':
+                data.items[i].status = '已取消'
+                break;
+              case 'Submitting':
+                data.items[i].status = '待提交'
+                break;
+              case 'Submitted':
+                data.items[i].status = '已提交'
+                break;
+              case 'Confirmed':
+                data.items[i].status = '已确认'
+                break;
+              case 'Finished':
+                data.items[i].status = '已完成'
+                break;
+            }
           }
           _this.tableData = data.items
         }
@@ -231,7 +254,20 @@ export default {
     },
     //  确定
     ensure() {
-      this.addShow = false
+      var _this = this
+      $.ajax({
+        url: '/admin/api/v1/phases_attachments/' + this.id,
+        type: 'post',
+        contentType: 'application/json',
+        data: JSON.stringify(this.details),
+        success: function(result) {
+          _this.addShow = false
+          _this.$message({
+            message: result.message,
+            type: 'success'
+          })
+        }
+      })
     },
     cancel() {
       this.addShow = false

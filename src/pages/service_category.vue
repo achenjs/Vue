@@ -12,17 +12,22 @@
           <el-table-column
             align="center"
             prop="id"
-            label="类别编号">
+            label="类别编号"
+            width="100px"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            label="类别名称">
+            label="类别名称"
+            width="300px"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="description"
-            label="类别描述">
+            label="类别描述"
+            show-overflow-tooltip>
           </el-table-column>
         </el-table>
       </div>
