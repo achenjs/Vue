@@ -27,121 +27,122 @@ import NotFound from '@/pages/notFound.vue'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
-      path: '/admin',
+      path: '/',
+      name: '',
+      redirect: '/signin',
+      hidden: true
+    },
+    {
+      path: '/signin',
       name: '',
       component: signin,
       hidden: true
     },
     {
-      path: '/admin/signin',
-      name: '',
-      component: signin,
-      hidden: true
-    },
-    {
-      path: '/admin/404',
+      path: '/404',
       name: '未找到该页面',
       component: NotFound,
       hidden: true
     },
     {
-      path: '/admin/admin_list',
+      path: '/admin_list',
       name: '用户管理',
       iconCls: 'icon-user',
       component: Home,
       children: [
-        {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
-        {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
+        {path: '/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
+        {path: '/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
         // {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
       ]
     },
     {
-      path: '/admin/project_list',
+      path: '/project_list',
       name: '项目管理',
       iconCls: 'icon-project',
       component: Home,
       children: [
-        {path: '/admin/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
-        {path: '/admin/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
-        {path: '/admin/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
+        {path: '/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
+        {path: '/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
+        {path: '/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
         // {path: '/comment_list', component: comment_list, name: '点评记录'}
       ]
     },
     {
-      path: '/admin/service_category',
+      path: '/service_category',
       name: '服务包管理',
       iconCls: 'icon-server',
       component: Home,
       children: [
-        {path: '/admin/service_category', component: service_category, iconCls: 'icon-page7', name: '服务包类别管理'},
-        {path: '/admin/service_item', component: service_item, iconCls: 'icon-page8', name: '服务项管理'},
+        {path: '/service_category', component: service_category, iconCls: 'icon-page7', name: '服务包类别管理'},
+        {path: '/service_item', component: service_item, iconCls: 'icon-page8', name: '服务项管理'},
       ]
     },
     {
-      path: '/admin/service_custom',
+      path: '/service_custom',
       name: '定制化需求管理',
       iconCls: 'icon-custom',
       component: Home,
       children: [
-        {path: '/admin/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
+        {path: '/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
       ]
     },
     {
-      path: '/admin/deliverable_list',
+      path: '/deliverable_list',
       name: '交付物审核管理',
       iconCls: 'icon-examine',
       component: Home,
       children: [
-        {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'}
+        {path: '/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'}
       ]
     },
     {
-      path: '/admin/indent_list',
+      path: '/indent_list',
       name: '订单管理',
       iconCls: 'icon-serverList',
       component: Home,
       children: [
-        {path: '/admin/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表'}
+        {path: '/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表'}
       ]
     },
     {
-      path: '/admin/bill_list',
+      path: '/bill_list',
       name: '交易管理',
       iconCls: 'icon-serverList',
       component: Home,
       children: [
-        {path: '/admin/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
+        {path: '/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
       ]
     },
     {
-      path: '/admin/managers',
+      path: '/managers',
       name: '系统管理',
       iconCls: 'icon-system',
       component: Home,
       children: [
-        {path: '/admin/managers', component: managers, iconCls: 'icon-page12', name: '操作员管理'},
-        {path: '/admin/department', component: department, iconCls: 'icon-page13', name: '部门管理'},
-        {path: '/admin/role', component: role, iconCls: 'icon-page11', name: '角色管理'},
-        {path: '/admin/permissions', component: permissions, iconCls: 'icon-page7', name: '权限管理'},
-        {path: '/admin/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
+        {path: '/managers', component: managers, iconCls: 'icon-page12', name: '操作员管理'},
+        {path: '/department', component: department, iconCls: 'icon-page13', name: '部门管理'},
+        {path: '/role', component: role, iconCls: 'icon-page11', name: '角色管理'},
+        {path: '/permissions', component: permissions, iconCls: 'icon-page7', name: '权限管理'},
+        {path: '/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
       ]
     },
      {
-      path: '/admin/bp_list',
+      path: '/bp_list',
       name: 'BP管理',
       iconCls: 'icon-BP',
       component: Home,
       children: [
-        {path: '/admin/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
-        {path: '/admin/bp_manage', name: '新建BP', component: bp_manage, hidden: true},
-        {path: '/admin/bp_details', name: '修改BP', component: bp_details, hidden: true},
+        {path: '/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
+        {path: '/bp_manage', name: '新建BP', component: bp_manage, hidden: true},
+        {path: '/bp_details', name: '修改BP', component: bp_details, hidden: true},
       ]
     },
     {
       path: '*',
-      redirect: {path: '/admin/404'},
+      redirect: {path: '/404'},
       hidden: true
     },
   ]
