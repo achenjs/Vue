@@ -62,15 +62,13 @@
             format="yyyy-MM-dd"
             v-model="form.starttime"
             type="date"
-            placeholder="选择日期"
-            :picker-options="pickerOptions0">
+            placeholder="选择日期">
           </el-date-picker>
           <span>至</span>
           <el-date-picker
             v-model="form.endtime"
             type="date"
-            placeholder="选择日期"
-            :picker-options="pickerOptions1">
+            placeholder="选择日期">
           </el-date-picker>
         </div>
       </el-col>
@@ -142,16 +140,6 @@ import pages from '../components/pages/pages.vue'
 export default {
   data () {
     return {
-      pickerOptions0: {
-        disabledDate(time) {
-          return time.getTime() < Date.now() - 8.64e7;
-        }
-      },
-      pickerOptions1: {
-        disabledDate(time) {
-          return time.getTime() < Date.now() - 8.64e7;
-        }
-      },
       form: {
         id: '',
         name: '',
@@ -182,7 +170,6 @@ export default {
         _this.industries = data.industries
       }
     })
-
     //  阶段
     $.ajax({
       url: '/admin/api/v1/phases?page=1',
@@ -191,7 +178,6 @@ export default {
         _this.phases = data.items
       }
     })
-
     //  项目列表
     this.query(1)
   },

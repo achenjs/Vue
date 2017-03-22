@@ -23,7 +23,6 @@
             label="操作"
             width="100">
             <template scope="scope">
-              <el-button @click="queryClick(scope.row.id)" type="text" size="small">查看</el-button>
               <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
             </template>
           </el-table-column>
@@ -33,7 +32,7 @@
         <div class="modal" v-if="addShow">
           <div class="modal-dialog">
             <div class="modal-header">
-              <span>创建角色</span>
+              <span>角色信息</span>
             </div>
             <div class="modal-content">
               <label for="">角色名称</label>
@@ -56,6 +55,7 @@
                 height="200"
                 border
                 style="width: 100%"
+                ref="table"
                 @selection-change="handleSelectionChange">
                 <el-table-column
                   type="selection">
@@ -106,7 +106,8 @@ export default {
         }],
         total: 1,
         id: '',
-        searchGet: true
+        searchGet: true,
+        page: ''
       }
     },
     methods: {
@@ -128,6 +129,10 @@ export default {
             let data = result.result
             _this.form.name = data.name
             _this.form.description = data.description
+
+            for(var i=0; i<data.permissions.length; i++) {
+              _this.$refs.table.toggleRowSelection(_this.tableData3.find(d => d.value === data.permissions[i]))
+            }
             _this.form.status = data.status
           }
         })
@@ -135,6 +140,7 @@ export default {
       midClick(id) {
         this.reset()
         this.id = id
+        this.queryClick(id)
         this.addShow = true
         this.searchGet = true
       },
@@ -187,12 +193,14 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+              _this.query(_this.page)
             }
           })
         }
       },
       query(page) {
         var _this = this
+        this.page = page
         $.ajax({
           url: '/admin/api/v1/roles?page=' + page,
           success: function(result) {
@@ -206,14 +214,7 @@ export default {
     created() {
       var _this = this
       //  所有角色
-      $.ajax({
-        url: '/admin/api/v1/roles?page=1',
-        success: function(result) {
-          var data = result.result
-          _this.total = data.total
-          _this.tableData = data.items
-        }
-      })
+      this.query(1)
       //  所有权限
       $.ajax({
         url: '/admin/api/v1/permissions',

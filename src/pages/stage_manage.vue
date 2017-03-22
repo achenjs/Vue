@@ -40,6 +40,7 @@
               <label for="">交付物列表</label>
               <el-table
               :data="tableData1"
+              ref="table"
               height="300"
               row-key="id"
               @select="changed"
@@ -47,6 +48,7 @@
                 <template scope="scope">
                   <el-table-column
                   ref="selection"
+                  :reserve-selection="true"
                   type="selection">
                   </el-table-column>
                   <el-table-column
@@ -63,7 +65,7 @@
                   </el-table-column>
                   <el-table-column
                     align="center"
-                    :show-overflow-tooltip=true
+                    show-overflow-tooltip
                     prop="attachment.description"
                     label="描述">
                   </el-table-column>
@@ -98,7 +100,8 @@ export default {
         loading: false,
         total: 1,
         total1: 1,
-        selection: ''
+        selection: '',
+        arrChecked: [],
       }
     },
     created() {
@@ -149,11 +152,12 @@ export default {
       },
       ensure() {
         var _this = this
-        var arr = []
         for (var i=0; i<this.selection.length; i++) {
-          arr.push(this.selection[i].id)
+          this.arrChecked.push(this.selection[i].id)
         }
-        this.form.attachments = arr.join()
+        var set = new Set(this.arrChecked.sort())
+        this.arrChecked = [...set]
+        this.form.attachments = this.arrChecked.join()
         $.ajax({
           url: '/admin/api/v1/phases',
           type: 'post',
@@ -208,6 +212,9 @@ export default {
 <style lang="scss">
 @import "../assets/css/modal.scss";
 .stage_manage {
+  .model {
+    width: 700px;
+  }
   .add_item {
     text-align: center;
     cursor: pointer;

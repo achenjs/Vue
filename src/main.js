@@ -8,6 +8,18 @@ import 'element-ui/lib/theme-default/index.css'
 
 import router from './router'
 
+router.beforeEach((to, from, next) => {
+  if (!sessionStorage.getItem('user')) {
+    if (to.path === '/') {
+      next()
+    } else {
+      next({path: '/'})
+    }
+  } else {
+    next()
+  }
+})
+
 Vue.use(ElementUI)
 
 /* eslint-disable no-new */

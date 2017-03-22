@@ -8,7 +8,8 @@
 						<img src="../assets/images/2.gif" alt="图片" width="100%" height="100%">
 					</div>
 					<div class="name">
-						<span>{{User.name}}</span><i>编辑资料</i>
+						<span>{{User.name}}</span>
+						<!-- <i>编辑资料</i> -->
 					</div>
 					<div class="company">
 						{{User.role_name}}
@@ -33,7 +34,7 @@
 				<div class="grid-content bg-purple-light">
 					<el-col :span="24" class="breadcrumb-container">
 						<el-breadcrumb separator="/" class="breadcrumb-inner">
-							<el-breadcrumb-item class="grid-title" v-for="item in $route.matched" :key="item.path">
+							<el-breadcrumb-item :to="{path: item.path}" class="grid-title" v-for="(item, index) in $route.matched" :key="item.path">
 								{{ item.name }}
 							</el-breadcrumb-item>
 						</el-breadcrumb>
@@ -111,6 +112,9 @@ import profile from '../assets/json/profile'
 .el-menu--dark .el-menu-item, .el-menu--dark .el-submenu__title {
 	color: #807f8a;
 }
+.el-menu .el-submenu.is-opened .el-submenu__title {
+	color: #ffffff;
+}
 .container {
 	position: absolute;
 	top: 0px;
@@ -187,6 +191,9 @@ import profile from '../assets/json/profile'
 			.home-menu {
 				background-color: #ffffff;
 				.el-submenu {
+					&.is-opened {
+						background-color: #000000;
+					}
 					[class^=icon-] {
 						display: inline-block;
 						width: 26px;
@@ -346,34 +353,37 @@ import profile from '../assets/json/profile'
 			left: 230px;
 			// overflow-y: scroll;
 			padding: 20px;
-			.breadcrumb-container {
-				height: 50px;
-				line-height: 50px;
-				margin-bottom: 15px;
-				background-color: #ffffff;
-				.breadcrumb-inner {
-					line-height: 50px;
-					padding-left: 30px;
-				}
-			}
-			.itemName {
-				clear: both;
-				padding: 30px;
-				background-color: #ffffff;
-				color: #027ee5;
-				font-size: 20px;
-				span {
-					display: inline-block;
-					width: 100%;
+			height: 100%;
+			.grid-content {
+				.breadcrumb-container {
 					height: 50px;
-					border-bottom: 1px solid #b9b9ba;
+					line-height: 50px;
+					margin-bottom: 15px;
+					background-color: #ffffff;
+					.breadcrumb-inner {
+						line-height: 50px;
+						padding-left: 30px;
+					}
 				}
-			}
-			.content-wrapper {
-   			padding: 0 30px 30px 30px;
-				background-color: #ffffff;
-				box-sizing: border-box;
-  			min-height: 535px;
+				.itemName {
+					clear: both;
+					padding: 30px;
+					background-color: #ffffff;
+					color: #027ee5;
+					font-size: 20px;
+					span {
+						display: inline-block;
+						width: 100%;
+						height: 50px;
+						border-bottom: 1px solid #b9b9ba;
+					}
+				}
+				.content-wrapper {
+					padding: 0 30px 30px 30px;
+					background-color: #ffffff;
+					box-sizing: border-box;
+					min-height: 535px;
+				}
 			}
 		}
 	}

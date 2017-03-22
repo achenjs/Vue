@@ -43,7 +43,6 @@
             width="120px"
             show-overflow-tooltip>
             <template scope="scope">
-              <el-button @click="queryClick(scope.row.id)" type="text" size="small">查看</el-button>
               <el-button @click="midClick(scope.row.id)" type="text" size="small">修改</el-button>
             </template>
           </el-table-column>
@@ -63,7 +62,7 @@
               <label for="">密码</label>
               <el-input placeholder="密码" type="password" v-model="form.password"></el-input>
               <label for="">部门</label>
-              <el-select v-model="form.dept_id" v-if="(id!=='')" placeholder="请选择">
+              <el-select v-model="form.dept_id" placeholder="请选择">
                 <el-option
                 v-for="item in departments"
                 :label="item.name"
@@ -71,9 +70,8 @@
                 :key="item.value">
                 </el-option>
               </el-select>
-              <el-input placeholder="部门" v-else v-model="dept_name"></el-input>
               <label for="">角色</label>
-              <el-select v-model="form.role_id" placeholder="请选择" v-if="(id!=='')">
+              <el-select v-model="form.role_id" placeholder="请选择">
                 <el-option
                 v-for="item in roles"
                 :label="item.name"
@@ -81,7 +79,6 @@
                 :key="item.value">
                 </el-option>
               </el-select>
-              <el-input placeholder="角色" v-else v-model="role_name"></el-input>
               <label for="">状态</label>
               <el-select v-model="form.status" placeholder="请选择">
                 <el-option
@@ -93,7 +90,7 @@
               </el-select>
             </div>
             <div class="modal-footer">
-              <el-button type="primary" v-if="searchGet" @click="ensure">确认</el-button>
+              <el-button type="primary" @click="ensure">确认</el-button>
               <el-button type="primary" @click="cancel">取消</el-button>
             </div>
           </div>
@@ -117,6 +114,7 @@ export default {
           dept_id: ''
         },
         tableData: [],
+        roles: [],
         departments: [],
         states: [{
           value: true,
@@ -125,13 +123,10 @@ export default {
           value: false,
           label: '禁用'
         }],
-        roles: [],
         loading: false,
+        page: '',
         total: 1,
         addShow: false,
-        role_name: '',
-        dept_name: '',
-        searchGet: true,
         id: ''
       }
     },
@@ -174,6 +169,7 @@ export default {
       ensure() {
         var _this = this
         if (this.id === '') {
+          //  新增
           if (this.form.dept_id == '' && this.form.role_id == '') {
             _this.$message({
               message: '角色和部门必选!',
@@ -187,6 +183,7 @@ export default {
               data: JSON.stringify(this.form),
               success: function(result) {
                 _this.addShow = false
+                _this.reset()
                 _this.$message({
                   message: result.message,
                   type: 'success'
@@ -195,6 +192,7 @@ export default {
             })
           }
         } else {
+          //  修改
           $.ajax({
             url: '/admin/api/v1/admins/' + this.id,
             type: 'post',
@@ -202,16 +200,19 @@ export default {
             data: JSON.stringify(this.form),
             success: function(result) {
               _this.addShow = false
+              _this.reset()
               _this.$message({
                 message: result.message,
                 type: 'success'
               })
+              _this.query(_this.page)
             }
           })
         }
       },
       query(page) {
         var _this = this
+        this.page = page
         $.ajax({
           url: '/admin/api/v1/admins?page=' + page,
           beforeSend: function() {
@@ -231,7 +232,6 @@ export default {
       //  查看
       queryClick(id) {
         var _this = this
-        this.searchGet = false
         $.ajax({
           url: '/admin/api/v1/admins/' + id,
           success: function(result) {
@@ -239,8 +239,16 @@ export default {
             let data = result.result
             _this.form.email = data.email
             _this.form.name = data.name
-            _this.role_name = data.role_name
-            _this.dept_name = data.dept_name
+            for(var i=0; i<_this.departments.length; i++) {
+              if (_this.departments[i].name === data.dept_name) {
+                _this.form.dept_id = _this.departments[i].id
+              }
+            }
+            for(var i=0; i<_this.roles.length; i++) {
+              if (_this.roles[i].name === data.role_name) {
+                _this.form.role_id = _this.roles[i].id
+              }
+            }
             _this.form.status = data.status
           }
         })
@@ -248,7 +256,7 @@ export default {
       //  修改
       midClick(id) {
         this.id = id
-        this.reset()
+        this.queryClick(this.id)
         this.addShow = true
       }
     },

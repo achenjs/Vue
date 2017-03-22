@@ -62,7 +62,8 @@ export default {
               contentType:'application/json',
               data: JSON.stringify(this.form),
               success: function (result) {
-                _this.$router.push('/home')
+                sessionStorage.setItem('user', JSON.stringify(result))
+                _this.$router.push('/admin_list')
               }
             })
         }

@@ -422,6 +422,27 @@ export default {
     ensure() {
       if(this.isCustom) {
         //  修改系统服务项
+        var status = this.details.status
+        switch (status) {
+          case '已取消':
+            this.details.status = 'Canceled'
+            break;
+          case '已支付':
+            this.details.status = 'Paid'
+            break;
+          case '待提交':
+            this.details.status = 'Submitting'
+            break;
+          case '已提交':
+            this.details.status = 'Submitted'
+            break;
+          case '已确认':
+            this.details.status = 'Confirmed'
+            break;
+          case '已完成':
+            this.details.status = 'Finished'
+            break;
+        }
         var obj = {
           status: this.details.status,
           price: this.UserDetails.price,
@@ -443,6 +464,27 @@ export default {
         })
       } else {
         //  修改自定义服务项
+        var status = this.details.status
+        switch (status) {
+          case '已取消':
+            this.details.status = 'Canceled'
+            break;
+          case '已支付':
+            this.details.status = 'Paid'
+            break;
+          case '待提交':
+            this.details.status = 'Submitting'
+            break;
+          case '已提交':
+            this.details.status = 'Submitted'
+            break;
+          case '已确认':
+            this.details.status = 'Confirmed'
+            break;
+          case '已完成':
+            this.details.status = 'Finished'
+            break;
+        }
         var obj = {
           status: this.details.status,
         }

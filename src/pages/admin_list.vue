@@ -67,14 +67,14 @@
         align="center"
         prop="name"
         show-overflow-tooltip
-        width="100"
+        width="120"
         label="会员名称">
       </el-table-column>
       <el-table-column
         align="center"
         prop="email"
         show-overflow-tooltip
-        width="150"
+        width="200"
         label="邮箱账号">
       </el-table-column>
       <el-table-column
@@ -88,7 +88,7 @@
         align="center"
         prop="wechat"
         show-overflow-tooltip
-        width="100"
+        width="150"
         label="微信账号">
       </el-table-column>
       <el-table-column
@@ -120,7 +120,7 @@
         align="center"
         prop="resume"
         label="投资身份"
-        width="150"
+        width="200"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -276,6 +276,12 @@ export default {
       if (this.id === '') {
         this.addShow = false
       } else {
+        const company_industry = this.form.company_industry
+        for(let i in this.industries) {
+          if(this.industries[i] === company_industry) {
+            this.form.company_industry = i
+          }
+        }
         $.ajax({
           url: '/admin/api/v1/users/' + this.id,
           type: 'post',

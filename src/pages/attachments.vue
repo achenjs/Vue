@@ -65,7 +65,6 @@ export default {
         total: 1,
         form: {
           description: '',
-          url: '',
           name: ''
         }
       }

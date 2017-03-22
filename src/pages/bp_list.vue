@@ -87,13 +87,11 @@ export default {
       },
       //  详情修改
       queryClick(id) {
-        var _this = this
-        $.ajax({
-          url: '/admin/api/v1/bps/' + id,
-          success: function(result) {
-            _this.$router.push('/bp_details')
-          }
-        })
+        if (typeof id === 'object') {
+          this.$message.error('没有获取到id值')
+        } else {
+          this.$router.push({path: 'bp_details', query: id})
+        }
       }
     },
     components: {
