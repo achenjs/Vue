@@ -71,7 +71,7 @@ export default {
     },
     methods: {
       addBp() {
-        this.$router.push('/bp_manage')
+        this.$router.push('/admin/bp_manage')
       },
       //  BP列表
       search(page) {
@@ -90,7 +90,7 @@ export default {
         if (typeof id === 'object') {
           this.$message.error('没有获取到id值')
         } else {
-          this.$router.push({path: 'bp_details', query: id})
+          this.$router.push({path: '/admin/bp_details', query: id})
         }
       }
     },

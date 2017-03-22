@@ -30,119 +30,119 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/admin',
       name: '',
       component: signin,
       hidden: true
     },
     {
-      path: '/signin',
+      path: '/admin/signin',
       name: '',
       component: signin,
       hidden: true
     },
     {
-      path: '/404',
+      path: '/admin/404',
       name: '未找到该页面',
       component: NotFound,
       hidden: true
     },
     {
-      path: '/admin_list',
+      path: '/admin/admin_list',
       name: '用户管理',
       iconCls: 'icon-user',
       component: Home,
       children: [
-        {path: '/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
-        {path: '/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
+        {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
+        {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
         // {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
       ]
     },
     {
-      path: '/project_list',
+      path: '/admin/project_list',
       name: '项目管理',
       iconCls: 'icon-project',
       component: Home,
       children: [
-        {path: '/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
-        {path: '/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
-        {path: '/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
+        {path: '/admin/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
+        {path: '/admin/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
+        {path: '/admin/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
         // {path: '/comment_list', component: comment_list, name: '点评记录'}
       ]
     },
     {
-      path: '/service_category',
+      path: '/admin/service_category',
       name: '服务包管理',
       iconCls: 'icon-server',
       component: Home,
       children: [
-        {path: '/service_category', component: service_category, iconCls: 'icon-page7', name: '服务包类别管理'},
-        {path: '/service_item', component: service_item, iconCls: 'icon-page8', name: '服务项管理'},
+        {path: '/admin/service_category', component: service_category, iconCls: 'icon-page7', name: '服务包类别管理'},
+        {path: '/admin/service_item', component: service_item, iconCls: 'icon-page8', name: '服务项管理'},
       ]
     },
     {
-      path: '/service_custom',
+      path: '/admin/service_custom',
       name: '定制化需求管理',
       iconCls: 'icon-custom',
       component: Home,
       children: [
-        {path: '/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
+        {path: '/admin/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
       ]
     },
     {
-      path: '/deliverable_list',
+      path: '/admin/deliverable_list',
       name: '交付物审核管理',
       iconCls: 'icon-examine',
       component: Home,
       children: [
-        {path: '/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'}
+        {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'}
       ]
     },
     {
-      path: '/indent_list',
+      path: '/admin/indent_list',
       name: '订单管理',
       iconCls: 'icon-serverList',
       component: Home,
       children: [
-        {path: '/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表'}
+        {path: '/admin/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表'}
       ]
     },
     {
-      path: '/bill_list',
+      path: '/admin/bill_list',
       name: '交易管理',
       iconCls: 'icon-serverList',
       component: Home,
       children: [
-        {path: '/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
+        {path: '/admin/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
       ]
     },
     {
-      path: '/managers',
+      path: '/admin/managers',
       name: '系统管理',
       iconCls: 'icon-system',
       component: Home,
       children: [
-        {path: '/managers', component: managers, iconCls: 'icon-page12', name: '操作员管理'},
-        {path: '/department', component: department, iconCls: 'icon-page13', name: '部门管理'},
-        {path: '/role', component: role, iconCls: 'icon-page11', name: '角色管理'},
-        {path: '/permissions', component: permissions, iconCls: 'icon-page7', name: '权限管理'},
-        {path: '/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
+        {path: '/admin/managers', component: managers, iconCls: 'icon-page12', name: '操作员管理'},
+        {path: '/admin/department', component: department, iconCls: 'icon-page13', name: '部门管理'},
+        {path: '/admin/role', component: role, iconCls: 'icon-page11', name: '角色管理'},
+        {path: '/admin/permissions', component: permissions, iconCls: 'icon-page7', name: '权限管理'},
+        {path: '/admin/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
       ]
     },
      {
-      path: '/bp_list',
+      path: '/admin/bp_list',
       name: 'BP管理',
       iconCls: 'icon-BP',
       component: Home,
       children: [
-        {path: '/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
-        {path: '/bp_manage', name: '新建BP', component: bp_manage, hidden: true},
-        {path: '/bp_details', name: '修改BP', component: bp_details, hidden: true},
+        {path: '/admin/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
+        {path: '/admin/bp_manage', name: '新建BP', component: bp_manage, hidden: true},
+        {path: '/admin/bp_details', name: '修改BP', component: bp_details, hidden: true},
       ]
     },
     {
       path: '*',
-      redirect: {path: '/404'},
+      redirect: {path: '/admin/404'},
       hidden: true
     },
   ]

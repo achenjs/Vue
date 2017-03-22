@@ -346,7 +346,7 @@ import upload from '../assets/js/upload'
                 message: result.message,
                 type: 'success'
               })
-              _this.$router.push('/bp_list')
+              _this.$router.push('/admin/bp_list')
             }
           })
         }

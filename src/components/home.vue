@@ -88,18 +88,6 @@ import profile from '../assets/json/profile'
 			},
 			handleselect: function (a, b) {
 			},
-			//退出登录
-			logout: function () {
-				var _this = this
-				this.$confirm('确认退出吗?', '提示', {
-
-				}).then(() => {
-					sessionStorage.removeItem('user')
-					_this.$router.push('/signin')
-				}).catch(() => {
-					console.log('退出异常!')
-				})
-			}
 		},
 		mounted() {
 
