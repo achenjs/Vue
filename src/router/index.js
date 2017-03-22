@@ -27,7 +27,6 @@ import NotFound from '@/pages/notFound.vue'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/admin',
