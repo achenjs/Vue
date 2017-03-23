@@ -15,7 +15,7 @@
         <span id="getImg"><img :src="imgUrl" style="width:30%; height:100%;"><label for=""  @click="captcha">换一张</label></span>
       </el-form-item>
       <el-form-item style="width:100%;">
-        <el-button type="primary" style="width:100%;"  @keyup.enter="signin" @click="signin">登录</el-button>
+        <el-button type="primary" style="width:100%;" @click="signin">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -69,6 +69,9 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #000000;
+  .el-input__inner {
+    height: 30px;
+  }
   .login-container {
     position: absolute;
     left: 0;

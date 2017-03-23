@@ -307,14 +307,18 @@ import upload from '../assets/js/upload'
       this.id = this.$route.query
       //  根据id获取详情
       var _this = this
-      $.ajax({
-        url: '/admin/api/v1/bps/' + this.id,
-        success: function(result) {
-          var data = result.result
-          _this.form.start_from = data.gmt_create.split('T')[0]
-          Object.assign(_this.form, data)
-        }
-      })
+      if (typeof this.id === 'object') {
+        this.$router.push('/admin/bp_list')
+      } else {
+        $.ajax({
+          url: '/admin/api/v1/bps/' + this.id,
+          success: function(result) {
+            var data = result.result
+            _this.form.start_from = data.gmt_create.split('T')[0]
+            Object.assign(_this.form, data)
+          }
+        })
+      }
     },
     methods: {
       //  上传
@@ -322,7 +326,6 @@ import upload from '../assets/js/upload'
         var _this = this
         upload(ele.target, () => {
           _this.form.bp_url = $("#hiddens").val()
-          console.log(_this.form.bp_url)
         })
       },
       //  修改BP

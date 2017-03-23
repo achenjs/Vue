@@ -84,50 +84,58 @@
       <el-table-column
         align="center"
         prop="id"
+        width="120"
         label="项目编号">
       </el-table-column>
       <el-table-column
         align="center"
         prop="name"
+        width="150"
         label="项目名称">
       </el-table-column>
       <el-table-column
         align="center"
         prop="contact_name"
+        width="120"
         label="负责人">
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip=true
         align="center"
         prop="contact_phone"
+        width="150"
         label="手机号">
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip=true
         align="center"
         prop="gmt_create"
+        width="150"
         label="创建时间">
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip=true
         align="center"
         prop="industry"
+        width="150"
         label="所在行业">
       </el-table-column>
       <el-table-column
         align="center"
         prop="phase_index"
+        width="150"
         label="所在阶段">
       </el-table-column>
       <el-table-column
         align="center"
-        prop=""
+        prop="status"
         label="审核">
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip=true
         align="center"
         prop="description"
+        width="150"
         label="部门描述">
       </el-table-column>
     </el-table>

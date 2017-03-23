@@ -10,10 +10,10 @@ import router from './router'
 
 router.beforeEach((to, from, next) => {
   if (!sessionStorage.getItem('user')) {
-    if (to.path === '/signin') {
+    if (to.path === '/admin/signin') {
       next()
     } else {
-      next({path: '/signin'})
+      next({path: '/admin/signin'})
     }
   } else {
     next()

@@ -13,34 +13,34 @@
             align="center"
             prop="id"
             label="编号"
-            width="100px"
+            width="100"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
             label="服务项名称"
-            width="150px"
+            width="200"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="desc"
             label="服务项描述"
+            width="200"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="category_id"
             label="类别"
-            width="150px"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="price"
             label="报价"
-            width="150px"
+            width="150"
             show-overflow-tooltip>
           </el-table-column>
         </el-table>
@@ -183,8 +183,8 @@ export default {
   .add_item {
     text-align: center;
     cursor: pointer;
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     background-color: #027ee5;
     color: #fff;
     border-radius: 50px;

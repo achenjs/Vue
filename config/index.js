@@ -1,6 +1,9 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
-
+var ServerPost = {
+  'qingge': 'http://172.16.46.53:5000',
+  'wuge': 'http://172.16.39.163:5000'
+}
 module.exports = {
   build: {
     env: require('./prod.env'),
@@ -29,14 +32,14 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/main/api/v1': {
-        target: 'http://172.16.46.53:5000',
+        target: ServerPost.wuge,
         changeOrigin: true,
         pathRewrite: {
           '^/main/api/v1': '/main/api/v1'
         }
       },
       '/admin/api': {
-        target: 'http://172.16.46.53:5000',
+        target: ServerPost.qingge,
         changeOrigin: true,
         pathRewrite: {
           '^/admin/api': '/admin/api'

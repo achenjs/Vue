@@ -303,7 +303,6 @@ import upload from '../assets/js/upload'
       }
     },
     created() {
-      console.log(this.$router.params)
     },
     methods: {
       //  上传

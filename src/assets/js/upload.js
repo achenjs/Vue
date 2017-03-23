@@ -18,6 +18,7 @@ function uploadComplete(evt){
     var obj = JSON.parse(evt.target.responseText).obj
     if (obj) {
       $('#hiddens').val(obj)
+      $('#url').val(obj)
     }
 }
 

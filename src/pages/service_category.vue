@@ -142,8 +142,8 @@ export default {
   .add_item {
     text-align: center;
     cursor: pointer;
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     background-color: #027ee5;
     color: #fff;
     border-radius: 50px;

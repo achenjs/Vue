@@ -5,7 +5,9 @@
 			<aside>
 				<div class="Introduction">
 					<div class="avatar">
-						<img src="../assets/images/2.gif" alt="图片" width="100%" height="100%">
+						<input type="file" name="" value="" @change="uploadFile($event)" id="up" class="uploadInput">
+						<input type="hidden" name="" value="" id="url">
+						<img :src="User.avatar_url !== '' ? User.avatar_url : '../assets/images/2.gif'" alt="图片" width="100%" height="100%">
 					</div>
 					<div class="name">
 						<span>{{User.name}}</span>
@@ -50,8 +52,11 @@
 </template>
 
 <script>
+import upload from '../assets/js/upload'
 import header from '../components/header/header.vue'
 import profile from '../assets/json/profile'
+
+const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 	export default {
 		data() {
 			return {
@@ -60,23 +65,52 @@ import profile from '../assets/json/profile'
 				User: {
 					email: '',
 					name: '',
-					role_name: ''
+					role_name: '',
+					avatar_url: ''
     		},
 			}
 		},
   	created() {
-			var _this = this
-			 $.ajax({
-				 url: '/admin/api/v1/profile',
-				 success: function (result) {
-					 var data = result.result
-	         _this.User.email = data.email
-					 _this.User.name = data.name
-					 _this.User.role_name = data.role_name
-				 }
-			 })
+		 	this.updateUser()
   	},
 		methods: {
+			//	获取用户信息
+			updateUser() {
+				var _this = this
+				$.ajax({
+					url: '/admin/api/v1/profile',
+					success: function (result) {
+						var data = result.result
+						_this.User.email = data.email
+						_this.User.name = data.name
+						_this.User.role_name = data.role_name
+						_this.User.avatar_url = URL + data.avatar_url
+					}
+				})
+			},
+
+			//  上传
+      uploadFile(ele) {
+        var _this = this
+        upload(ele.target, () => {
+          const obj = {
+						url: $("#url").val()
+					}
+					$.ajax({
+						url: '/admin/api/v1/profile',
+						type: 'post',
+						contentType: 'application/json',
+						data: JSON.stringify(obj),
+						success: function(result) {
+							_this.$message({
+	              message: result.message,
+	              type: 'success'
+	            })
+							_this.updateUser()
+						}
+					})
+        })
+      },
 			onSubmit() {
 				console.log('submit!');
 			},
@@ -103,6 +137,14 @@ import profile from '../assets/json/profile'
 .el-menu .el-submenu.is-opened .el-submenu__title {
 	color: #ffffff;
 }
+.el-menu-item, .el-submenu__title {
+	height: 40px;
+	line-height: 40px;
+}
+.el-submenu .el-menu-item {
+	height: 40px;
+	line-height: 40px;
+}
 .container {
 	position: absolute;
 	top: 0px;
@@ -119,13 +161,21 @@ import profile from '../assets/json/profile'
 			margin-top: 20px;
 			background-color: #ffffff;
 			.Introduction {
-				width: 100%;
 				padding: 20px 20px 0;
 				.avatar {
 					width: 80px;
 					height: 80px;
 					margin: 20px auto;
-					overflow: hiddle;
+					position: relative;
+					.uploadInput {
+						position: absolute;
+						left: 0;
+						top: 0;
+						height: 80px;
+						opacity: 0;
+						cursor: pointer;
+						width: 80px;
+					}
 					img {
 						border: none;
 						border-radius: 50%;
@@ -156,7 +206,7 @@ import profile from '../assets/json/profile'
 					margin-bottom: 20px;
 				}
 				.email {
-					margin-bottom: 20px;
+					margin-bottom: 10px;
 					img {
 						width: 34px;
 						height: 28px;
@@ -180,7 +230,31 @@ import profile from '../assets/json/profile'
 				background-color: #ffffff;
 				.el-submenu {
 					&.is-opened {
-						background-color: #000000;
+						background-color: #027ee5;
+						.icon-user {
+							background-image: url('../assets/images/icon/APL-29.png');
+						}
+						.icon-project {
+							background-image: url('../assets/images/icon/APL-33.png');
+						}
+						.icon-server {
+							background-image: url('../assets/images/icon/APL-37.png');
+						}
+						.icon-custom {
+							background-image: url('../assets/images/icon/APL-40.png');
+						}
+						.icon-examine {
+							background-image: url('../assets/images/icon/APL-42.png');
+						}
+						.icon-serverList {
+							background-image: url('../assets/images/icon/APL-44.png');
+						}
+						.icon-system {
+							background-image: url('../assets/images/icon/APL-48.png');
+						}
+						.icon-BP {
+							background-image: url('../assets/images/icon/APL-51.png');
+						}
 					}
 					[class^=icon-] {
 						display: inline-block;
@@ -262,7 +336,7 @@ import profile from '../assets/json/profile'
 					}
 					.is-active {
 						color: #ffffff;
-						background-color: rgb(2, 126, 229);
+						background-color: rgb(11, 217, 229);
 						.icon-user {
 							background-image: url('../assets/images/icon/APL-29.png');
 						}
@@ -355,14 +429,15 @@ import profile from '../assets/json/profile'
 				}
 				.itemName {
 					clear: both;
-					padding: 30px;
+					padding: 20px 30px;
 					background-color: #ffffff;
 					color: #027ee5;
 					font-size: 20px;
+					height: 30px;
+					line-height: 30px;
 					span {
 						display: inline-block;
 						width: 100%;
-						height: 50px;
 						border-bottom: 1px solid #b9b9ba;
 					}
 				}

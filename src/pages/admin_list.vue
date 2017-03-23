@@ -146,23 +146,44 @@
             <span>详细信息</span>
           </div>
           <div class="modal-content">
-            <label for="">会员名称</label>
-            <el-input placeholder="会员名称" v-model="form.name"></el-input>
-            <label for="">邮箱账号</label>
-            <el-input placeholder="邮箱账号" v-model="form.email"></el-input>
-            <label for="">手机号码</label>
-            <el-input placeholder="手机号码" v-model="form.phone"></el-input>
-            <label for="">企业名称</label>
-            <el-input placeholder="企业名称" v-model="form.company_name"></el-input>
-            <label for="">所属行业</label>
-            <el-select v-model="form.company_industry" placeholder="请选择">
-              <el-option
-              v-for="(item, index) in industries"
-              :label="item"
-              :value="index"
-              :key="index">
-              </el-option>
-            </el-select>
+            <el-row>
+              <el-col :span="11" style="margin-right: 10px;">
+                <label for="">会员名称</label>
+                <el-input placeholder="会员名称" v-model="form.name"></el-input>
+                <label for="">邮箱账号</label>
+                <el-input placeholder="邮箱账号" v-model="form.email"></el-input>
+                <label for="">手机号码</label>
+                <el-input placeholder="手机号码" v-model="form.phone"></el-input>
+                <label for="">企业名称</label>
+                <el-input placeholder="企业名称" v-model="form.company_name"></el-input>
+                <label for="">所属行业</label>
+                <el-select v-model="form.company_industry" placeholder="请选择">
+                  <el-option
+                  v-for="(item, index) in industries"
+                  :label="item"
+                  :value="index"
+                  :key="index">
+                  </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="11">
+                <label for="">微信账号</label>
+                <el-input placeholder="微信账号" v-model="form.wechat"></el-input>
+                <label for="">公司职位</label>
+                <el-input placeholder="公司职位" v-model="form.company"></el-input>
+                <label for="">性别</label>
+                <el-select v-model="form.gender" placeholder="请选择">
+                  <el-option
+                  v-for="(item, index) in genders"
+                  :label="item"
+                  :value="index"
+                  :key="index">
+                  </el-option>
+                </el-select>
+                <label for="">投资身份</label>
+                <el-input placeholder="投资身份" v-model="form.resume"></el-input>
+              </el-col>
+            </el-row>
           </div>
           <div class="modal-footer">
             <el-button type="primary" @click="ensure">确认</el-button>
@@ -194,17 +215,18 @@ export default {
         phone: '',
         email: '',
         company_industry: '',
-        company_name: ''
+        company_name: '',
+        company: '',
+        gender: '',
+        resume: '',
+        wechat: ''
+      },
+      genders: {
+        '男': '男',
+        '女': '女'
       },
       id: '',
       industries: {},
-      states: [{
-        value: true,
-        label: '启用'
-      }, {
-        value: false,
-        label: '禁用'
-      }],
       tableData: [],
       total: 1,
       loading: false,
@@ -263,11 +285,7 @@ export default {
         url: '/admin/api/v1/users/' + id,
         success: function(result) {
           let data = result.result
-          _this.form.name = data.name
-          _this.form.email = data.email
-          _this.form.company_industry = data.company_industry
-          _this.form.company_name = data.company_name
-          _this.form.phone = data.phone
+          Object.assign(_this.form, data)
         }
       })
     },

@@ -2,7 +2,7 @@
    <div class="admin_new">
     <div class="admin_line clearfix">
       <el-col :span="8" :offset="8">
-        <div style="width: 80%;">
+        <div style="width: 100%;">
           <label for="">姓名</label>
           <el-input placeholder="姓名" v-model="form.name"></el-input>
         </div>
@@ -10,7 +10,7 @@
     </div>
     <div class="admin_line clearfix">
       <el-col :span="8" :offset="8">
-        <div style="width: 80%;">
+        <div style="width: 100%;">
           <label for="">邮箱</label>
           <el-input placeholder="邮箱" type="email" v-model="form.email"></el-input>
         </div>
@@ -18,7 +18,7 @@
     </div>
     <div class="admin_line clearfix">
       <el-col :span="8" :offset="8">
-        <div style="width: 80%;">
+        <div style="width: 100%;">
           <label for="">密码</label>
           <el-input placeholder="请输入您的密码" type="password" v-model="form.password"></el-input>
         </div>
@@ -26,7 +26,7 @@
     </div>
     <div class="admin_line clearfix">
       <el-col :span="8" :offset="8">
-        <div style="width: 80%;">
+        <div style="width: 100%;">
           <label for="">电话</label>
           <el-input placeholder="电话" v-model="form.phone"></el-input>
         </div>
@@ -105,7 +105,7 @@ export default {
       text-align: center;
       display: inline-block;
       font-size: 14px;
-      width: 80%;
+      width: 100%;
       height: 40px;
       line-height: 40px;
       cursor: pointer;

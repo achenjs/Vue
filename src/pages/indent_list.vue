@@ -88,10 +88,35 @@
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
+           v-if="isCustom"
            align="center"
-           prop="title"
-           label="服务项"
+           prop="service_category_name"
+           label="服务项类别"
            width="150px"
+           show-overflow-tooltip>
+         </el-table-column>
+         <el-table-column
+           v-else
+           align="center"
+           prop="category_name"
+           label="服务项类别"
+           width="150px"
+           show-overflow-tooltip>
+         </el-table-column>
+         <el-table-column
+           v-if="isCustom"
+           align="center"
+           prop="service_name"
+           label="服务项"
+           width="150"
+           show-overflow-tooltip>
+         </el-table-column>
+         <el-table-column
+           v-else
+           align="center"
+           prop="description"
+           label="服务项"
+           width="150"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -104,19 +129,20 @@
            align="center"
            prop="status"
            label="订单状态"
-           width="150px"
+           width="150"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="price"
            label="订单金额"
-           width="150px"
+           width="150"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            fixed="right"
+           width="100"
            label="操作"
            show-overflow-tooltip>
            <template scope="scope">

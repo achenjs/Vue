@@ -47,7 +47,12 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
+.el-table td, .el-table th {
+	height: 20px !important;
+}
+.el-input__inner {
+	height: 30px !important;
+}
 .clearfix {
 	zoom: 1;
 	&:after {
