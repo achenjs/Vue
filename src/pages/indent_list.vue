@@ -78,13 +78,14 @@
        <el-table
          :data="tableData"
          v-loading="loading"
+         border
          element-loading-text="拼命加载中"
          style="width: 100%">
          <el-table-column
            align="center"
            prop="id"
            label="订单号"
-           width="100px"
+           width="80"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -92,7 +93,7 @@
            align="center"
            prop="service_category_name"
            label="服务项类别"
-           width="150px"
+           width="150"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -100,7 +101,7 @@
            align="center"
            prop="category_name"
            label="服务项类别"
-           width="150px"
+           width="150"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -122,6 +123,7 @@
          <el-table-column
            align="center"
            prop="gmt_create"
+           width="150"
            label="下单时间"
            show-overflow-tooltip>
          </el-table-column>
@@ -142,7 +144,7 @@
          <el-table-column
            align="center"
            fixed="right"
-           width="100"
+           width="80"
            label="操作"
            show-overflow-tooltip>
            <template scope="scope">

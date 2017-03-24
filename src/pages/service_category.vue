@@ -7,20 +7,21 @@
         <el-table
         :data="tableData"
         v-loading="loading"
+        border
         element-loading-text="拼命加载中"
         style="width: 100%">
           <el-table-column
             align="center"
             prop="id"
             label="类别编号"
-            width="100px"
+            width="120"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
             label="类别名称"
-            width="300px"
+            width="300"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column

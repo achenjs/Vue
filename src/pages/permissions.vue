@@ -7,11 +7,13 @@
         <el-table
         :data="tableData"
         v-loading="loading"
+        border
         element-loading-text="拼命加载中"
         style="width: 100%">
           <el-table-column
             align="center"
             prop="id"
+            width="80"
             label="编号">
           </el-table-column>
           <el-table-column
@@ -27,6 +29,7 @@
           <el-table-column
             align="center"
             prop="status"
+            width="100"
             label="状态">
           </el-table-column>
         </el-table>

@@ -6,10 +6,12 @@
       <div class="">
         <el-table
         :data="tableData"
+        border
         style="width: 100%">
           <el-table-column
             align="center"
             prop="name"
+            width="150"
             label="角色名称">
           </el-table-column>
           <el-table-column
@@ -21,7 +23,7 @@
             align="center"
             fixed="right"
             label="操作"
-            width="100">
+            width="80">
             <template scope="scope">
               <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
             </template>

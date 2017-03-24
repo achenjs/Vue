@@ -55,12 +55,13 @@
            fixed
            prop="id"
            label="编号"
-           width="100px"
+           width="80"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="attachment_name"
+           width="150"
            label="项目名称"
            show-overflow-tooltip>
          </el-table-column>
@@ -68,7 +69,7 @@
            align="center"
            prop="phase_id"
            label="阶段"
-           width="120px"
+           width="100"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -81,20 +82,21 @@
          <el-table-column
            align="center"
            prop="gmt_create"
-           width="150px"
+           width="150"
            label="交付时间"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="status"
+           width="120"
            label="状态">
          </el-table-column>
          <el-table-column
             align="center"
             fixed="right"
             label="操作"
-            width="100"
+            width="80"
             show-overflow-tooltip>
            <template scope="scope">
              <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>

@@ -6,17 +6,20 @@
       <div class="">
         <el-table
         v-loading="loading"
+        border
         element-loading-text="拼命加载中"
         :data="tableData"
         style="width: 100%">
           <el-table-column
             align="center"
             prop="id"
+            width="80"
             label="编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
+            width="150"
             label="部门名称">
           </el-table-column>
           <el-table-column

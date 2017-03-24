@@ -46,14 +46,14 @@
             prop="id"
             label="订单号"
             show-overflow-tooltip
-            width="100px">
+            width="100">
          </el-table-column>
          <el-table-column
             align="center"
             prop="project_name"
             label="项目名称"
             show-overflow-tooltip
-            width="150px">
+            width="150">
          </el-table-column>
          <el-table-column
             align="center"
@@ -66,14 +66,14 @@
             prop="price"
             label="金额"
             show-overflow-tooltip
-            width="150px">
+            width="150">
          </el-table-column>
          <el-table-column
             align="center"
             prop="gmt_create"
             label="下单时间"
             show-overflow-tooltip
-            width="150px">
+            width="150">
          </el-table-column>
        </el-table>
      </div>

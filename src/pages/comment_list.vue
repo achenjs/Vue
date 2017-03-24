@@ -4,21 +4,25 @@
         <el-table
         :data="tableData"
         v-loading="loading"
+        border
         element-loading-text="拼命加载中"
         style="width: 100%">
           <el-table-column
             align="center"
             prop="id"
+            width="80"
             label="编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
+            width="150"
             label="项目名称">
           </el-table-column>
           <el-table-column
             align="center"
             prop="address"
+            width="150"
             label="点评人">
           </el-table-column>
           <el-table-column
@@ -29,6 +33,7 @@
           <el-table-column
             align="center"
             prop="address"
+            width="150"
             label="时间">
           </el-table-column>
         </el-table>

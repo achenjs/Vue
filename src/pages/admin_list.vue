@@ -100,6 +100,7 @@
       <el-table-column
         align="center"
         prop="gender"
+        width="80"
         label="性别">
       </el-table-column>
       <el-table-column
@@ -133,6 +134,7 @@
       <el-table-column
         align="center"
         fixed="right"
+        width="80"
         label="操作">
         <template scope="scope">
           <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
@@ -222,8 +224,8 @@ export default {
         wechat: ''
       },
       genders: {
-        '男': '男',
-        '女': '女'
+        '男': 'boy',
+        '女': 'girl'
       },
       id: '',
       industries: {},
