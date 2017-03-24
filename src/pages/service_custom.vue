@@ -3,20 +3,21 @@
      <el-table
      :data="tableData"
      v-loading="loading"
+     border
      element-loading-text="拼命加载中"
      style="width: 100%">
        <el-table-column
          align="center"
          prop="id"
          label="编号"
-         width="100px"
+         width="80"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="title"
          label="服务项名称"
-         width="150px"
+         width="150"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
@@ -29,14 +30,14 @@
          align="center"
          prop="project_name"
          label="类别"
-         width="150px"
+         width="150"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="price"
          label="报价"
-         width="150px"
+         width="150"
          show-overflow-tooltip>
        </el-table-column>
      </el-table>

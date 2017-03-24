@@ -7,16 +7,19 @@
         <el-table
         :data="tableData"
         v-loading="loading"
+        border
         element-loading-text="拼命加载中"
         style="width: 100%">
           <el-table-column
             align="center"
             prop="id"
+            width="120"
             label="阶段编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
+            width="200"
             label="阶段名称">
           </el-table-column>
           <el-table-column

@@ -32,7 +32,7 @@ export default new Router({
     {
       path: '/admin',
       name: '',
-      redirect: '/admin/signin',
+      redirect: '/admin/admin_list',
       hidden: true
     },
     {
