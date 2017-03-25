@@ -35,6 +35,7 @@ export default {
   },
   created () {
     this.captcha()
+    // this.isLogin()
   },
   methods: {
     captcha() {
@@ -57,6 +58,21 @@ export default {
         success: function (result) {
           sessionStorage.setItem('user', JSON.stringify(result))
           _this.$router.push('/admin/admin_list')
+        }
+      })
+    },
+    isLogin() {
+      var _this = this
+      console.log(this.$cookies.get('admin'))
+      $.ajax({
+        url: '/admin/api/v1/',
+        success: function(result) {
+          let status = result.status
+          if (status == '200') {
+            _this.$router.push('/admin/admin_list')
+          } else {
+            return false
+          }
         }
       })
     }

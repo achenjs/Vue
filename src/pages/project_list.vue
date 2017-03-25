@@ -80,6 +80,7 @@
     v-loading="loading"
     element-loading-text="拼命加载中"
     :data="tableData"
+    border
     style="width: 100%">
       <el-table-column
         align="center"

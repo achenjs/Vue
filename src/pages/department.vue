@@ -25,7 +25,17 @@
           <el-table-column
             align="center"
             prop="description"
+            width="200"
             label="部门描述">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            fixed="right"
+            width="80"
+            label="操作">
+            <template scope="scope">
+              <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -81,7 +91,9 @@ export default {
           status: true,
         },
         total: 1,
-        loading: false
+        loading: false,
+        id: '',
+        page: ''
       }
     },
     created() {
@@ -95,6 +107,7 @@ export default {
       },
       query(page) {
         var _this = this
+        this.page = page
         $.ajax({
           url: '/admin/api/v1/departments?page=' + page,
           success: function(result) {
@@ -113,17 +126,47 @@ export default {
       },
       ensure() {
         var _this = this
+        if (this.id === '') {
+          $.ajax({
+            url: '/admin/api/v1/departments',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.addShow = false
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+            }
+          })
+        } else {
+          $.ajax({
+            url: '/admin/api/v1/departments/' + this.id,
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.addShow = false
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+              _this.query(_this.page)
+            }
+          })
+        }
+      },
+      //  根据id查看详情和修改
+      midClick(id) {
+        var _this = this
+        this.addShow = true
+        this.id = id
         $.ajax({
-          url: '/admin/api/v1/departments',
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
+          url: '/admin/api/v1/departments/' + id,
           success: function(result) {
-            _this.addShow = false
-            _this.$message({
-              message: result.message,
-              type: 'success'
-            })
+            var data = result.result
+            _this.form = data
           }
         })
       },

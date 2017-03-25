@@ -14,19 +14,31 @@
             align="center"
             prop="id"
             width="120"
+            show-overflow-tooltip
             label="阶段编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
             width="200"
+            show-overflow-tooltip
             label="阶段名称">
           </el-table-column>
           <el-table-column
             align="center"
             prop="description"
+            show-overflow-tooltip
             label="阶段描述">
           </el-table-column>
+          <!-- <el-table-column
+            align="center"
+            fixed="right"
+            width="80"
+            label="操作">
+            <template scope="scope">
+              <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+            </template>
+          </el-table-column> -->
         </el-table>
       </div>
       <transition name="fade">
@@ -44,35 +56,34 @@
               <el-table
               :data="tableData1"
               ref="table"
-              height="300"
               row-key="id"
-              @select="changed"
+              height="300"
+              @change="changed"
               style="width: 100%">
-                <template scope="scope">
-                  <el-table-column
-                  ref="selection"
-                  :reserve-selection="true"
-                  type="selection">
-                  </el-table-column>
-                  <el-table-column
-                    align="center"
-                    prop="attachment.id"
-                    label="编号">
-                  </el-table-column>
-                  <el-table-column
-                    align="center"
-                    show-overflow-tooltip
-                    width="120"
-                    prop="attachment.name"
-                    label="交付物名称">
-                  </el-table-column>
-                  <el-table-column
-                    align="center"
-                    show-overflow-tooltip
-                    prop="attachment.description"
-                    label="描述">
-                  </el-table-column>
-                </template>
+                <el-table-column
+                :reserve-selection="true"
+                width="50"
+                type="selection">
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  prop="attachment.id"
+                  width="80"
+                  label="编号">
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  show-overflow-tooltip
+                  width="120"
+                  prop="attachment.name"
+                  label="交付物名称">
+                </el-table-column>
+                <el-table-column
+                  align="center"
+                  show-overflow-tooltip
+                  prop="attachment.description"
+                  label="描述">
+                </el-table-column>
               </el-table>
               <v-pages :total="total1" v-on:currentChange="queryAttachment"></v-pages>
             </div>
@@ -103,25 +114,16 @@ export default {
         loading: false,
         total: 1,
         total1: 1,
+        id: '',
         selection: '',
         arrChecked: [],
       }
     },
     created() {
-      var _this = this
       //  阶段列表
-      $.ajax({
-        url: '/admin/api/v1/phases?page=1',
-        beforeSend: function() {
-          _this.loading = true
-        },
-        success: function(result) {
-          var data = result.result
-          _this.loading = false
-          _this.total = data.total
-          _this.tableData = data.items
-        }
-      })
+      this.query(1)
+      //  交付物列表
+      this.queryAttachment(1)
     },
     methods: {
       changed(selection, row) {
@@ -135,46 +137,53 @@ export default {
       addOpen() {
         this.reset()
         this.addShow = true
-        var _this = this
-        //  交付物列表
-        $.ajax({
-          url: '/admin/api/v1/user_attachments?page=1',
-          beforeSend: function() {
-            _this.loading = true
-          },
-          success: function(result) {
-            let data = result.result
-            _this.loading = false
-            _this.total1 = data.total
-            _this.tableData1 = data.items
-          }
-        })
       },
       cancel() {
         this.addShow = false
       },
       ensure() {
         var _this = this
+        var arr = []
         for (var i=0; i<this.selection.length; i++) {
-          this.arrChecked.push(this.selection[i].id)
+          arr.push(this.selection[i].id)
         }
-        var set = new Set(this.arrChecked.sort())
-        this.arrChecked = [...set]
-        this.form.attachments = this.arrChecked.join()
-        $.ajax({
-          url: '/admin/api/v1/phases',
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
-            _this.$message({
-              message: result.message,
-              type: 'success'
-            })
-            _this.addShow = false
-          }
-        })
+        // var set = new Set(this.arrChecked.sort())
+        // this.arrChecked = [...set]
+        this.form.attachments = arr.join()
+        if (this.id === '') {
+          //  新建
+          $.ajax({
+            url: '/admin/api/v1/phases',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+              _this.addShow = false
+            }
+          })
+        }
+        // else {
+        //   //  修改
+        //   $.ajax({
+        //     url: '/admin/api/v1/phases/' + this.id,
+        //     type: 'post',
+        //     contentType: 'application/json',
+        //     data: JSON.stringify(this.form),
+        //     success: function(result) {
+        //       _this.$message({
+        //         message: result.message,
+        //         type: 'success'
+        //       })
+        //       _this.addShow = false
+        //     }
+        //   })
+        // }
       },
+      //  查询列表
       query(page) {
         var _this = this
         $.ajax({
@@ -187,6 +196,24 @@ export default {
             _this.loading = false
             _this.total = data.total
             _this.tableData = data.items
+          }
+        })
+      },
+      //  根据id查看详情和修改
+      midClick(id) {
+        var _this = this
+        this.addShow = true
+        this.id = id
+        $.ajax({
+          url: '/admin/api/v1/phases/' + id,
+          success: function(result) {
+            var data = result.result
+            _this.form.name = data.name
+            _this.form.description = data.description
+            var arrId = data.atts
+            for(var i=0; i<arrId.length; i++) {
+              _this.$refs.table.toggleRowSelection(_this.tableData1.find(d => d.id === arrId[i].id))
+            }
           }
         })
       },

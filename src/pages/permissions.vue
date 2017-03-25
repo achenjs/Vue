@@ -14,23 +14,38 @@
             align="center"
             prop="id"
             width="80"
+            show-overflow-tooltip
             label="编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
+            width="200"
+            show-overflow-tooltip
             label="权限名称">
           </el-table-column>
           <el-table-column
             align="center"
             prop="description"
+            show-overflow-tooltip
+            width="200"
             label="权限描述">
           </el-table-column>
           <el-table-column
             align="center"
             prop="status"
+            show-overflow-tooltip
             width="100"
             label="状态">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            fixed="right"
+            width="80"
+            label="操作">
+            <template scope="scope">
+              <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -62,10 +77,12 @@
           </div>
         </div>
       </transition>
+      <v-pages :total="total" v-on:currentChange="query"></v-pages>
    </div>
 </template>
 
 <script>
+import pages from '../components/pages/pages.vue'
 export default {
     data() {
       return {
@@ -83,30 +100,14 @@ export default {
           description: '',
           status: true
         },
-        loading: false
+        loading: false,
+        page: '',
+        id: '',
+        total: 1,
       }
     },
     created() {
-      var _this = this
-      //  获取所有权限
-      $.ajax({
-        url: '/admin/api/v1/permissions',
-        beforeSend: function() {
-          _this.loading = true
-        },
-        success: function(result) {
-          _this.loading = false
-          var data = result.result
-          for(var i=0; i<data.items.length; i++) {
-            if (data.items[i].status == true) {
-              data.items[i].status = 'true'
-            } else {
-              data.items[i].status = 'false'
-            }
-          }
-          _this.tableData = data.items
-        }
-      })
+      this.query(1)
     },
     methods: {
       reset() {
@@ -123,20 +124,78 @@ export default {
       },
       ensure() {
         var _this = this
+        if (this.id === '') {
+          $.ajax({
+            url: '/admin/api/v1/permissions',
+            type: 'post',
+            contentType:'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.$message({
+                message: '创建成功!',
+                type: 'success'
+              })
+              _this.addShow = false
+            }
+          })
+        } else {
+          $.ajax({
+            url: '/admin/api/v1/permissions/' + this.id,
+            type: 'post',
+            contentType:'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.$message({
+                message: '创建成功!',
+                type: 'success'
+              })
+              _this.query(_this.page)
+              _this.addShow = false
+            }
+          })
+        }
+
+      },
+      //  查询列表
+      query(page) {
+        var _this = this
+        this.page = page
+        //  获取所有权限
         $.ajax({
-          url: '/admin/api/v1/permissions',
-          type: 'post',
-          contentType:'application/json',
-          data: JSON.stringify(this.form),
+          url: '/admin/api/v1/permissions?page=' + page,
+          beforeSend: function() {
+            _this.loading = true
+          },
           success: function(result) {
-            _this.$message({
-              message: '创建成功!',
-              type: 'success'
-            })
-            _this.addShow = false
+            _this.loading = false
+            var data = result.result
+            for(var i=0; i<data.items.length; i++) {
+              if (data.items[i].status == true) {
+                data.items[i].status = 'true'
+              } else {
+                data.items[i].status = 'false'
+              }
+            }
+            _this.tableData = data.items
           }
         })
-      }
+      },
+      //  根据id查看详情和修改
+      midClick(id) {
+        var _this = this
+        this.addShow = true
+        this.id = id
+        $.ajax({
+          url: '/admin/api/v1/permissions/' + id,
+          success: function(result) {
+            var data = result.result
+            _this.form = data
+          }
+        })
+      },
+    },
+    components: {
+      'v-pages': pages
     }
   }
 </script>

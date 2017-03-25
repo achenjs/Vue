@@ -28,7 +28,17 @@
             align="center"
             prop="description"
             label="描述"
+            width="300"
             show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            fixed="right"
+            width="80"
+            label="操作">
+            <template scope="scope">
+              <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -67,7 +77,8 @@ export default {
         form: {
           description: '',
           name: ''
-        }
+        },
+        page: 1
       }
     },
     methods: {
@@ -85,22 +96,44 @@ export default {
       },
       ensure() {
         var _this = this
-        $.ajax({
-          url: '/admin/api/v1/attachments',
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
-            _this.addShow = false
-            _this.$message({
-              message: result.message,
-              type: 'success'
-            })
-          }
-        })
+        if (this.id === '') {
+          //  新增
+          $.ajax({
+            url: '/admin/api/v1/attachments',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.addShow = false
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+            }
+          })
+        } else {
+          //  修改
+          $.ajax({
+            url: '/admin/api/v1/attachments/' + this.id,
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.addShow = false
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+              _this.query(_this.page)
+            }
+          })
+        }
+
       },
+      //  列表查询
       query(page) {
         var _this = this
+        this.page = page
         $.ajax({
           url: '/admin/api/v1/attachments?page=' + page,
           beforeSend: function() {
@@ -111,6 +144,19 @@ export default {
             _this.loading = false
             _this.total = data.total
             _this.tableData = data.items
+          }
+        })
+      },
+      //  根据id查看详情和修改
+      midClick(id) {
+        var _this = this
+        this.addShow = true
+        this.id = id
+        $.ajax({
+          url: '/admin/api/v1/attachments/' + id,
+          success: function(result) {
+            var data = result.result
+            _this.form = data
           }
         })
       }

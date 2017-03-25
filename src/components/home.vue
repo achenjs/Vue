@@ -7,7 +7,8 @@
 					<div class="avatar">
 						<input type="file" name="" value="" @change="uploadFile($event)" id="up" class="uploadInput">
 						<input type="hidden" name="" value="" id="url">
-						<img :src="User.avatar_url !== '' ? User.avatar_url : '../assets/images/2.gif'" alt="图片" width="100%" height="100%">
+						<img v-if="User.avatar_url === ''" src="../assets/images/2.gif" width="100%" height="100%" alt="图片">
+						<img v-else :src="User.avatar_url" alt="图片" width="100%" height="100%">
 					</div>
 					<div class="name">
 						<span>{{User.name}}</span>

@@ -1,7 +1,8 @@
 <template>
     <el-col :span="24" class="header">
         <el-col :span="14" class="logo">
-            <img src="../../assets/images/logo.png" /> <span><i class="line"></i>首页</span>
+            <img src="../../assets/images/logo.png" />
+            <!-- <span><i class="line"></i>首页</span> -->
         </el-col>
         <el-col :span="10" class="userinfo">
             <span>{{User.email}}</span><i class="line"></i>
