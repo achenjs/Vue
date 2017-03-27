@@ -177,6 +177,7 @@ export default {
       tableData: [],
       loading: false,
       total: 1,
+      page: '',
       id: ''
     }
   },
@@ -201,6 +202,7 @@ export default {
     //  分页查询
     searchPage(page) {
       var _this = this
+      this.page = page
       var page
       if (typeof page != 'object') {
         page = page
@@ -268,6 +270,7 @@ export default {
             message: result.message,
             type: 'success'
           })
+          _this.searchPage(_this.page)
         }
       })
     },

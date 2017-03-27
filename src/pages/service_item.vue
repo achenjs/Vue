@@ -44,6 +44,15 @@
             width="150"
             show-overflow-tooltip>
           </el-table-column>
+          <el-table-column
+            align="center"
+            fixed="right"
+            width="80"
+            label="操作">
+            <template scope="scope">
+              <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <transition name="fade">
@@ -98,6 +107,8 @@ export default {
         },
         loading: false,
         total: 1,
+        page: '',
+        id: ''
       }
     },
     created() {
@@ -144,22 +155,40 @@ export default {
       },
       ensure() {
         var _this = this
-        $.ajax({
-          url: '/admin/api/v1/service_items',
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
-            _this.addShow = false
-            _this.$message({
-              message: result.message,
-              type: 'success'
-            })
-          }
-        })
+        if (this.id === '') {
+          $.ajax({
+            url: '/admin/api/v1/service_items',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.addShow = false
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+            }
+          })
+        } else {
+          $.ajax({
+            url: '/admin/api/v1/service_items/' + this.id,
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.addShow = false
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+              _this.query(_this.page)
+            }
+          })
+        }
       },
       query(page) {
         var _this = this
+        this.page = page
         $.ajax({
           url: '/admin/api/v1/service_items?page=' + page,
           beforeSend: function() {
@@ -172,7 +201,20 @@ export default {
             _this.tableData = data.items
           }
         })
-      }
+      },
+      //  根据id查看详情和修改
+      midClick(id) {
+        var _this = this
+        this.addShow = true
+        this.id = id
+        $.ajax({
+          url: '/admin/api/v1/service_items/' + id,
+          success: function(result) {
+            var data = result.result
+            _this.form = data
+          }
+        })
+      },
     },
     components: { 'v-pages': pages }
   }

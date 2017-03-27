@@ -30,9 +30,15 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '/',
+      name: '',
+      redirect: '/admin/signin',
+      hidden: true
+    },
+    {
       path: '/admin',
       name: '',
-      redirect: '/admin/admin_list',
+      redirect: '/admin/signin',
       hidden: true
     },
     {
@@ -48,7 +54,7 @@ export default new Router({
       hidden: true
     },
     {
-      path: '/admin/admin_list',
+      path: '/admin/home',
       name: '用户管理',
       iconCls: 'icon-user',
       component: Home,
@@ -59,7 +65,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/project_list',
+      path: '/admin/home',
       name: '项目管理',
       iconCls: 'icon-project',
       component: Home,
@@ -71,7 +77,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/service_category',
+      path: '/admin/home',
       name: '服务包管理',
       iconCls: 'icon-server',
       component: Home,
@@ -81,7 +87,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/service_custom',
+      path: '/admin/home',
       name: '定制化需求管理',
       iconCls: 'icon-custom',
       component: Home,
@@ -90,7 +96,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/deliverable_list',
+      path: '/admin/home',
       name: '交付物审核管理',
       iconCls: 'icon-examine',
       component: Home,
@@ -99,7 +105,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/indent_list',
+      path: '/admin/home',
       name: '订单管理',
       iconCls: 'icon-serverList',
       component: Home,
@@ -108,7 +114,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/bill_list',
+      path: '/admin/home',
       name: '交易管理',
       iconCls: 'icon-serverList',
       component: Home,
@@ -117,7 +123,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/managers',
+      path: '/admin/home',
       name: '系统管理',
       iconCls: 'icon-system',
       component: Home,
@@ -130,7 +136,7 @@ export default new Router({
       ]
     },
      {
-      path: '/admin/bp_list',
+      path: '/admin/home',
       name: 'BP管理',
       iconCls: 'icon-BP',
       component: Home,

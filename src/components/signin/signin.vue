@@ -34,7 +34,10 @@ export default {
     }
   },
   created () {
+    //  验证码
     this.captcha()
+    //  判断是否已登录
+    this.isLogin()
   },
   methods: {
     captcha() {
@@ -55,8 +58,21 @@ export default {
         contentType:'application/json',
         data: JSON.stringify(this.form),
         success: function (result) {
-          sessionStorage.setItem('user', JSON.stringify(result))
           _this.$router.push('/admin/admin_list')
+        }
+      })
+    },
+    isLogin() {
+      var _this = this
+      $.ajax({
+        url: '/admin/api/v1/',
+        success: function(result) {
+          let status = result.status
+          if (status == '200') {
+            _this.$router.push('/admin/admin_list')
+          } else {
+            return false
+          }
         }
       })
     }

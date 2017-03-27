@@ -1,7 +1,8 @@
 <template>
     <el-col :span="24" class="header">
         <el-col :span="14" class="logo">
-            <img src="../../assets/images/logo.png" /> <span><i class="line"></i>首页</span>
+            <img src="../../assets/images/logo.png" />
+            <!-- <span><i class="line"></i>首页</span> -->
         </el-col>
         <el-col :span="10" class="userinfo">
             <span>{{User.email}}</span><i class="line"></i>
@@ -29,10 +30,14 @@ export default{
             var _this = this;
             this.$confirm('确认退出吗?', '提示', {
             }).then(() => {
-                sessionStorage.removeItem('user');
-                _this.$router.push('/admin/signin')
+              $.ajax({
+                url: '/admin/api/v1/logout',
+                success: function(result) {
+                  _this.$router.push('/admin/signin')
+                }
+              })
             }).catch(() => {
-                console.log('错误!')
+              console.log('错误!')
             });
         }
     }

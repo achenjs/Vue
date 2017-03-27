@@ -157,13 +157,13 @@ export default {
       },
       ensure() {
         var _this = this
+        var arr = []
+        for (var i=0; i<this.multipleSelection.length; i++) {
+          arr.push(this.multipleSelection[i].id)
+        }
+        this.form.permissions = arr.join()
         if (this.id === '') {
           //  新建
-          var arr = []
-          for (var i=0; i<this.multipleSelection.length; i++) {
-            arr.push(this.multipleSelection[i].id)
-          }
-          this.form.permissions = arr.join()
           $.ajax({
             url: '/admin/api/v1/roles',
             type: 'post',
@@ -179,11 +179,6 @@ export default {
           })
         } else {
           //  修改
-          var arr = []
-          for (var i=0; i<this.multipleSelection.length; i++) {
-            arr.push(this.multipleSelection[i].id)
-          }
-          this.form.permissions = arr.join()
           $.ajax({
             url: '/admin/api/v1/roles/' + this.id,
             type: 'post',
