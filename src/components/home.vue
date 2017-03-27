@@ -85,7 +85,7 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 						_this.User.email = data.email
 						_this.User.name = data.name
 						_this.User.role_name = data.role_name
-						_this.User.avatar_url = URL + data.avatar_url
+						_this.User.avatar_url = data.avatar_url === '' ? '' :  URL + data.avatar_url
 					}
 				})
 			},

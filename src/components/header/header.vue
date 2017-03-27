@@ -30,10 +30,14 @@ export default{
             var _this = this;
             this.$confirm('确认退出吗?', '提示', {
             }).then(() => {
-                sessionStorage.removeItem('user');
-                _this.$router.push('/admin/signin')
+              $.ajax({
+                url: '/admin/api/v1/logout',
+                success: function(result) {
+                  _this.$router.push('/admin/signin')
+                }
+              })
             }).catch(() => {
-                console.log('错误!')
+              console.log('错误!')
             });
         }
     }

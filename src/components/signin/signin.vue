@@ -34,8 +34,10 @@ export default {
     }
   },
   created () {
+    //  验证码
     this.captcha()
-    // this.isLogin()
+    //  判断是否已登录
+    this.isLogin()
   },
   methods: {
     captcha() {
@@ -56,14 +58,12 @@ export default {
         contentType:'application/json',
         data: JSON.stringify(this.form),
         success: function (result) {
-          sessionStorage.setItem('user', JSON.stringify(result))
           _this.$router.push('/admin/admin_list')
         }
       })
     },
     isLogin() {
       var _this = this
-      console.log(this.$cookies.get('admin'))
       $.ajax({
         url: '/admin/api/v1/',
         success: function(result) {
