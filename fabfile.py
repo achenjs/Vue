@@ -22,6 +22,7 @@ _REMOTE_TMP_TAR = '/tmp/%s' % _TAR_FILE
 _REMOTE_ROOT_DIR = '/root'
 _REMOTE_BASE_DIR = '/root/Repository'
 
+_nginx_config_path = '/etc/nginx/sites-available'
 
 def _current_path():
     return os.path.abspath('.')
@@ -54,7 +55,8 @@ def deploy():
         sudo('sudo service nginx restart')
 
 
-def reboot():
-    with cd(_REMOTE_ROOT_DIR):
-        sudo('sudo service nginx restart')
+def deploy_configs():
+    put('default', _nginx_config_path)
+    sudo('sudo supervisorctl restart apl')
+    sudo('sudo service nginx restart')
 
