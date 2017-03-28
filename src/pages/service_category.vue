@@ -78,7 +78,9 @@ export default {
           description: ''
         },
         id: '',
-        page: ''
+        page: '',
+        regions: [],
+        citys: []
       }
     },
     created() {

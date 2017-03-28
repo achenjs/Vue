@@ -64,7 +64,7 @@
          <el-table-column
             align="center"
             prop="price"
-            label="金额"
+            label="金额(硬豆)"
             show-overflow-tooltip
             width="150">
          </el-table-column>

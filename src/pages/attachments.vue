@@ -36,7 +36,7 @@
             width="80">
             <template scope="scope">
               <!-- <el-button @click="download(scope.row.url)" type="text" size="small">下载</el-button> -->
-              <a href="#" style="">下载</a>
+              <a :href="scope.row.url" style="">下载</a>
             </template>
           </el-table-column>
           <el-table-column
@@ -60,7 +60,7 @@
               <label for="">交付物名称</label>
               <el-input placeholder="交付物名称" v-model="form.name"></el-input>
               <label for="">附件</label>
-              <input type="text" name="" value="">
+              <input type="text" name="" value="" id="hiddens" v-model="form.url" :disabled="true">
               <input type="file" @change="uploadFile($event)" id="upLog">
               <label for="">描述</label>
               <el-input placeholder="描述" v-model="form.description"></el-input>
@@ -78,6 +78,8 @@
 
 <script>
 import pages from '../components/pages/pages.vue'
+import upload from '../assets/js/upload'
+const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 export default {
     data() {
       return {
@@ -87,9 +89,10 @@ export default {
         total: 1,
         form: {
           description: '',
-          name: ''
+          name: '',
+          url: ''
         },
-        page: 1
+        page: 1,
       }
     },
     methods: {
@@ -97,7 +100,7 @@ export default {
       uploadFile(ele) {
         var _this = this
         upload(ele.target, 2, () => {
-          _this.form.bp_url = $("#hiddens").val()
+          _this.form.url = $("#hiddens").val()
         })
       },
       reset() {
@@ -162,6 +165,9 @@ export default {
             let data = result.result
             _this.loading = false
             _this.total = data.total
+            for(var i in data.items) {
+              data.items[i].url = data.items[i].url === null ? '#' : URL + data.items[i].url
+            }
             _this.tableData = data.items
           },
           complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数

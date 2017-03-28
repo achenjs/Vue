@@ -18,6 +18,9 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="有利条件">
+          <el-input type="textarea" v-model="form.advantage" placeholder="有利条件" :maxlength="100" :rows="4"></el-input>
+        </el-form-item>
         <el-form-item label="手机号">
           <el-input placeholder="手机号" v-model="form.contact_phone"></el-input>
         </el-form-item>
@@ -27,21 +30,21 @@
         <el-form-item label="所在阶段">
           <el-input placeholder="所在阶段" v-model="form.phase_index"></el-input>
         </el-form-item>
-        <el-form-item label="完成时间">
+        <!-- <el-form-item label="完成时间">
           <el-date-picker
             format="yyyy-MM-dd"
-            v-model="form.deadline"
+            v-model="form.gmt_modified"
             type="date"
             placeholder="选择日期">
           </el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="附件">
           <el-input placeholder="附件" v-model="form.bp_url" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="审核">
           <el-select v-model="form.status">
             <el-option
-            v-for="(key, index) in examines"
+            v-for="key in examines"
             :label="key.label"
             :value="key.value"
             :key="key">
@@ -67,12 +70,12 @@ export default {
       industries: {},
       examines: [
         {
-          value: 'Paid',
-          label: '已支付'
+          value: 'Accepted',
+          label: '已通过'
         },
         {
-          value: 'Canceled',
-          label: '已取消'
+          value: 'Rejected',
+          label: '已驳回'
         },
         {
           value: 'Submitting',
@@ -82,14 +85,6 @@ export default {
           value: 'Submitted',
           label: '已提交'
         },
-        {
-          value: 'Confirmed',
-          label: '已确认'
-        },
-        {
-          value: 'Finished',
-          label: '已完成'
-        }
       ],
       right: 'right',
       id: '',
@@ -103,7 +98,8 @@ export default {
         description: '',
         contact_email: '',
         bp_url: '',
-        deadline: ''
+        gmt_modified: '',
+        advantage: ''
       }
     }
   },
@@ -139,23 +135,43 @@ export default {
     //  修改
     ensure() {
       var _this = this
-      if (this.form.deadline === '') {
-        this.form.deadline = ''
+      if (this.form.gmt_modified === '') {
+        this.form.gmt_modified = ''
       } else {
-        this.form.deadline = Date.parse(new Date(this.form.deadline))
+        this.form.gmt_modified = Date.parse(new Date(this.form.gmt_modified))
+      }
+      var status = this.form.status
+      switch (status) {
+        case '待提交':
+          this.form.status = 'Submitting'
+          break;
+        case '已提交':
+          this.form.status = 'Submitted'
+          break;
+        case '已驳回':
+          this.form.status = 'Rejected'
+          break;
+        case '已通过':
+          this.form.status = 'Accepted'
+          break;
+      }
+      var industry = this.form.industry
+      for (var i in this.industries) {
+        if (industry == this.industries[i]) {
+          this.form.industry = i
+        }
       }
       $.ajax({
         url: '/admin/api/v1/projects/' + this.id,
         type: 'post',
         contentType: 'application/json',
-        data: JSON.stringify(this.details),
+        data: JSON.stringify(this.form),
         success: function(result) {
-          _this.addShow = false
           _this.$message({
             message: result.message,
             type: 'success'
           })
-          _this.searchPage(_this.page)
+          _this.$router.push('/admin/project_list')
         }
       })
     },

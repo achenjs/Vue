@@ -310,6 +310,12 @@ export default {
             this.form.company_industry = i
           }
         }
+        var gender = this.form.gender
+        for(var i in this.genders) {
+          if(this.genders[i] == gender) {
+            this.form.gender = i
+          }
+        }
         $.ajax({
           url: '/admin/api/v1/users/' + this.id,
           type: 'post',

@@ -31,6 +31,13 @@
       }
     },
     methods: {
+      reset() {
+        this.$data.form = {
+          old_pwd: '',
+          new_pwd: ''
+        }
+        this.$data.add_pwd = ''
+      },
       submitForm(formName) {
         var _this = this
         if (this.form.new_pwd === this.add_pwd) {
@@ -44,6 +51,7 @@
                  message: result.message,
                  type: 'success'
               })
+              _this.reset()
             },
             error(err) {
               _this.$message.error(JSON.parse(err.responseText).message)

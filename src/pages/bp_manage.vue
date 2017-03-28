@@ -47,7 +47,7 @@
                   :value="item.area_id"
                   :key="item.area_id"></el-option>
                 </el-select>
-                <el-select>
+                <el-select v-model="form.city">
                   <el-option
                   v-for="item in citys"
                   :label="item.name"
@@ -55,11 +55,6 @@
                   :key="item.area_id">
                   </el-option>
                 </el-select>
-                <!-- <el-cascader :options="regions" :show-all-levels="false" :props="selectProps"></el-cascader> -->
-                <!-- <el-input placeholder="所属城市" v-model="form.city"></el-input>
-                <select class="" name="">
-                  <option value="" v-for="(item, index) in options">{{item[index].name}}</option>
-                </select> -->
               </el-form-item>
               <el-form-item label="关联投资者">
                 <el-input placeholder="关联投资者" v-model="form.investors"></el-input>
@@ -320,41 +315,6 @@ import upload from '../assets/js/upload'
           "valuation": ""
         },
         fileData: {},
-        // options: [{
-        //   value: 'zhinan',
-        //   label: '指南',
-        //   children: [{
-        //     value: 'shejiyuanze',
-        //     label: '设计原则',
-        //     children: [{
-        //       value: 'yizhi',
-        //       label: '一致'
-        //     }, {
-        //       value: 'fankui',
-        //       label: '反馈'
-        //     }, {
-        //       value: 'xiaolv',
-        //       label: '效率'
-        //     }, {
-        //       value: 'kekong',
-        //       label: '可控'
-        //     }]
-        //   }, {
-        //     value: 'daohang',
-        //     label: '导航',
-        //     children: [{
-        //       value: 'cexiangdaohang',
-        //       label: '侧向导航'
-        //     }, {
-        //       value: 'dingbudaohang',
-        //       label: '顶部导航'
-        //     }]
-        //   }]
-        // }]
-        selectProps: {
-          value: '',
-          label: ''
-        },
         regions: [],
         citys: []
       }
@@ -386,6 +346,7 @@ import upload from '../assets/js/upload'
               message: result.message,
               type: 'success'
             })
+            _this.$router.push('/admin/bp_list')
           }
         })
       },
@@ -397,10 +358,6 @@ import upload from '../assets/js/upload'
           success: function(result) {
             var data = result.result
             _this.regions = data
-            _this.selectProps = {
-              value: 'area_id',
-              label: 'name'
-            }
           }
         })
       },
@@ -408,7 +365,7 @@ import upload from '../assets/js/upload'
       city(id) {
         var _this = this
         $.ajax({
-          url: '/main/api/v1/region?page=1&region_id=eead4c86-a579-4d83-8e96-7064882bdabf',
+          url: '/main/api/v1/region/' + id +'?page=1',
           success: function(result) {
             var data = result.result
             _this.citys = data

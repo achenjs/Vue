@@ -62,11 +62,12 @@
            align="center"
            prop="attachment_name"
            label="项目名称"
+           width="200"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
-           prop="phase_id"
+           prop="phase_name"
            label="阶段"
            width="100"
            show-overflow-tooltip>
@@ -74,8 +75,8 @@
          <el-table-column
            align="center"
            prop="attachment_name"
-           width="150"
            label="交付物名称"
+           width="250"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -95,7 +96,6 @@
             align="center"
             fixed="right"
             label="操作"
-            width="80"
             show-overflow-tooltip>
            <template scope="scope">
              <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
@@ -142,12 +142,12 @@ export default {
           label: '全部状态',
         },
         {
-          value: 'Paid',
-          label: '已支付'
+          value: 'Ignoring',
+          label: '请求忽略'
         },
         {
-          value: 'Canceled',
-          label: '已取消'
+          value: 'Ignored',
+          label: '已忽略'
         },
         {
           value: 'Submitting',
@@ -162,8 +162,8 @@ export default {
           label: '已确认'
         },
         {
-          value: 'Finished',
-          label: '已完成'
+          value: 'Rejected',
+          label: '已驳回'
         }
       ],
       addShow: false,

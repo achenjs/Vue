@@ -46,7 +46,7 @@
          width="80"
          label="附件">
          <template scope="scope">
-           <a href="#">下载</a>
+           <a href="scope.row.file_name">下载</a>
          </template>
        </el-table-column>
        <el-table-column
@@ -91,6 +91,7 @@
 
 <script>
 import pages from '../components/pages/pages.vue'
+const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 export default {
   data () {
     return {
@@ -161,6 +162,9 @@ export default {
           let data = result.result
           _this.loading = false
           _this.total = data.total
+          for(var i in data.items) {
+            data.items[i].file_name = data.items[i].file_name === null ? '#' : URL + data.items[i].file_name
+          }
           _this.tableData = data.items
         },
         complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数

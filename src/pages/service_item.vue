@@ -33,21 +33,28 @@
           </el-table-column>
           <el-table-column
             align="center"
-            prop="category_id"
+            width="150"
+            prop="category_name"
             label="类别"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
+            label="附件">
+            <template scope="scope">
+              <a :href="scope.row.zip_url">下载</a>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
             prop="price"
+            width="200"
             label="报价(硬豆)"
-            width="150"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             fixed="right"
-            width="80"
             label="操作">
             <template scope="scope">
               <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
@@ -91,6 +98,7 @@
 
 <script>
 import pages from '../components/pages/pages.vue'
+const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 export default {
     data() {
       return {
@@ -122,6 +130,9 @@ export default {
           let data = result.result
           _this.loading = false
           _this.total = data.total
+          for(var i in data.items) {
+            data.items[i].zip_url = data.items[i].zip_url === null ? '#' : URL + data.items[i].zip_url
+          }
           _this.tableData = data.items
         }
       })

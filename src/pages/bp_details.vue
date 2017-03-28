@@ -40,7 +40,21 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="所属城市">
-                <el-input placeholder="所属城市" v-model="form.city"></el-input>
+                <el-select @change="city(region_name)" v-model="region_name">
+                  <el-option
+                  v-for="item in regions"
+                  :label="item.name"
+                  :value="item.area_id"
+                  :key="item.area_id"></el-option>
+                </el-select>
+                <el-select v-model="city_id" @change="isChange(city_id)">
+                  <el-option
+                  v-for="item in citys"
+                  :label="item.name"
+                  :value="item.area_id"
+                  :key="item.area_id">
+                  </el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="关联投资者">
                 <el-input placeholder="关联投资者" v-model="form.investors"></el-input>
@@ -300,27 +314,53 @@ import upload from '../assets/js/upload'
           "valuation": ""
         },
         fileData: {},
-        id: ''
+        id: '',
+        region_name: '',
+        regions: [],
+        citys: [],
+        city_id: ''
       }
     },
     created() {
       this.id = this.$route.query
-      //  根据id获取详情
-      var _this = this
-      if (typeof this.id === 'object') {
-        this.$router.push('/admin/bp_list')
-      } else {
-        $.ajax({
-          url: '/admin/api/v1/bps/' + this.id,
-          success: function(result) {
-            var data = result.result
-            _this.form.start_from = data.gmt_create.split('T')[0]
-            Object.assign(_this.form, data)
-          }
-        })
-      }
+      this.details()
     },
     methods: {
+      //  详情
+      details() {
+        var _this = this
+        if (typeof this.id === 'object') {
+          this.$router.push('/admin/bp_list')
+        } else {
+          new Promise((resolve, reject) => {
+            $.ajax({
+              url: '/admin/api/v1/bps/' + this.id,
+              success: function(result) {
+                var data = result.result
+                _this.form.start_from = data.gmt_create.split('T')[0]
+                Object.assign(_this.form, data)
+                return resolve(data.city)
+              }
+            })
+          }).then((city) => {
+            $.ajax({
+              url: '/main/api/v1/region_detail/' + city + '?page=1',
+              success: function(result) {
+                var data = result.result
+                //  省
+                _this.region_name = data[0].name
+                //  市
+                _this.region()
+                _this.city(data[0].area_id)
+                _this.form.city = data[1].area_id
+                _this.city_id = data[1].name
+              }
+            })
+          })
+        }
+      },
+      isChange() {
+      },
       //  上传
       uploadFile(ele) {
         var _this = this
@@ -353,7 +393,33 @@ import upload from '../assets/js/upload'
             }
           })
         }
-      }
+      },
+      //  获取省级
+      region() {
+        var _this = this
+        $.ajax({
+          url: '/main/api/v1/region?page=1',
+          success: function(result) {
+            var data = result.result
+            _this.regions = data
+          }
+        })
+      },
+      //  获取市级
+      city(id) {
+        var _this = this
+        if (/^[\u4e00-\u9fa5]+$/.test(id)) {
+          return false
+        } else {
+          $.ajax({
+            url: '/main/api/v1/region/' + id +'?page=1',
+            success: function(result) {
+              var data = result.result
+              _this.citys = data
+            }
+          })
+        }
+      },
     }
   }
 </script>
