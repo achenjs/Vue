@@ -61,7 +61,6 @@
          <el-table-column
            align="center"
            prop="attachment_name"
-           width="150"
            label="项目名称"
            show-overflow-tooltip>
          </el-table-column>
@@ -74,7 +73,7 @@
          </el-table-column>
          <el-table-column
            align="center"
-           prop="phase_name"
+           prop="attachment_name"
            width="150"
            label="交付物名称"
            show-overflow-tooltip>
@@ -111,7 +110,7 @@
              <span>交付物详情</span>
            </div>
            <div class="modal-content">
-             <label for="">订单状态</label>
+             <label for="">状态</label>
              <el-select placeholder="请选择" v-model="details.status">
                <el-option
                v-for="item in conditions"
@@ -138,6 +137,10 @@ export default {
   data () {
     return {
       conditions: [
+        {
+          value: '',
+          label: '全部状态',
+        },
         {
           value: 'Paid',
           label: '已支付'
@@ -224,6 +227,7 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
+        timeout: 5000,
         success: function(result) {
           let data = result.result
           _this.loading = false
@@ -253,7 +257,13 @@ export default {
             }
           }
           _this.tableData = data.items
-        }
+        },
+        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+              _this.loading = false
+    　　　　　  _this.$message.error('请求超时！请稍后重试')
+    　　　　}
+    　　 }
       })
     },
     //  确定

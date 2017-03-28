@@ -5,6 +5,7 @@ import Home from '@/components/home.vue'
 import admin_list from '@/pages/admin_list.vue'
 import admin_new from '@/pages/admin_new.vue'
 import project_list from '@/pages/project_list.vue'
+import project_details from '@/pages/project_details.vue'
 import stage_manage from '@/pages/stage_manage.vue'
 import attachments from '@/pages/attachments.vue'
 // import comment_list from '@/pages/comment_list.vue'
@@ -71,6 +72,7 @@ export default new Router({
       component: Home,
       children: [
         {path: '/admin/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
+        {path: '/admin/project_details', component: project_details, name: '项目详情', hidden: true},
         {path: '/admin/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
         {path: '/admin/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
         // {path: '/comment_list', component: comment_list, name: '点评记录'}

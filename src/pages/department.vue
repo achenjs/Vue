@@ -25,7 +25,6 @@
           <el-table-column
             align="center"
             prop="description"
-            width="200"
             label="部门描述">
           </el-table-column>
           <el-table-column

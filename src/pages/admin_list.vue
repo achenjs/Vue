@@ -117,13 +117,13 @@
         label="所属行业"
         show-overflow-tooltip>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         align="center"
         prop="resume"
         label="投资身份"
         width="200"
         show-overflow-tooltip>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         align="center"
         prop="gmt_create"
@@ -156,8 +156,6 @@
                 <el-input placeholder="邮箱账号" v-model="form.email"></el-input>
                 <label for="">手机号码</label>
                 <el-input placeholder="手机号码" v-model="form.phone"></el-input>
-                <label for="">企业名称</label>
-                <el-input placeholder="企业名称" v-model="form.company_name"></el-input>
                 <label for="">所属行业</label>
                 <el-select v-model="form.company_industry" placeholder="请选择">
                   <el-option
@@ -173,6 +171,8 @@
                 <el-input placeholder="微信账号" v-model="form.wechat"></el-input>
                 <label for="">公司职位</label>
                 <el-input placeholder="公司职位" v-model="form.company"></el-input>
+                <label for="">企业名称</label>
+                <el-input placeholder="企业名称" v-model="form.company_name"></el-input>
                 <label for="">性别</label>
                 <el-select v-model="form.gender" placeholder="请选择">
                   <el-option
@@ -182,8 +182,8 @@
                   :key="index">
                   </el-option>
                 </el-select>
-                <label for="">投资身份</label>
-                <el-input placeholder="投资身份" v-model="form.resume"></el-input>
+                <!-- <label for="">投资身份</label>
+                <el-input placeholder="投资身份" v-model="form.resume"></el-input> -->
               </el-col>
             </el-row>
           </div>
@@ -224,8 +224,8 @@ export default {
         wechat: ''
       },
       genders: {
-        '男': 'boy',
-        '女': 'girl'
+        'Male': '男',
+        'Female': '女'
       },
       id: '',
       industries: {},
@@ -243,6 +243,7 @@ export default {
       success: function(result) {
         var data = result.result
         _this.industries = data.industries
+        _this.industries[''] = '全部行业'
       }
     })
     //  会员列表
@@ -264,10 +265,11 @@ export default {
       }
       //  会员列表
       $.ajax({
-        url: '/admin/api/v1/users?id='+this.query.id+'&type='+this.query.type+'&name='+this.query.name+'&email='+this.query.email+'&phone='+this.query.phone+'&company_industry='+this.query.company_industry+'&page='+page,
+        url: '/admin/api/v1/users?id='+this.query.id+'&type='+this.query.type+'&name='+this.query.name+'&email='+this.query.email+'&phone='+this.query.phone+'&company_name='+this.query.company_name+'&company_industry='+this.query.company_industry+'&page='+page,
         beforeSend: function() {
           _this.loading = true
         },
+        timeout: 5000,
         success: function(result) {
           var data = result.result
           _this.loading = false
@@ -275,7 +277,13 @@ export default {
             data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
           }
           _this.tableData = data.items
-        }
+        },
+        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+              _this.loading = false
+    　　　　　  _this.$message.error('请求超时！请稍后重试')
+    　　　　}
+    　　 }
       })
     },
     //  编辑信息

@@ -30,7 +30,7 @@
             show-overflow-tooltip
             label="阶段描述">
           </el-table-column>
-          <!-- <el-table-column
+          <el-table-column
             align="center"
             fixed="right"
             width="80"
@@ -38,7 +38,7 @@
             <template scope="scope">
               <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
             </template>
-          </el-table-column> -->
+          </el-table-column>
         </el-table>
       </div>
       <transition name="fade">
@@ -67,7 +67,7 @@
                 </el-table-column>
                 <el-table-column
                   align="center"
-                  prop="attachment.id"
+                  prop="id"
                   width="80"
                   label="编号">
                 </el-table-column>
@@ -75,13 +75,13 @@
                   align="center"
                   show-overflow-tooltip
                   width="120"
-                  prop="attachment.name"
+                  prop="name"
                   label="交付物名称">
                 </el-table-column>
                 <el-table-column
                   align="center"
                   show-overflow-tooltip
-                  prop="attachment.description"
+                  prop="description"
                   label="描述">
                 </el-table-column>
               </el-table>
@@ -166,22 +166,22 @@ export default {
             }
           })
         }
-        // else {
-        //   //  修改
-        //   $.ajax({
-        //     url: '/admin/api/v1/phases/' + this.id,
-        //     type: 'post',
-        //     contentType: 'application/json',
-        //     data: JSON.stringify(this.form),
-        //     success: function(result) {
-        //       _this.$message({
-        //         message: result.message,
-        //         type: 'success'
-        //       })
-        //       _this.addShow = false
-        //     }
-        //   })
-        // }
+        else {
+          //  修改
+          $.ajax({
+            url: '/admin/api/v1/phases/' + this.id,
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+              _this.addShow = false
+            }
+          })
+        }
       },
       //  查询列表
       query(page) {
@@ -191,12 +191,19 @@ export default {
           beforeSend: function() {
             _this.loading = true
           },
+          timeout: 5000,
           success: function(result) {
             var data = result.result
             _this.loading = false
             _this.total = data.total
             _this.tableData = data.items
-          }
+          },
+          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+                _this.loading = false
+      　　　　　  _this.$message.error('请求超时！请稍后重试')
+      　　　　}
+      　　 }
         })
       },
       //  根据id查看详情和修改
@@ -220,7 +227,7 @@ export default {
       queryAttachment(page) {
         var _this = this
         $.ajax({
-          url: '/admin/api/v1/user_attachments?page=' + page,
+          url: '/admin/api/v1/attachments?page=' + page,
           beforeSend: function() {
             _this.loading = true
           },

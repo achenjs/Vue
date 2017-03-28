@@ -109,7 +109,6 @@
            align="center"
            prop="service_name"
            label="服务项"
-           width="150"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -117,7 +116,6 @@
            align="center"
            prop="description"
            label="服务项"
-           width="150"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -137,7 +135,7 @@
          <el-table-column
            align="center"
            prop="price"
-           label="订单金额"
+           label="订单金额(硬豆)"
            width="150"
            show-overflow-tooltip>
          </el-table-column>
@@ -160,7 +158,7 @@
              <span>服务项详情</span>
            </div>
            <div class="modal-content">
-             <label for="" v-if="isCustom">价格</label>
+             <label for="" v-if="isCustom">价格(硬豆)</label>
              <el-input placeholder="价格" v-if="isCustom" v-model="UserDetails.price"></el-input>
              <label for="" v-if="!isCustom">服务项</label>
              <el-input placeholder="服务项" :disabled="true" v-if="!isCustom" v-model="CustomDetails.title"></el-input>
@@ -392,6 +390,7 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
+        timeout: 5000,
         success: function(result) {
           _this.loading = false
           var data = result.result
@@ -400,7 +399,13 @@ export default {
             data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
           }
           _this.tableData = data.items
-        }
+        },
+        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+              _this.loading = false
+    　　　　　  _this.$message.error('请求超时！请稍后重试')
+    　　　　}
+    　　 }
       })
     },
     //  自定义服务项列表
@@ -429,6 +434,7 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
+        timeout: 5000,
         success: function(result) {
           _this.loading = false
           var data = result.result
@@ -437,7 +443,13 @@ export default {
             data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
           }
           _this.tableData = data.items
-        }
+        },
+        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+              _this.loading = false
+    　　　　　  _this.$message.error('请求超时！请稍后重试')
+    　　　　}
+    　　 }
       })
     },
     search() {

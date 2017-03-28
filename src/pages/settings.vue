@@ -8,6 +8,9 @@
           <el-form-item label="新密码">
             <el-input type="password" v-model="form.new_pwd"></el-input>
           </el-form-item>
+          <el-form-item label="确认密码">
+            <el-input type="password" v-model="add_pwd"></el-input>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm">提交</el-button>
           </el-form-item>
@@ -24,19 +27,31 @@
           old_pwd: '',
           new_pwd: '',
         },
+        add_pwd: ''
       }
     },
     methods: {
       submitForm(formName) {
-        $.ajax({
-          url: '/admin/api/v1/reset_password',
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
-            console.log(result)
-          }
-        })
+        var _this = this
+        if (this.form.new_pwd === this.add_pwd) {
+          $.ajax({
+            url: '/admin/api/v1/reset_password',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.$message({
+                 message: result.message,
+                 type: 'success'
+              })
+            },
+            error(err) {
+              _this.$message.error(JSON.parse(err.responseText).message)
+            }
+          })
+        } else {
+            _this.$message.error('二次输入的密码不一致！')
+        }
       }
     }
   }

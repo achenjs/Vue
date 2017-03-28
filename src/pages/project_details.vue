@@ -1,0 +1,175 @@
+<template lang="html">
+  <div class="project_details">
+    <el-col :span="24">
+      <el-form :label-position="right" label-width="120px">
+        <el-form-item label="项目名称">
+          <el-input placeholder="项目名称" v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="负责人">
+          <el-input placeholder="负责人" v-model="form.contact_name"></el-input>
+        </el-form-item>
+        <el-form-item label="所属行业">
+          <el-select v-model="form.industry" placeholder="请选择">
+            <el-option
+            v-for="(key, index) in industries"
+            :label="key"
+            :value="index"
+            :key="key">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input placeholder="手机号" v-model="form.contact_phone"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input placeholder="邮箱" v-model="form.contact_email"></el-input>
+        </el-form-item>
+        <el-form-item label="所在阶段">
+          <el-input placeholder="所在阶段" v-model="form.phase_index"></el-input>
+        </el-form-item>
+        <el-form-item label="完成时间">
+          <el-date-picker
+            format="yyyy-MM-dd"
+            v-model="form.deadline"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="附件">
+          <el-input placeholder="附件" v-model="form.bp_url" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="审核">
+          <el-select v-model="form.status">
+            <el-option
+            v-for="(key, index) in examines"
+            :label="key.label"
+            :value="key.value"
+            :key="key">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="项目描述">
+          <el-input type="textarea" v-model="form.description" placeholder="项目描述" :maxlength="100" :rows="4"></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="submit">
+        <el-button type="primary" @click="ensure">确认</el-button>
+        <el-button type="primary" @click="cancel">取消</el-button>
+      </div>
+    </el-col>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      industries: {},
+      examines: [
+        {
+          value: 'Paid',
+          label: '已支付'
+        },
+        {
+          value: 'Canceled',
+          label: '已取消'
+        },
+        {
+          value: 'Submitting',
+          label: '待提交'
+        },
+        {
+          value: 'Submitted',
+          label: '已提交'
+        },
+        {
+          value: 'Confirmed',
+          label: '已确认'
+        },
+        {
+          value: 'Finished',
+          label: '已完成'
+        }
+      ],
+      right: 'right',
+      id: '',
+      form: {
+        name: '',
+        contact_name: '',
+        industry: '',
+        contact_phone: '',
+        phase_index: '',
+        status: '',
+        description: '',
+        contact_email: '',
+        bp_url: '',
+        deadline: ''
+      }
+    }
+  },
+  created() {
+    var _this = this
+    //  所属行业
+    $.ajax({
+      url: '/main/api/v1/industries',
+      success: function(result) {
+        var data = result.result
+        _this.industries = data.industries
+      }
+    })
+    this.projects(this.$route.query)
+  },
+  methods: {
+    //  详情
+    projects(id) {
+      var _this = this
+      this.id = id
+      if (typeof id === 'object') {
+        this.$router.push('/admin/project_list')
+      } else {
+        $.ajax({
+          url: '/admin/api/v1/projects/' + id,
+          success: function(result) {
+            var data = result.result
+            _this.form = data
+          }
+        })
+      }
+    },
+    //  修改
+    ensure() {
+      var _this = this
+      if (this.form.deadline === '') {
+        this.form.deadline = ''
+      } else {
+        this.form.deadline = Date.parse(new Date(this.form.deadline))
+      }
+      $.ajax({
+        url: '/admin/api/v1/projects/' + this.id,
+        type: 'post',
+        contentType: 'application/json',
+        data: JSON.stringify(this.details),
+        success: function(result) {
+          _this.addShow = false
+          _this.$message({
+            message: result.message,
+            type: 'success'
+          })
+          _this.searchPage(_this.page)
+        }
+      })
+    },
+    cancel() {
+      this.$router.push('/admin/project_list')
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.project_details {
+  .submit {
+    text-align: center;
+  }
+}
+</style>

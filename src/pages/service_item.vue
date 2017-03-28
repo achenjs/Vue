@@ -40,7 +40,7 @@
           <el-table-column
             align="center"
             prop="price"
-            label="报价"
+            label="报价(硬豆)"
             width="150"
             show-overflow-tooltip>
           </el-table-column>
@@ -75,7 +75,7 @@
                 :key="item.id">
                 </el-option>
               </el-select>
-              <label for="">报价</label>
+              <label for="">报价(硬豆)</label>
               <el-input placeholder="报价" v-model="form.price"></el-input>
             </div>
             <div class="modal-footer">
@@ -132,12 +132,18 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
+        timeout: 5000,
         success: function(result) {
           _this.loading = false
           var data = result.result
-          _this.total = data.total
           _this.categorys = data.items
-        }
+        },
+        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+              _this.loading = false
+    　　　　　  _this.$message.error('请求超时！请稍后重试')
+    　　　　}
+    　　 }
       })
     },
     methods: {

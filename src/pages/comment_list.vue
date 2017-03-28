@@ -80,12 +80,19 @@ export default {
           beforeSend: function() {
             _this.loading = true
           },
+          timeout: 5000,
           success: function(result) {
             var data = result.result
             _this.loading = false
             _this.total = data.total
             _this.tableData = data.items
-          }
+          },
+          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+                _this.loading = false
+      　　　　　  _this.$message.error('请求超时！请稍后重试')
+      　　　　}
+      　　 }
         })
       }
     },

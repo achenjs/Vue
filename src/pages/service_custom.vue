@@ -24,7 +24,7 @@
          align="center"
          prop="description"
          label="服务项描述"
-         width="150"
+         width="400"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
@@ -37,9 +37,17 @@
        <el-table-column
          align="center"
          prop="price"
-         label="报价"
+         label="报价(硬豆)"
          width="150"
          show-overflow-tooltip>
+       </el-table-column>
+       <el-table-column
+         align="center"
+         width="80"
+         label="附件">
+         <template scope="scope">
+           <a href="#">下载</a>
+         </template>
        </el-table-column>
        <el-table-column
          align="center"
@@ -58,7 +66,9 @@
              <span>修改状态</span>
            </div>
            <div class="modal-content">
-             <label for="">订单状态</label>
+             <label for="">报价(硬豆)</label>
+             <el-input type="text" v-model="details.price"></el-input>
+             <label for="">状态</label>
              <el-select placeholder="请选择" v-model="details.status">
                <el-option
                v-for="item in conditions"
@@ -117,7 +127,8 @@ export default {
       loading: false,
       addShow: false,
       details: {
-        status: ''
+        status: '',
+        price: ''
       }
     }
   },
@@ -145,12 +156,19 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
+        timeout: 5000,
         success: function(result) {
           let data = result.result
           _this.loading = false
           _this.total = data.total
           _this.tableData = data.items
-        }
+        },
+        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+              _this.loading = false
+    　　　　　  _this.$message.error('请求超时！请稍后重试')
+    　　　　}
+    　　 }
       })
     },
     ensure() {

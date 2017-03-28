@@ -12,10 +12,10 @@
         <el-input type="text" v-model="form.captcha" auto-complete="off" placeholder="验证码"></el-input>
       </el-form-item>
       <el-form-item>
-        <span id="getImg"><img :src="imgUrl" style="width:30%; height:100%;"><label for=""  @click="captcha">换一张</label></span>
+        <span id="getImg"><img :src="imgUrl" style="width:30%; height:100%;" @click="captcha"><label for="" @click="captcha">换一张</label></span>
       </el-form-item>
       <el-form-item style="width:100%;">
-        <el-button type="primary" style="width:100%;" @click="signin">登录</el-button>
+        <el-button type="primary" class="submit" style="width:100%;" @click="signin" @keyup="show($event)">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -39,7 +39,19 @@ export default {
     //  判断是否已登录
     this.isLogin()
   },
+  mounted() {
+    if (this.captcha !== '' && this.username !== '' && this.password !== '') {
+      $('.submit').focus()
+    }
+  },
   methods: {
+    //  回车登录
+    show(ev) {
+      if (ev.keyCode == 13) {
+        this.signin()
+      }
+    },
+    //  验证码
     captcha() {
       var _this = this
       $.ajax({
@@ -59,6 +71,9 @@ export default {
         data: JSON.stringify(this.form),
         success: function (result) {
           _this.$router.push('/admin/admin_list')
+        },
+        error: function(err) {
+          _this.$message.error(JSON.parse(err.responseText).message)
         }
       })
     },
@@ -68,11 +83,10 @@ export default {
         url: '/admin/api/v1/',
         success: function(result) {
           let status = result.status
-          if (status == '200') {
-            _this.$router.push('/admin/admin_list')
-          } else {
-            return false
-          }
+          _this.$router.push('/admin/admin_list')
+        },
+        error(err) {
+          _this.$message.error(JSON.parse(err.responseText).message)
         }
       })
     }

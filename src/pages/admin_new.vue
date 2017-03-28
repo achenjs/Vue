@@ -77,6 +77,9 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+            },
+            error(err) {
+              _this.$message.error(JSON.parse(err.responseText).message)
             }
           })
         }

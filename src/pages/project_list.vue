@@ -137,7 +137,16 @@
         align="center"
         prop="description"
         width="150"
-        label="部门描述">
+        label="项目描述">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        fixed="right"
+        width="80"
+        label="操作">
+        <template scope="scope">
+          <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <v-pages :total="total" v-on:currentChange="query"></v-pages>
@@ -177,6 +186,7 @@ export default {
       success: function(result) {
         var data = result.result
         _this.industries = data.industries
+        _this.industries[''] = '全部行业'
       }
     })
     //  阶段
@@ -185,6 +195,7 @@ export default {
       success: function(result) {
         var data = result.result
         _this.phases = data.items
+        _this.phases.push({id: '', name: '全部阶段'})
       }
     })
     //  项目列表
@@ -214,6 +225,7 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
+        timeout: 5000,
         success: function(result) {
           let data = result.result
           _this.loading = false
@@ -222,8 +234,18 @@ export default {
             data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
           }
           _this.tableData = data.items
-        }
+        },
+        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+              _this.loading = false
+    　　　　　  _this.$message.error('请求超时！请稍后重试')
+    　　　　}
+    　　 }
       })
+    },
+    //  详情
+    midClick(id) {
+      this.$router.push({path: '/admin/project_details', query: id})
     }
   },
   components: { 'v-pages': pages }

@@ -28,8 +28,16 @@
             align="center"
             prop="description"
             label="描述"
-            width="300"
             show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="附件"
+            width="80">
+            <template scope="scope">
+              <!-- <el-button @click="download(scope.row.url)" type="text" size="small">下载</el-button> -->
+              <a href="#" style="">下载</a>
+            </template>
           </el-table-column>
           <el-table-column
             align="center"
@@ -51,6 +59,9 @@
             <div class="modal-content">
               <label for="">交付物名称</label>
               <el-input placeholder="交付物名称" v-model="form.name"></el-input>
+              <label for="">附件</label>
+              <input type="text" name="" value="">
+              <input type="file" @change="uploadFile($event)" id="upLog">
               <label for="">描述</label>
               <el-input placeholder="描述" v-model="form.description"></el-input>
             </div>
@@ -82,6 +93,13 @@ export default {
       }
     },
     methods: {
+      //  上传
+      uploadFile(ele) {
+        var _this = this
+        upload(ele.target, 2, () => {
+          _this.form.bp_url = $("#hiddens").val()
+        })
+      },
       reset() {
         for(var name in this.$data.form) {
           this.$data.form[name] = ''
@@ -139,12 +157,19 @@ export default {
           beforeSend: function() {
             _this.loading = true
           },
+          timeout: 5000,
           success: function(result) {
             let data = result.result
             _this.loading = false
             _this.total = data.total
             _this.tableData = data.items
-          }
+          },
+          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+                _this.loading = false
+      　　　　　  _this.$message.error('请求超时！请稍后重试')
+      　　　　}
+      　　 }
         })
       },
       //  根据id查看详情和修改
@@ -163,6 +188,16 @@ export default {
     },
     created() {
       this.query(1)
+      $.ajax({
+        url: '/admin/api/v1/projects/next/phases',
+        success: function(result) {
+        }
+      })
+      $.ajax({
+        url: '/admin/api/v1/projects/next/attas/322',
+        success: function(result) {
+        }
+      })
     },
     components: {
       'v-pages': pages

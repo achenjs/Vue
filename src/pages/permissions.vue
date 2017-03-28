@@ -28,7 +28,6 @@
             align="center"
             prop="description"
             show-overflow-tooltip
-            width="200"
             label="权限描述">
           </el-table-column>
           <el-table-column
@@ -166,6 +165,7 @@ export default {
           beforeSend: function() {
             _this.loading = true
           },
+          timeout: 5000,
           success: function(result) {
             _this.loading = false
             var data = result.result
@@ -177,7 +177,13 @@ export default {
               }
             }
             _this.tableData = data.items
-          }
+          },
+          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+                _this.loading = false
+      　　　　　  _this.$message.error('请求超时！请稍后重试')
+      　　　　}
+      　　 }
         })
       },
       //  根据id查看详情和修改

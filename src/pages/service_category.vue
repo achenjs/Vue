@@ -27,7 +27,6 @@
           <el-table-column
             align="center"
             prop="description"
-            width="300"
             label="类别描述"
             show-overflow-tooltip>
           </el-table-column>
@@ -87,6 +86,7 @@ export default {
       //  获取所有服务项
       $.ajax({
         url: '/admin/api/v1/service_categories?page=1',
+        timeout: 5000,
         beforeSend: function() {
           _this.loading = true
         },
@@ -95,7 +95,13 @@ export default {
           var data = result.result
           _this.total = data.total
           _this.tableData = data.items
-        }
+        },
+        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+              _this.loading = false
+    　　　　　  _this.$message.error('请求超时！请稍后重试')
+    　　　　}
+    　　 }
       })
     },
     methods: {

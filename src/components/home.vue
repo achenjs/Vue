@@ -17,9 +17,9 @@
 					<div class="company">
 						{{User.role_name}}
 					</div>
-					<div class="email">
+					<!-- <div class="email">
 						<img src="../assets/images/email.png" alt="图片"><span :title="User.email">{{User.email}}</span>
-					</div>
+					</div> -->
 				</div>
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo home-menu"
 				  @open="handleopen" @close="handleclose" @select="handleselect"
@@ -93,7 +93,7 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 			//  上传
       uploadFile(ele) {
         var _this = this
-        upload(ele.target, () => {
+        upload(ele.target, 1, () => {
           const obj = {
 						url: $("#url").val()
 					}

@@ -324,7 +324,7 @@ import upload from '../assets/js/upload'
       //  上传
       uploadFile(ele) {
         var _this = this
-        upload(ele.target, () => {
+        upload(ele.target, 2, () => {
           _this.form.bp_url = $("#hiddens").val()
         })
       },

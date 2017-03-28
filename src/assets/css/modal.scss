@@ -13,6 +13,8 @@
     top: 20%;
     transform: translate(-50%, 0);
     width: 690px;
+    max-height: 500px;
+    overflow-y: scroll;
     background: #fff;
     .modal-header {
       padding-left: 20px;
