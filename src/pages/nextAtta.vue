@@ -37,6 +37,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <div>
+      <el-button type="primary" @click="ensure">同意进入下一阶段</el-button>
+      <el-button type="primary" @click="cancel">驳回</el-button>
+    </div>
     <v-pages :total="total" v-on:currentChange="nextAtta"></v-pages>
   </div>
 </template>
@@ -49,7 +53,7 @@ export default {
       loading: false,
       tableData: [],
       id: '',
-      total: 1
+      total: 1,
     }
   },
   created() {
@@ -57,12 +61,6 @@ export default {
     this.nextAtta(1)
   },
   methods: {
-    reset() {
-      this.$data.form = {
-        status: '',
-        content: ''
-      }
-    },
     //  进入交付物详情
     details(id) {
       this.$router.push({path: '/admin/attaDetails', query: id})
@@ -93,6 +91,46 @@ export default {
         })
       }
     },
+    //  同意进入下一阶段
+    ensure() {
+      var _this = this
+      var obj = {
+        ppid: this.id,
+        status: 'Confirmed'
+      }
+      $.ajax({
+        url: '/admin/api/v1/project_phase_review/',
+        type: 'post',
+        contentType: 'application/json',
+        data: JSON.stringify(obj),
+        success: function(result) {
+          _this.$message({
+            message: result.message,
+            type: 'success'
+          })
+        }
+      })
+    },
+    //  驳回
+    cancel() {
+      var _this = this
+      var obj = {
+        ppid: this.id,
+        status: 'Rejected'
+      }
+      $.ajax({
+        url: '/admin/api/v1/project_phase_review/',
+        type: 'post',
+        contentType: 'application/json',
+        data: JSON.stringify(obj),
+        success: function(result) {
+          _this.$message({
+            message: result.message,
+            type: 'success'
+          })
+        }
+      })
+    }
   },
   components: {
     'v-pages': pages
