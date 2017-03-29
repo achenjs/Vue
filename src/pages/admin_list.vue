@@ -117,13 +117,6 @@
         label="所属行业"
         show-overflow-tooltip>
       </el-table-column>
-      <!-- <el-table-column
-        align="center"
-        prop="resume"
-        label="投资身份"
-        width="200"
-        show-overflow-tooltip>
-      </el-table-column> -->
       <el-table-column
         align="center"
         prop="gmt_create"
@@ -182,8 +175,6 @@
                   :key="index">
                   </el-option>
                 </el-select>
-                <!-- <label for="">投资身份</label>
-                <el-input placeholder="投资身份" v-model="form.resume"></el-input> -->
               </el-col>
             </el-row>
           </div>
@@ -244,6 +235,12 @@ export default {
         var data = result.result
         _this.industries = data.industries
         _this.industries[''] = '全部行业'
+      },
+      error: function(err) {
+        if (err.status == '401') {
+          _this.$message.error(JSON.parse(err.responseText).message)
+          _this.$router.push('/admin/signin')
+        }
       }
     })
     //  会员列表
@@ -279,11 +276,17 @@ export default {
           _this.tableData = data.items
         },
         complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+          if(status == 'timeout'){ //超时,status还有success,error等值的情况
               _this.loading = false
     　　　　　  _this.$message.error('请求超时！请稍后重试')
     　　　　}
-    　　 }
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
+        }
       })
     },
     //  编辑信息
@@ -296,6 +299,12 @@ export default {
         success: function(result) {
           let data = result.result
           Object.assign(_this.form, data)
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
         }
       })
     },
@@ -327,6 +336,12 @@ export default {
               message: result.message,
               type: 'success'
             })
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       }

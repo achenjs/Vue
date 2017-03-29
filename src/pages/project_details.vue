@@ -111,6 +111,12 @@ export default {
       success: function(result) {
         var data = result.result
         _this.industries = data.industries
+      },
+      error: function(err) {
+        if (err.status == '401') {
+          _this.$message.error(JSON.parse(err.responseText).message)
+          _this.$router.push('/admin/signin')
+        }
       }
     })
     this.projects(this.$route.query)
@@ -128,6 +134,12 @@ export default {
           success: function(result) {
             var data = result.result
             _this.form = data
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       }
@@ -172,6 +184,12 @@ export default {
             type: 'success'
           })
           _this.$router.push('/admin/project_list')
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
         }
       })
     },

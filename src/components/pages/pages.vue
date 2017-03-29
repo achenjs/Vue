@@ -3,6 +3,7 @@
     <el-pagination
       v-show="total > 0"
       layout="prev, pager, next"
+      :page-size="perPage"
       :current-page="currenPage"
       :total="total"
       v-on:current-change="currentChange">
@@ -25,6 +26,10 @@ export default {
     currenPage: {
       type: Number,
       default: 1
+    },
+    perPage: {
+      type: Number,
+      default: 20
     }
   },
   created() {

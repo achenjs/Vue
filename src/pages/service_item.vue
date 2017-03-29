@@ -98,7 +98,6 @@
 
 <script>
 import pages from '../components/pages/pages.vue'
-const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 export default {
     data() {
       return {
@@ -121,21 +120,7 @@ export default {
     },
     created() {
       var _this = this
-      $.ajax({
-        url: '/admin/api/v1/service_items?page=1',
-        beforeSend: function() {
-          _this.loading = true
-        },
-        success: function(result) {
-          let data = result.result
-          _this.loading = false
-          _this.total = data.total
-          for(var i in data.items) {
-            data.items[i].zip_url = data.items[i].zip_url === null ? '#' : URL + data.items[i].zip_url
-          }
-          _this.tableData = data.items
-        }
-      })
+      this.query(1)
 
       //  服务类别
       $.ajax({
@@ -154,7 +139,13 @@ export default {
               _this.loading = false
     　　　　　  _this.$message.error('请求超时！请稍后重试')
     　　　　}
-    　　 }
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
+        }
       })
     },
     methods: {
@@ -173,6 +164,7 @@ export default {
       ensure() {
         var _this = this
         if (this.id === '') {
+          //  新增
           $.ajax({
             url: '/admin/api/v1/service_items',
             type: 'post',
@@ -184,9 +176,16 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         } else {
+          //  修改
           $.ajax({
             url: '/admin/api/v1/service_items/' + this.id,
             type: 'post',
@@ -199,6 +198,12 @@ export default {
                 type: 'success'
               })
               _this.query(_this.page)
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         }
@@ -215,7 +220,25 @@ export default {
             let data = result.result
             _this.loading = false
             _this.total = data.total
+            for (let i in data.items) {
+              if (data.items[i].zip_url === null || data.items[i].zip_url === '') {
+                  data.items[i].zip_url = '#'
+              } else {
+                $.ajax({
+                  url: '/main/api/v1/files/' + data.items[i].zip_url,
+                  success: function(result) {
+                    data.items[i].url = result
+                  }
+                })
+              }
+            }
             _this.tableData = data.items
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },
@@ -229,6 +252,12 @@ export default {
           success: function(result) {
             var data = result.result
             _this.form = data
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },

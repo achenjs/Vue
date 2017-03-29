@@ -141,6 +141,12 @@ export default {
         success: function(result) {
           let data = result.result
           _this.departments = data.items
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
         }
       })
       //  角色列表
@@ -149,6 +155,12 @@ export default {
         success: function(result) {
           let data = result.result
           _this.roles = data.items
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
         }
       })
     },
@@ -189,6 +201,12 @@ export default {
                   message: result.message,
                   type: 'success'
                 })
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/admin/signin')
+                }
               }
             })
           }
@@ -207,6 +225,12 @@ export default {
                 type: 'success'
               })
               _this.query(_this.page)
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         }
@@ -234,7 +258,13 @@ export default {
                 _this.loading = false
       　　　　　  _this.$message.error('请求超时！请稍后重试')
       　　　　}
-      　　 }
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
+          }
         })
       },
       //  查看
@@ -258,6 +288,12 @@ export default {
               }
             }
             _this.form.status = data.status
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },

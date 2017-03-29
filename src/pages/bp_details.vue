@@ -40,14 +40,14 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="所属城市">
-                <el-select @change="city(region_name)" v-model="region_name">
+                <el-select placeholder="请选择省会" @change="city(region_name)" v-model="region_name">
                   <el-option
                   v-for="item in regions"
                   :label="item.name"
                   :value="item.area_id"
                   :key="item.area_id"></el-option>
                 </el-select>
-                <el-select v-model="city_id" @change="isChange(city_id)">
+                <el-select placeholder="请选择城市" v-model="city_id" @change="isChange(city_id)">
                   <el-option
                   v-for="item in citys"
                   :label="item.name"
@@ -340,6 +340,12 @@ import upload from '../assets/js/upload'
                 _this.form.start_from = data.gmt_create.split('T')[0]
                 Object.assign(_this.form, data)
                 return resolve(data.city)
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/admin/signin')
+                }
               }
             })
           }).then((city) => {
@@ -354,6 +360,12 @@ import upload from '../assets/js/upload'
                 _this.city(data[0].area_id)
                 _this.form.city = data[1].area_id
                 _this.city_id = data[1].name
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/admin/signin')
+                }
               }
             })
           })
@@ -390,6 +402,12 @@ import upload from '../assets/js/upload'
                 type: 'success'
               })
               _this.$router.push('/admin/bp_list')
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         }
@@ -402,6 +420,12 @@ import upload from '../assets/js/upload'
           success: function(result) {
             var data = result.result
             _this.regions = data
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },
@@ -416,6 +440,12 @@ import upload from '../assets/js/upload'
             success: function(result) {
               var data = result.result
               _this.citys = data
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         }

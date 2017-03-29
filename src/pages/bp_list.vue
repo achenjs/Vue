@@ -48,7 +48,7 @@
             width="120px"
             show-overflow-tooltip>
             <template scope="scope">
-              <el-button @click="queryClick(scope.row.id)" type="text" size="small">查看</el-button>
+              <el-button @click="queryClick(scope.row.id)" type="text" size="small">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -82,6 +82,12 @@ export default {
             let data = result.result
             _this.total = data.total
             _this.tableData = data.items
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },

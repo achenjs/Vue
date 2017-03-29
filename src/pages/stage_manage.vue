@@ -179,6 +179,12 @@ export default {
                 type: 'success'
               })
               _this.addShow = false
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         }
@@ -203,7 +209,13 @@ export default {
                 _this.loading = false
       　　　　　  _this.$message.error('请求超时！请稍后重试')
       　　　　}
-      　　 }
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
+          }
         })
       },
       //  根据id查看详情和修改
@@ -221,6 +233,12 @@ export default {
             for(var i=0; i<arrId.length; i++) {
               _this.$refs.table.toggleRowSelection(_this.tableData1.find(d => d.id === arrId[i].id))
             }
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },
@@ -236,6 +254,12 @@ export default {
             _this.loading = false
             _this.total1 = data.total
             _this.tableData1 = data.items
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       }

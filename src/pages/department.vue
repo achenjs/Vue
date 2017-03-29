@@ -113,6 +113,12 @@ export default {
             let data = result.result
             _this.total = data.total
             _this.tableData = data.items
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },
@@ -137,6 +143,12 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         } else {
@@ -152,6 +164,12 @@ export default {
                 type: 'success'
               })
               _this.query(_this.page)
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         }

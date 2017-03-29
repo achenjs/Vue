@@ -13,6 +13,8 @@ import service_category from '@/pages/service_category.vue'
 import service_item from '@/pages/service_item.vue'
 import service_custom from '@/pages/service_custom.vue'
 import deliverable_list from '@/pages/deliverable_list.vue'
+import nextAtta from '@/pages/nextAtta.vue'
+import attaDetails from '@/pages/attaDetails.vue'
 import indent_list from '@/pages/indent_list.vue'
 import managers from '@/pages/managers.vue'
 import department from '@/pages/department.vue'
@@ -55,7 +57,7 @@ export default new Router({
       hidden: true
     },
     {
-      path: '/admin/home',
+      path: '/admin/admin_list',
       name: '用户管理',
       iconCls: 'icon-user',
       component: Home,
@@ -66,7 +68,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/home',
+      path: '/admin/project_list',
       name: '项目管理',
       iconCls: 'icon-project',
       component: Home,
@@ -79,7 +81,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/home',
+      path: '/admin/service_category',
       name: '服务包管理',
       iconCls: 'icon-server',
       component: Home,
@@ -89,7 +91,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/home',
+      path: '/admin/service_custom',
       name: '定制化需求管理',
       iconCls: 'icon-custom',
       component: Home,
@@ -98,16 +100,20 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/home',
-      name: '交付物审核管理',
+      path: '/admin/deliverable_list',
+      // name: '交付物审核管理',
+      name: '用户需求评审',
       iconCls: 'icon-examine',
       component: Home,
       children: [
-        {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'}
+        // {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
+        {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '阶段评审'},
+        {path: '/admin/nextAtta', component: nextAtta, name: '交付物评审', hidden: true},
+        {path: '/admin/attaDetails', component: attaDetails, name: '交付物详情', hidden: true}
       ]
     },
     {
-      path: '/admin/home',
+      path: '/admin/indent_list',
       name: '订单管理',
       iconCls: 'icon-serverList',
       component: Home,
@@ -116,7 +122,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/home',
+      path: '/admin/bill_list',
       name: '交易管理',
       iconCls: 'icon-serverList',
       component: Home,
@@ -125,7 +131,7 @@ export default new Router({
       ]
     },
     {
-      path: '/admin/home',
+      path: '/admin/managers',
       name: '系统管理',
       iconCls: 'icon-system',
       component: Home,
@@ -138,7 +144,7 @@ export default new Router({
       ]
     },
      {
-      path: '/admin/home',
+      path: '/admin/bp_list',
       name: 'BP管理',
       iconCls: 'icon-BP',
       component: Home,

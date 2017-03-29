@@ -40,14 +40,14 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="所属城市">
-                <el-select @change="city(region_name)" v-model="region_name">
+                <el-select placeholder="请选择省会" @change="city(region_name)" v-model="region_name">
                   <el-option
                   v-for="item in regions"
                   :label="item.name"
                   :value="item.area_id"
                   :key="item.area_id"></el-option>
                 </el-select>
-                <el-select v-model="form.city">
+                <el-select placeholder="请选择城市" v-model="form.city">
                   <el-option
                   v-for="item in citys"
                   :label="item.name"
@@ -347,6 +347,12 @@ import upload from '../assets/js/upload'
               type: 'success'
             })
             _this.$router.push('/admin/bp_list')
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },
@@ -358,6 +364,12 @@ import upload from '../assets/js/upload'
           success: function(result) {
             var data = result.result
             _this.regions = data
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },
@@ -369,6 +381,12 @@ import upload from '../assets/js/upload'
           success: function(result) {
             var data = result.result
             _this.citys = data
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },

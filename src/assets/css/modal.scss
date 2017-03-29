@@ -22,6 +22,11 @@
       line-height: 40px;
       background-color: rgb(247, 247, 247);
       margin-bottom: 30px;
+      i {
+        float: right;
+        margin-right: 20px;
+        cursor: pointer;
+      }
     }
     .modal-content {
       width: 80%;

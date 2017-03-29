@@ -19,6 +19,11 @@ import router from './router'
 //   }
 // })
 
+$('window').ajaxError(function(event,xhr,options,exc) {
+  console.log(event)
+})
+
+
 Vue.use(ElementUI)
 
 /* eslint-disable no-new */

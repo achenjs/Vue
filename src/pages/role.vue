@@ -131,11 +131,16 @@ export default {
             let data = result.result
             _this.form.name = data.name
             _this.form.description = data.description
-
             for(var i=0; i<data.permissions.length; i++) {
               _this.$refs.table.toggleRowSelection(_this.tableData3.find(d => d.value === data.permissions[i]))
             }
             _this.form.status = data.status
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       },
@@ -175,6 +180,12 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         } else {
@@ -191,6 +202,12 @@ export default {
                 type: 'success'
               })
               _this.query(_this.page)
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         }
@@ -204,6 +221,12 @@ export default {
             var data = result.result
             _this.total = data.total
             _this.tableData = data.items
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       }
@@ -218,6 +241,12 @@ export default {
         success: function(result) {
           var data = result.result
           _this.tableData3 = data.items
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
         }
       })
     },

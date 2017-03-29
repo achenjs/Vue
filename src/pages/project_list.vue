@@ -187,6 +187,12 @@ export default {
         var data = result.result
         _this.industries = data.industries
         _this.industries[''] = '全部行业'
+      },
+      error: function(err) {
+        if (err.status == '401') {
+          _this.$message.error(JSON.parse(err.responseText).message)
+          _this.$router.push('/admin/signin')
+        }
       }
     })
     //  阶段
@@ -196,6 +202,12 @@ export default {
         var data = result.result
         _this.phases = data.items
         _this.phases.push({id: '', name: '全部阶段'})
+      },
+      error: function(err) {
+        if (err.status == '401') {
+          _this.$message.error(JSON.parse(err.responseText).message)
+          _this.$router.push('/admin/signin')
+        }
       }
     })
     //  项目列表
@@ -240,7 +252,13 @@ export default {
               _this.loading = false
     　　　　　  _this.$message.error('请求超时！请稍后重试')
     　　　　}
-    　　 }
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
+        }
       })
     },
     //  详情

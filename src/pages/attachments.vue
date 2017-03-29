@@ -79,7 +79,6 @@
 <script>
 import pages from '../components/pages/pages.vue'
 import upload from '../assets/js/upload'
-const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 export default {
     data() {
       return {
@@ -130,6 +129,12 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         } else {
@@ -146,10 +151,15 @@ export default {
                 type: 'success'
               })
               _this.query(_this.page)
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/admin/signin')
+              }
             }
           })
         }
-
       },
       //  列表查询
       query(page) {
@@ -162,11 +172,20 @@ export default {
           },
           timeout: 5000,
           success: function(result) {
-            let data = result.result
+            var data = result.result
             _this.loading = false
             _this.total = data.total
-            for(var i in data.items) {
-              data.items[i].url = data.items[i].url === null ? '#' : URL + data.items[i].url
+            for (let i in data.items) {
+              if (data.items[i].url === '' || data.items[i].url === null) {
+                  data.items[i].url = '#'
+              } else {
+                $.ajax({
+                  url: '/main/api/v1/files/' + data.items[i].url,
+                  success: function(result) {
+                    data.items[i].url = result
+                  }
+                })
+              }
             }
             _this.tableData = data.items
           },
@@ -175,7 +194,13 @@ export default {
                 _this.loading = false
       　　　　　  _this.$message.error('请求超时！请稍后重试')
       　　　　}
-      　　 }
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
+          }
         })
       },
       //  根据id查看详情和修改
@@ -188,22 +213,18 @@ export default {
           success: function(result) {
             var data = result.result
             _this.form = data
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       }
     },
     created() {
       this.query(1)
-      $.ajax({
-        url: '/admin/api/v1/projects/next/phases',
-        success: function(result) {
-        }
-      })
-      $.ajax({
-        url: '/admin/api/v1/projects/next/attas/322',
-        success: function(result) {
-        }
-      })
     },
     components: {
       'v-pages': pages

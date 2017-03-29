@@ -270,6 +270,12 @@ export default {
       success: function(result) {
         var data = result.result
         _this.servers = data.items
+      },
+      error: function(err) {
+        if (err.status == '401') {
+          _this.$message.error(JSON.parse(err.responseText).message)
+          _this.$router.push('/admin/signin')
+        }
       }
     })
     //  系统服务项
@@ -335,6 +341,12 @@ export default {
               break;
           }
           _this.details.status = data.status
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
         }
       })
     },
@@ -348,6 +360,12 @@ export default {
           _this.CustomDetails.title = data.title
           _this.details.category_id = data.category_id
           _this.details.status = data.status
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
         }
       })
     },
@@ -405,7 +423,13 @@ export default {
               _this.loading = false
     　　　　　  _this.$message.error('请求超时！请稍后重试')
     　　　　}
-    　　 }
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
+        }
       })
     },
     //  自定义服务项列表
@@ -449,7 +473,13 @@ export default {
               _this.loading = false
     　　　　　  _this.$message.error('请求超时！请稍后重试')
     　　　　}
-    　　 }
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
+        }
       })
     },
     search() {
@@ -500,6 +530,12 @@ export default {
               message: result.message,
               type: 'success'
             })
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       } else {
@@ -540,6 +576,12 @@ export default {
               message: result.message,
               type: 'success'
             })
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/admin/signin')
+            }
           }
         })
       }
