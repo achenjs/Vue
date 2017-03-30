@@ -85,8 +85,8 @@
       <el-table-column
         align="center"
         prop="id"
-        width="70"
-        label="项目编号">
+        width="50"
+        label="编号">
       </el-table-column>
       <el-table-column
         show-overflow-tooltip

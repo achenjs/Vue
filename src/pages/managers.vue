@@ -27,7 +27,7 @@
             align="center"
             prop="role_name"
             label="角色"
-            width="100"
+            width="120"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
