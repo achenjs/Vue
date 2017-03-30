@@ -55,22 +55,20 @@
       </el-col>
     </div>
     <div class="admin_line admin_line_3 clearfix">
-      <el-col :span="14">
-        <div style="width: 80%;">
-          <label for="">创建时间</label>
-          <el-date-picker
-            format="yyyy-MM-dd"
-            v-model="form.starttime"
-            type="date"
-            placeholder="选择日期">
-          </el-date-picker>
-          <span>至</span>
-          <el-date-picker
-            v-model="form.endtime"
-            type="date"
-            placeholder="选择日期">
-          </el-date-picker>
-        </div>
+      <el-col :span="15">
+        <label for="">创建时间</label>
+        <el-date-picker
+          format="yyyy-MM-dd"
+          v-model="form.starttime"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
+        <span>至</span>
+        <el-date-picker
+          v-model="form.endtime"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
       </el-col>
     </div>
     <div class="query">

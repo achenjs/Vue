@@ -75,7 +75,7 @@
                 <el-input placeholder="一句话介绍" v-model="form.description"></el-input>
               </el-form-item>
               <el-form-item label="备注">
-                <el-input type="textarea" v-model="form.comment" placeholder="备注" :maxlength="100" :rows="3"></el-input>
+                <el-input type="textarea" autosize v-model="form.comment" placeholder="备注" :maxlength="100" :rows="3"></el-input>
               </el-form-item>
             </el-form>
           </el-col>
@@ -104,7 +104,7 @@
                 <el-input placeholder="目前股权结构" v-model="form.stock_structure"></el-input>
               </el-form-item>
               <el-form-item label="团队描述及组成">
-                <el-input type="textarea" v-model="form.team_desc" placeholder="团队描述及组成" :maxlength="100" :rows="3"></el-input>
+                <el-input type="textarea" autosize v-model="form.team_desc" placeholder="团队描述及组成" :maxlength="100" :rows="3"></el-input>
               </el-form-item>
             </el-form>
           </el-col>
@@ -124,13 +124,13 @@
                 <el-input placeholder="市场增量" v-model="form.market_proficiency"></el-input>
               </el-form-item>
               <el-form-item label="竞争对手分析">
-                <el-input type="textarea" v-model="form.rival" placeholder="竞争对手分析" :maxlength="100" :rows="3"></el-input>
+                <el-input type="textarea" autosize v-model="form.rival" placeholder="竞争对手分析" :maxlength="100" :rows="3"></el-input>
               </el-form-item>
               <el-form-item label="痛点及需求描述">
-                <el-input type="textarea" v-model="form.pain_point" placeholder="痛点及需求描述" :maxlength="100" :rows="3"></el-input>
+                <el-input type="textarea" autosize v-model="form.pain_point" placeholder="痛点及需求描述" :maxlength="100" :rows="3"></el-input>
               </el-form-item>
               <el-form-item label="我们的资源匹配情况">
-                <el-input type="textarea" v-model="form.our_resource" placeholder="我们的资源匹配情况" :maxlength="100" :rows="3"></el-input>
+                <el-input type="textarea" autosize v-model="form.our_resource" placeholder="我们的资源匹配情况" :maxlength="100" :rows="3"></el-input>
               </el-form-item>
             </el-form>
           </el-col>
@@ -174,7 +174,7 @@
                 <el-input placeholder="未来定位" v-model="form.future_aim"></el-input>
               </el-form-item>
               <el-form-item label="商业模式描述">
-                <el-input type="textarea" v-model="form.business_mode" placeholder="商业模式描述" :maxlength="100" :rows="3"></el-input>
+                <el-input type="textarea" autosize v-model="form.business_mode" placeholder="商业模式描述" :maxlength="100" :rows="3"></el-input>
               </el-form-item>
             </el-form>
           </el-col>

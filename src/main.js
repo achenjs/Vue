@@ -25,7 +25,6 @@ axios.interceptors.response.use(
   }
 )
 
-
 Vue.use(ElementUI)
 
 /* eslint-disable no-new */

@@ -112,9 +112,6 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 					})
         })
       },
-			onSubmit() {
-				console.log('submit!');
-			},
 			handleopen() {
 				//console.log('handleopen');
 			},
@@ -122,6 +119,7 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 				//console.log('handleclose');
 			},
 			handleselect: function (a, b) {
+				// this.$router.push(b)
 			},
 		},
 		mounted() {
@@ -337,7 +335,7 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 					}
 					.is-active {
 						color: #ffffff;
-						background-color: rgb(11, 217, 229);
+						background-color: #42A5F5;
 						.icon-user {
 							background-image: url('../assets/images/icon/APL-29.png');
 						}

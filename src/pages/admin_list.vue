@@ -95,13 +95,13 @@
         align="center"
         prop="company_name"
         show-overflow-tooltip
-        width="200"
         label="企业名称">
       </el-table-column>
       <el-table-column
         align="center"
         prop="company"
-        width="200"
+        show-overflow-tooltip
+        width="100"
         label="职位">
       </el-table-column>
       <el-table-column
@@ -280,7 +280,17 @@ export default {
           var data = result.result
           _this.loading = false
           for (var i in data.items) {
-            data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+            var DateTime = data.items[i].gmt_create
+  					var timer = new Date(DateTime)
+  					timer.setTime(timer.getTime()+0)
+			      var  year = timer.getUTCFullYear(),
+          			 month = timer.getUTCMonth()+1,
+          			 date = timer.getUTCDate(),
+          			 hour = timer.getUTCHours(),
+          			 minute = timer.getUTCMinutes(),
+          			 second = timer.getUTCSeconds(),
+         			   time = year + "-" + month + "-" + date
+            data.items[i].gmt_create = time
           }
           _this.total = data.total
           _this.tableData = data.items
