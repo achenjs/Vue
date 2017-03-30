@@ -10,7 +10,7 @@
         align="center"
         prop="id"
         label="编号"
-        width="80"
+        width="50"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -32,13 +32,12 @@
         align="center"
         prop="comment_admin"
         label="回复"
-        width="400"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         align="center"
         fixed="right"
-        width="120"
+        width="60"
         label="操作">
         <template scope="scope">
           <el-button v-if="scope.$index != attaLength" :disabled="true" type="text" size="small">- -</el-button>

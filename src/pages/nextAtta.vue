@@ -10,7 +10,7 @@
         align="center"
         prop="id"
         label="编号"
-        width="80"
+        width="50"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -23,14 +23,14 @@
         align="center"
         prop="status"
         label="状态"
-        width="200"
+        width="80"
         show-overflow-tooltip>
       </el-table-column>
       </el-table-column>
       <el-table-column
         align="center"
         fixed="right"
-        width="80"
+        width="60"
         label="操作">
         <template scope="scope">
           <el-button @click="details(scope.row.id)" type="text" size="small">详情</el-button>

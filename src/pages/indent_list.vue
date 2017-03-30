@@ -143,7 +143,7 @@
          <el-table-column
            align="center"
            fixed="right"
-           width="40"
+           width="60"
            label="操作"
            show-overflow-tooltip>
            <template scope="scope">
