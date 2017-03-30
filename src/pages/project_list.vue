@@ -92,7 +92,7 @@
         show-overflow-tooltip
         align="center"
         prop="name"
-        width="100"
+        width="120"
         label="项目名称">
       </el-table-column>
       <el-table-column
@@ -120,7 +120,7 @@
         :show-overflow-tooltip="true"
         align="center"
         prop="industry"
-        width="80"
+        width="120"
         label="所在行业">
       </el-table-column>
       <el-table-column
@@ -133,7 +133,7 @@
         align="center"
         prop="status"
         width="60"
-        label="审核">
+        label="状态">
       </el-table-column>
       <el-table-column
         :show-overflow-tooltip="true"
@@ -144,7 +144,7 @@
       <el-table-column
         align="center"
         fixed="right"
-        width="40"
+        width="60"
         label="操作">
         <template scope="scope">
           <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>

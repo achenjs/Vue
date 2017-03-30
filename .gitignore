@@ -4,5 +4,5 @@ node_modules/
 .vsvcode/
 npm-debug.log
 yarn-error.log
-dist/titan.tar.gz
 fabfile.pyc
+dist/

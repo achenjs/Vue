@@ -64,14 +64,14 @@
             prop="price"
             label="金额(硬豆)"
             show-overflow-tooltip
-            width="70">
+            width="80">
          </el-table-column>
          <el-table-column
             align="center"
             prop="gmt_create"
             label="下单时间"
             show-overflow-tooltip
-            width="70">
+            width="80">
          </el-table-column>
        </el-table>
      </div>

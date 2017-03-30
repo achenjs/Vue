@@ -18,21 +18,21 @@
             align="center"
             prop="contact"
             label="联系人"
-            width="50"
+            width="60"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="contact_phone"
             label="联系电话"
-            width="80"
+            width="100"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="Industry"
             label="所属行业"
-            width="80"
+            width="120"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
@@ -45,7 +45,7 @@
             align="center"
             prop="address"
             label="操作"
-            width="40"
+            width="60"
             show-overflow-tooltip>
             <template scope="scope">
               <el-button @click="queryClick(scope.row.id)" type="text" size="small">详情</el-button>

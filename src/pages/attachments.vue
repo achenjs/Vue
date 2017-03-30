@@ -32,7 +32,7 @@
           <el-table-column
             align="center"
             label="附件"
-            width="40">
+            width="60">
             <template scope="scope">
               <a :href="scope.row.url" style="">下载</a>
             </template>
@@ -40,7 +40,7 @@
           <el-table-column
             align="center"
             fixed="right"
-            width="40"
+            width="60"
             label="操作">
             <template scope="scope">
               <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>

@@ -10,7 +10,7 @@
          align="center"
          prop="id"
          label="编号"
-         width="40"
+         width="50"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
@@ -29,7 +29,7 @@
          align="center"
          prop="category_name"
          label="类别"
-         width="90"
+         width="100"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
@@ -41,7 +41,7 @@
        </el-table-column>
        <el-table-column
          align="center"
-         width="40"
+         width="60"
          label="附件">
          <template scope="scope">
            <a href="scope.row.file_name">下载</a>
@@ -50,7 +50,7 @@
        <el-table-column
          align="center"
          fixed="right"
-         width="40"
+         width="60"
          label="操作">
          <template scope="scope">
            <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
