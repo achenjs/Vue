@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -54,41 +55,30 @@ export default {
     //  验证码
     captcha() {
       var _this = this
-      $.ajax({
-        url: '/main/api/v1/captcha',
-        type: 'get',
-        success: function (result) {
-          _this.imgUrl = result
-        }
-      })
+      axios.get('/main/api/v1/captcha')
+        .then((result) => {
+          _this.imgUrl = result.data
+        })
     },
     signin() {
       var _this = this
-      $.ajax({
-        url: '/admin/api/v1/',
-        type: 'post',
-        contentType:'application/json',
-        data: JSON.stringify(this.form),
-        success: function (result) {
+      axios.post('/admin/api/v1/', this.form)
+        .then((result) => {
           _this.$router.push('/admin/admin_list')
-        },
-        error: function(err) {
-          _this.$message.error(JSON.parse(err.responseText).message)
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     },
     isLogin() {
       var _this = this
-      $.ajax({
-        url: '/admin/api/v1/',
-        success: function(result) {
-          let status = result.status
+      axios.get('/admin/api/v1/')
+        .then((result) => {
           _this.$router.push('/admin/admin_list')
-        },
-        error(err) {
-          _this.$message.error(JSON.parse(err.responseText).message)
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     }
   }
 }

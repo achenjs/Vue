@@ -123,7 +123,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        prop="phase_index"
+        prop="company_phase"
         width="150"
         label="所在阶段">
       </el-table-column>
@@ -263,7 +263,8 @@ export default {
     },
     //  详情
     midClick(id) {
-      this.$router.push({path: '/admin/project_details', query: id})
+      this.$router.push('/admin/project_details')
+      localStorage.setItem('ProjectDetailsId', id)
     }
   },
   components: { 'v-pages': pages }

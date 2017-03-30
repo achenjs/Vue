@@ -96,7 +96,8 @@ export default {
         if (typeof id === 'object') {
           this.$message.error('没有获取到id值')
         } else {
-          this.$router.push({path: '/admin/bp_details', query: id})
+          this.$router.push('/admin/bp_details')
+          localStorage.setItem('bpDetailsId', id)
         }
       }
     },

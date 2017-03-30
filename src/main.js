@@ -4,24 +4,27 @@ import Vue from 'vue'
 import App from './App'
 import './assets/css/reset.scss'
 import ElementUI from 'element-ui'
+import axios from 'axios'
 import 'element-ui/lib/theme-default/index.css'
 import router from './router'
 
-// router.beforeEach((to, from, next) => {
-//   if (!sessionStorage.getItem('user')) {
-//     if (to.path === '/admin/signin') {
-//       next()
-//     } else {
-//       next({path: '/admin/signin'})
-//     }
-//   } else {
-//     next()
-//   }
-// })
 
-$('window').ajaxError(function(event,xhr,options,exc) {
-  console.log(event)
-})
+axios.defaults.withCredentials = true
+
+axios.interceptors.response.use(
+  response => {
+    return response
+  },
+  error => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+        router.push('/admin/signin')
+      }
+    }
+    return Promise.reject(error.response.data)   // 返回接口返回的错误信息
+  }
+)
 
 
 Vue.use(ElementUI)

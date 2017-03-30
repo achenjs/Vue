@@ -37,7 +37,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div>
+    <div class="submit">
       <el-button type="primary" @click="ensure">同意进入下一阶段</el-button>
       <el-button type="primary" @click="cancel">驳回</el-button>
     </div>
@@ -52,50 +52,47 @@ export default {
     return {
       loading: false,
       tableData: [],
-      id: '',
       total: 1,
+      nextAttaId: ''
     }
   },
   created() {
-    this.id = this.$route.query
+    this.nextAttaId = localStorage.getItem('nextAttaId')
     this.nextAtta(1)
   },
   methods: {
     //  进入交付物详情
     details(id) {
-      this.$router.push({path: '/admin/attaDetails', query: id})
+      this.$router.push('/admin/attaDetails')
+      localStorage.setItem('attaDetailsId', id)
     },
     //  阶段下交付物列表
     nextAtta(page) {
-      var _this = this
-      if (typeof this.id == 'object') {
-          this.$router.push('/admin/deliverable_list')
-      } else {
-        $.ajax({
-          url: '/admin/api/v1/user_attachments?ppid=' + this.id + '&page=' + page,
-          beforeSend: function() {
-            _this.loading = true
-          },
-          success: function(result) {
-            var data = result.result
-            _this.loading = false
-            _this.total = data.total
-            _this.tableData = data.items
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
-            }
+      const _this = this
+      $.ajax({
+        url: '/admin/api/v1/user_attachments?ppid=' + this.nextAttaId + '&page=' + page,
+        beforeSend: function() {
+          _this.loading = true
+        },
+        success: function(result) {
+          var data = result.result
+          _this.loading = false
+          _this.total = data.total
+          _this.tableData = data.items
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
           }
-        })
-      }
+        }
+      })
     },
     //  同意进入下一阶段
     ensure() {
-      var _this = this
+      const _this = this
       var obj = {
-        ppid: this.id,
+        ppid: this.nextAttaId,
         status: 'Confirmed'
       }
       $.ajax({
@@ -115,7 +112,7 @@ export default {
     cancel() {
       var _this = this
       var obj = {
-        ppid: this.id,
+        ppid: this.nextAttaId,
         status: 'Rejected'
       }
       $.ajax({

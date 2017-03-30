@@ -314,7 +314,7 @@ import upload from '../assets/js/upload'
           "valuation": ""
         },
         fileData: {},
-        id: '',
+        bpDetailsId: '',
         region_name: '',
         regions: [],
         citys: [],
@@ -322,19 +322,16 @@ import upload from '../assets/js/upload'
       }
     },
     created() {
-      this.id = this.$route.query
+      this.bpDetailsId = localStorage.getItem('bpDetailsId')
       this.details()
     },
     methods: {
       //  详情
       details() {
         var _this = this
-        if (typeof this.id === 'object') {
-          this.$router.push('/admin/bp_list')
-        } else {
           new Promise((resolve, reject) => {
             $.ajax({
-              url: '/admin/api/v1/bps/' + this.id,
+              url: '/admin/api/v1/bps/' + this.bpDetailsId,
               success: function(result) {
                 var data = result.result
                 _this.form.start_from = data.gmt_create.split('T')[0]
@@ -369,7 +366,6 @@ import upload from '../assets/js/upload'
               }
             })
           })
-        }
       },
       isChange() {
       },
@@ -392,7 +388,7 @@ import upload from '../assets/js/upload'
           this.$message.error('没有获取到上传url')
         } else {
           $.ajax({
-            url: '/admin/api/v1/bps/' + this.id,
+            url: '/admin/api/v1/bps/' + this.bpDetailsId,
             type: 'post',
             contentType: 'application/json',
             data: JSON.stringify(this.form),

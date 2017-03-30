@@ -229,6 +229,15 @@ export default {
   created() {
     var _this = this
     //  所属行业
+    // axios.get('/main/api/v1/industries')
+    //   .then((result) => {
+    //     const data = result.data
+    //     _this.industries = data.industries
+    //     _this.industries[''] = '全部行业'
+    //   })
+    //   .catch((err) => {
+    //
+    //   })
     $.ajax({
       url: '/main/api/v1/industries',
       success: function(result) {

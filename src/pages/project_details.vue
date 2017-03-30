@@ -87,7 +87,7 @@ export default {
         },
       ],
       right: 'right',
-      id: '',
+      ProjectDetailsId: '',
       form: {
         name: '',
         contact_name: '',
@@ -119,30 +119,26 @@ export default {
         }
       }
     })
-    this.projects(this.$route.query)
+    this.ProjectDetailsId = localStorage.getItem('ProjectDetailsId')
+    this.projects()
   },
   methods: {
     //  详情
-    projects(id) {
+    projects() {
       var _this = this
-      this.id = id
-      if (typeof id === 'object') {
-        this.$router.push('/admin/project_list')
-      } else {
-        $.ajax({
-          url: '/admin/api/v1/projects/' + id,
-          success: function(result) {
-            var data = result.result
-            _this.form = data
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
-            }
+      $.ajax({
+        url: '/admin/api/v1/projects/' + this.ProjectDetailsId,
+        success: function(result) {
+          var data = result.result
+          _this.form = data
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
           }
-        })
-      }
+        }
+      })
     },
     //  修改
     ensure() {
@@ -174,7 +170,7 @@ export default {
         }
       }
       $.ajax({
-        url: '/admin/api/v1/projects/' + this.id,
+        url: '/admin/api/v1/projects/' + this.ProjectDetailsId,
         type: 'post',
         contentType: 'application/json',
         data: JSON.stringify(this.form),

@@ -80,7 +80,7 @@ export default {
       comment: {
         comment: ''
       },
-      id: '',
+      attaDetailsId: '',
       padid: '',
       addShow: false,
       status: '',
@@ -88,7 +88,7 @@ export default {
     }
   },
   created() {
-    this.id = this.$route.query
+    this.attaDetailsId = localStorage.getItem('attaDetailsId')
     this.details(1)
     this.isStatus()
   },
@@ -103,42 +103,38 @@ export default {
     },
     details(page) {
       var _this = this
-      if (typeof this.id == 'object') {
-          this.$router.push('/admin/nextAtta')
-      } else {
-        $.ajax({
-          url: '/admin/api/v1/attachment_details?uaid=' + this.id + '&page=' + page,
-          success: function(result) {
-            var data = result.result
-            for (let i in data.items) {
-              if (data.items[i].url === null || data.items[i].url === '') {
-                  data.items[i].url = '#'
-              } else {
-                $.ajax({
-                  url: '/main/api/v1/files/' + data.items[i].url,
-                  success: function(result) {
-                    data.items[i].url = result
-                  }
-                })
-              }
-            }
-            _this.tableData = data.items
-            _this.attaLength = data.items.length - 1
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+      $.ajax({
+        url: '/admin/api/v1/attachment_details?uaid=' + this.attaDetailsId + '&page=' + page,
+        success: function(result) {
+          var data = result.result
+          for (let i in data.items) {
+            if (data.items[i].url === null || data.items[i].url === '') {
+                data.items[i].url = '#'
+            } else {
+              $.ajax({
+                url: '/main/api/v1/files/' + data.items[i].url,
+                success: function(result) {
+                  data.items[i].url = result
+                }
+              })
             }
           }
-        })
-      }
+          _this.tableData = data.items
+          _this.attaLength = data.items.length - 1
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
+        }
+      })
     },
     //  判断提交状态
     isStatus() {
       var _this = this
       $.ajax({
-        url: '/admin/api/v1/user_attachments/' + this.id,
+        url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
         success: function(result) {
           var data = result.result
           _this.status = data.status
@@ -162,7 +158,7 @@ export default {
       this.form.status = 'Confirmed'
       var statusReq = new Promise((resolve, reject) => {
         $.ajax({
-          url: '/admin/api/v1/user_attachments/' + this.id,
+          url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
           type: 'post',
           contentType: 'application/json',
           data: JSON.stringify(this.form),
@@ -216,7 +212,7 @@ export default {
       }
       var statusReq = new Promise((resolve, reject) => {
         $.ajax({
-          url: '/admin/api/v1/user_attachments/' + this.id,
+          url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
           type: 'post',
           contentType: 'application/json',
           data: JSON.stringify(this.form),

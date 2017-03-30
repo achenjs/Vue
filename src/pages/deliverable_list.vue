@@ -119,7 +119,8 @@ export default {
     },
     //  阶段下详情
     midClick(id) {
-      this.$router.push({path: '/admin/nextAtta', query: id})
+      this.$router.push('/admin/nextAtta')
+      localStorage.setItem('nextAttaId', id)
     },
   },
   components: {
