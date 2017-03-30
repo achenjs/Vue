@@ -6,33 +6,33 @@
       <div class="">
         <el-table
           :data="tableData"
+          border
           style="width: 100%">
           <el-table-column
             align="center"
             prop="project_name"
             label="项目名称"
-            width="180px"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="contact"
             label="联系人"
-            width="150px"
+            width="50"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="contact_phone"
             label="联系电话"
-            width="150px"
+            width="80"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="Industry"
             label="所属行业"
-            width="150px"
+            width="80"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
@@ -45,7 +45,7 @@
             align="center"
             prop="address"
             label="操作"
-            width="120px"
+            width="40"
             show-overflow-tooltip>
             <template scope="scope">
               <el-button @click="queryClick(scope.row.id)" type="text" size="small">详情</el-button>

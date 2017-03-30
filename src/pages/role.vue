@@ -11,19 +11,21 @@
           <el-table-column
             align="center"
             prop="name"
-            width="150"
-            label="角色名称">
+            width="80"
+            label="角色名称"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="description"
-            label="角色描述">
+            label="角色描述"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             fixed="right"
             label="操作"
-            width="80">
+            width="40">
             <template scope="scope">
               <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
             </template>

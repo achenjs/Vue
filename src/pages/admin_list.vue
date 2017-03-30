@@ -60,27 +60,27 @@
         align="center"
         fixed
         prop="id"
-        width="100"
+        width="70"
         label="会员编号">
       </el-table-column>
       <el-table-column
         align="center"
         prop="name"
         show-overflow-tooltip
-        width="120"
+        width="70"
         label="会员名称">
       </el-table-column>
       <el-table-column
         align="center"
         prop="email"
         show-overflow-tooltip
-        width="200"
+        width="180"
         label="邮箱账号">
       </el-table-column>
       <el-table-column
         align="center"
         prop="phone"
-        width="150"
+        width="100"
         show-overflow-tooltip
         label="手机号">
       </el-table-column>
@@ -88,46 +88,46 @@
         align="center"
         prop="wechat"
         show-overflow-tooltip
-        width="150"
+        width="100"
         label="微信账号">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="company"
-        width="150"
-        label="公司及职位">
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="gender"
-        width="80"
-        label="性别">
       </el-table-column>
       <el-table-column
         align="center"
         prop="company_name"
         show-overflow-tooltip
-        width="150"
+        width="200"
         label="企业名称">
       </el-table-column>
       <el-table-column
         align="center"
+        prop="company"
+        width="200"
+        label="职位">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="gender"
+        width="40"
+        label="性别">
+      </el-table-column>
+      <el-table-column
+        align="center"
         prop="company_industry"
-        width="150"
+        width="80"
         label="所属行业"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         align="center"
         prop="gmt_create"
-        width="150"
+        width="80"
         show-overflow-tooltip
         label="注册日期">
       </el-table-column>
       <el-table-column
         align="center"
         fixed="right"
-        width="80"
+        width="40"
         label="操作">
         <template scope="scope">
           <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
@@ -282,6 +282,7 @@ export default {
           for (var i in data.items) {
             data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
           }
+          _this.total = data.total
           _this.tableData = data.items
         },
         complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数

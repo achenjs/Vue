@@ -13,24 +13,27 @@
           <el-table-column
             align="center"
             prop="id"
-            width="80"
-            label="编号">
+            width="40"
+            label="编号"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            width="150"
-            label="部门名称">
+            width="130"
+            label="部门名称"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="description"
-            label="部门描述">
+            label="部门描述"
+            show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             fixed="right"
-            width="80"
+            width="40"
             label="操作">
             <template scope="scope">
               <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>

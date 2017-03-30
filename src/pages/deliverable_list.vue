@@ -10,34 +10,33 @@
         align="center"
         prop="id"
         label="编号"
-        width="80"
+        width="40"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         align="center"
         prop="project_name"
         label="项目名称"
-        width="300"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         align="center"
         prop="phase_name"
         label="阶段名称"
-        width="300"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         align="center"
         prop="status"
         label="状态"
-        width="200"
+        width="60"
         show-overflow-tooltip>
       </el-table-column>
       </el-table-column>
       <el-table-column
         align="center"
         fixed="right"
+        width="40"
         label="操作">
         <template scope="scope">
           <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>

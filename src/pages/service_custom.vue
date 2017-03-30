@@ -10,40 +10,38 @@
          align="center"
          prop="id"
          label="编号"
-         width="80"
+         width="40"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="title"
          label="服务项名称"
-         width="150"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="description"
          label="服务项描述"
-         width="400"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="category_name"
          label="类别"
-         width="150"
+         width="90"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
          prop="price"
          label="报价(硬豆)"
-         width="150"
+         width="80"
          show-overflow-tooltip>
        </el-table-column>
        <el-table-column
          align="center"
-         width="80"
+         width="40"
          label="附件">
          <template scope="scope">
            <a href="scope.row.file_name">下载</a>
@@ -52,7 +50,7 @@
        <el-table-column
          align="center"
          fixed="right"
-         width="80"
+         width="40"
          label="操作">
          <template scope="scope">
            <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>

@@ -13,14 +13,14 @@
           <el-table-column
             align="center"
             prop="id"
-            width="80"
+            width="40"
             show-overflow-tooltip
             label="编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            width="200"
+            width="80"
             show-overflow-tooltip
             label="权限名称">
           </el-table-column>
@@ -34,13 +34,13 @@
             align="center"
             prop="status"
             show-overflow-tooltip
-            width="100"
+            width="40"
             label="状态">
           </el-table-column>
           <el-table-column
             align="center"
             fixed="right"
-            width="80"
+            width="40"
             label="操作">
             <template scope="scope">
               <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
@@ -181,6 +181,7 @@ export default {
           success: function(result) {
             _this.loading = false
             var data = result.result
+            _this.total = data.total
             for(var i=0; i<data.items.length; i++) {
               if (data.items[i].status == true) {
                 data.items[i].status = 'true'

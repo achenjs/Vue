@@ -8,7 +8,6 @@ import axios from 'axios'
 import 'element-ui/lib/theme-default/index.css'
 import router from './router'
 
-
 axios.defaults.withCredentials = true
 
 axios.interceptors.response.use(

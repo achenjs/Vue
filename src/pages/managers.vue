@@ -14,26 +14,26 @@
             align="center"
             prop="name"
             label="姓名"
-            width="100"
+            width="50"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="dept_name"
             label="部门"
-            width="150"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="role_name"
             label="角色"
+            width="80"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             align="center"
             prop="gmt_create"
-            width="150"
+            width="70"
             label="登陆时间"
             show-overflow-tooltip>
           </el-table-column>
@@ -41,7 +41,7 @@
             align="center"
             prop="address"
             label="操作"
-            width="80"
+            width="40"
             show-overflow-tooltip>
             <template scope="scope">
               <el-button @click="midClick(scope.row.id)" type="text" size="small">修改</el-button>

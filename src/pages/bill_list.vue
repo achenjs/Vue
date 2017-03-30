@@ -1,22 +1,19 @@
 <template>
    <div class="bill_list">
      <div class="deliverable_inline clearfix">
-       <el-col :span="8">
-        <div style="width: 80%;">
-          <label for="">项目名称</label>
-          <el-input placeholder="项目名称" v-model="form.project_name"></el-input>
-        </div>
-      </el-col>
-      <el-col :span="8">
-       <div style="width: 80%;">
-         <label for="">订单号</label>
-        <el-input placeholder="订单号" v-model="form.id"></el-input>
-       </div>
-     </el-col>
-   </div>
-   <div class="deliverable_inline clearfix">
-     <el-col :span="16">
-       <div style="width: 80%;">
+       <el-col :span="5">
+         <div style="width: 80%;">
+           <label for="">项目名称</label>
+           <el-input placeholder="项目名称" v-model="form.project_name"></el-input>
+         </div>
+       </el-col>
+       <el-col :span="5">
+         <div style="width: 80%;">
+           <label for="">订单号</label>
+          <el-input placeholder="订单号" v-model="form.id"></el-input>
+         </div>
+       </el-col>
+       <el-col :span="14">
          <label for="">交易日期</label>
          <el-date-picker
            v-model="form.starttime"
@@ -29,12 +26,14 @@
            type="date"
            placeholder="选择日期">
          </el-date-picker>
-       </div>
-     </el-col>
+       </el-col>
      </div>
-     <div class="buttons">
+     <!-- <div class="buttons">
        <el-button class="query" type="primary" @click="query">查询</el-button>
        <el-button class="export" type="primary">导出</el-button>
+     </div> -->
+     <div class="query">
+       <span @click="query">查&nbsp;&nbsp;询</span>
      </div>
      <div class="deliverable_table">
        <el-table
@@ -46,14 +45,13 @@
             prop="id"
             label="订单号"
             show-overflow-tooltip
-            width="100">
+            width="50">
          </el-table-column>
          <el-table-column
             align="center"
             prop="project_name"
             label="项目名称"
-            show-overflow-tooltip
-            width="150">
+            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
             align="center"
@@ -66,14 +64,14 @@
             prop="price"
             label="金额(硬豆)"
             show-overflow-tooltip
-            width="150">
+            width="70">
          </el-table-column>
          <el-table-column
             align="center"
             prop="gmt_create"
             label="下单时间"
             show-overflow-tooltip
-            width="150">
+            width="70">
          </el-table-column>
        </el-table>
      </div>

@@ -13,14 +13,13 @@
           <el-table-column
             align="center"
             prop="id"
-            width="120"
+            width="70"
             show-overflow-tooltip
             label="阶段编号">
           </el-table-column>
           <el-table-column
             align="center"
             prop="name"
-            width="200"
             show-overflow-tooltip
             label="阶段名称">
           </el-table-column>
@@ -33,7 +32,7 @@
           <el-table-column
             align="center"
             fixed="right"
-            width="80"
+            width="40"
             label="操作">
             <template scope="scope">
               <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>

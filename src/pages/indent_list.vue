@@ -49,26 +49,27 @@
     </el-col>
     </div>
     <div class="deliverable_inline clearfix">
-       <el-col :span="12">
-         <div style="width: 80%;">
-           <label for="">交付时间</label>
-           <el-date-picker
-             v-model="form.starttime"
-             type="date"
-             placeholder="选择日期">
-           </el-date-picker>
-           <span>至</span>
-           <el-date-picker
-             v-model="form.endtime"
-             type="date"
-             placeholder="选择日期">
-           </el-date-picker>
-         </div>
+       <el-col :span="15">
+         <label for="">交付时间</label>
+         <el-date-picker
+           v-model="form.starttime"
+           type="date"
+           placeholder="选择日期">
+         </el-date-picker>
+         <span>至</span>
+         <el-date-picker
+           v-model="form.endtime"
+           type="date"
+           placeholder="选择日期">
+         </el-date-picker>
        </el-col>
      </div>
-     <div class="buttons">
+     <!-- <div class="buttons">
        <el-button class="query" type="primary" @click="search">查询</el-button>
        <el-button class="export" type="primary">导出</el-button>
+     </div> -->
+     <div class="query">
+       <span @click="search">查&nbsp;&nbsp;询</span>
      </div>
      <div class="" style="margin-bottom: 20px;">
        <el-button type="primary" class="tab-button" :class="{active: !isActive}" @click="tabQuery">系统服务项</el-button>
@@ -85,7 +86,7 @@
            align="center"
            prop="id"
            label="订单号"
-           width="80"
+           width="60"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -93,7 +94,7 @@
            align="center"
            prop="service_category_name"
            label="服务项类别"
-           width="150"
+           width="110"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -101,7 +102,7 @@
            align="center"
            prop="category_name"
            label="服务项类别"
-           width="150"
+           width="110"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -121,7 +122,7 @@
          <el-table-column
            align="center"
            prop="gmt_create"
-           width="150"
+           width="80"
            label="下单时间"
            show-overflow-tooltip>
          </el-table-column>
@@ -129,20 +130,20 @@
            align="center"
            prop="status"
            label="订单状态"
-           width="150"
+           width="70"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            prop="price"
            label="订单金额(硬豆)"
-           width="150"
+           width="110"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
            align="center"
            fixed="right"
-           width="80"
+           width="40"
            label="操作"
            show-overflow-tooltip>
            <template scope="scope">
@@ -617,6 +618,20 @@ export default {
   }
   .tab-button.active {
     background-color: #20a0ff;
+  }
+  .query {
+    margin: 30px 0;
+    text-align: center;
+    span {
+      display: inline-block;
+      font-size: 14px;
+      width: 300px;
+      height: 40px;
+      line-height: 40px;
+      cursor: pointer;
+      background-color: #027ee5;
+      color: #ffffff;
+    }
   }
 }
 </style>

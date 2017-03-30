@@ -3,7 +3,7 @@
     <el-form label-position="left" label-width="0px" class="demo-ruleForm login-container">
       <h3 class="title">洪泰孵化器后台管理系统</h3>
       <el-form-item>
-        <el-input type="text" v-model="form.username" auto-complete="off" placeholder="账号"></el-input>
+        <el-input type="text" v-model="form.username" auto-complete="on" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input type="password" v-model="form.password" auto-complete="off" placeholder="密码"></el-input>
@@ -15,7 +15,7 @@
         <span id="getImg"><img :src="imgUrl" style="width:30%; height:100%;" @click="captcha"><label for="" @click="captcha">换一张</label></span>
       </el-form-item>
       <el-form-item style="width:100%;">
-        <el-button type="primary" class="submit" style="width:100%;" @click="signin" @keyup="show($event)">登录</el-button>
+        <el-button type="primary" class="submit" style="width:100%;" @click="signin" @keyup.enter="signin">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -39,19 +39,18 @@ export default {
     this.captcha()
     //  判断是否已登录
     this.isLogin()
-  },
-  mounted() {
-    if (this.captcha !== '' && this.username !== '' && this.password !== '') {
+    if (this.form.captcha !== '' && this.form.username !== '' && this.form.password !== '') {
       $('.submit').focus()
     }
   },
-  methods: {
-    //  回车登录
-    show(ev) {
+  mounted() {
+    document.onkeydown = (e) => {
       if (ev.keyCode == 13) {
         this.signin()
       }
-    },
+    }
+  },
+  methods: {
     //  验证码
     captcha() {
       var _this = this

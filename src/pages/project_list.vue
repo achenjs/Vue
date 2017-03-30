@@ -85,64 +85,66 @@
       <el-table-column
         align="center"
         prop="id"
-        width="120"
+        width="70"
         label="项目编号">
       </el-table-column>
       <el-table-column
+        show-overflow-tooltip
         align="center"
         prop="name"
-        width="150"
+        width="100"
         label="项目名称">
       </el-table-column>
       <el-table-column
+        show-overflow-tooltip
         align="center"
         prop="contact_name"
-        width="120"
+        width="60"
         label="负责人">
       </el-table-column>
       <el-table-column
-        :show-overflow-tooltip=true
+        show-overflow-tooltip
         align="center"
         prop="contact_phone"
-        width="150"
+        width="100"
         label="手机号">
       </el-table-column>
       <el-table-column
-        :show-overflow-tooltip=true
+        :show-overflow-tooltip="true"
         align="center"
         prop="gmt_create"
-        width="150"
+        width="80"
         label="创建时间">
       </el-table-column>
       <el-table-column
-        :show-overflow-tooltip=true
+        :show-overflow-tooltip="true"
         align="center"
         prop="industry"
-        width="150"
+        width="80"
         label="所在行业">
       </el-table-column>
       <el-table-column
         align="center"
         prop="company_phase"
-        width="150"
+        width="80"
         label="所在阶段">
       </el-table-column>
       <el-table-column
         align="center"
         prop="status"
+        width="60"
         label="审核">
       </el-table-column>
       <el-table-column
-        :show-overflow-tooltip=true
+        :show-overflow-tooltip="true"
         align="center"
         prop="description"
-        width="150"
         label="项目描述">
       </el-table-column>
       <el-table-column
         align="center"
         fixed="right"
-        width="80"
+        width="40"
         label="操作">
         <template scope="scope">
           <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
@@ -242,8 +244,18 @@ export default {
           let data = result.result
           _this.loading = false
           _this.total = data.total
-          for (var i in data.items) {
-            data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+          for(var i in data.items) {
+            var DateTime = data.items[i].gmt_create
+  					var timer = new Date(DateTime)
+  					timer.setTime(timer.getTime()+0)
+			      var  year = timer.getUTCFullYear(),
+          			 month = timer.getUTCMonth()+1,
+          			 date = timer.getUTCDate(),
+          			 hour = timer.getUTCHours(),
+          			 minute = timer.getUTCMinutes(),
+          			 second = timer.getUTCSeconds(),
+         			   time = year + "-" + month + "-" + date
+            data.items[i].gmt_create = time
           }
           _this.tableData = data.items
         },
@@ -283,19 +295,19 @@ export default {
         width: 100%;
     }
   }
-   .query {
-      margin: 30px 0;
-      text-align: center;
-      span {
-          display: inline-block;
-          font-size: 14px;
-          width: 300px;
-          height: 40px;
-          line-height: 40px;
-          cursor: pointer;
-          background-color: #027ee5;
-          color: #ffffff;
-      }
+  .query {
+    margin: 30px 0;
+    text-align: center;
+    span {
+      display: inline-block;
+      font-size: 14px;
+      width: 300px;
+      height: 40px;
+      line-height: 40px;
+      cursor: pointer;
+      background-color: #027ee5;
+      color: #ffffff;
+    }
   }
 }
 </style>
