@@ -60,8 +60,8 @@
         align="center"
         fixed
         prop="id"
-        width="70"
-        label="会员编号">
+        width="50"
+        label="编号">
       </el-table-column>
       <el-table-column
         align="center"

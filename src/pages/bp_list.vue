@@ -18,7 +18,7 @@
             align="center"
             prop="contact"
             label="联系人"
-            width="60"
+            width="80"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column

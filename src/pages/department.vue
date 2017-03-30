@@ -20,7 +20,7 @@
           <el-table-column
             align="center"
             prop="name"
-            width="130"
+            width="150"
             label="部门名称"
             show-overflow-tooltip>
           </el-table-column>

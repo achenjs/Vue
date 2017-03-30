@@ -20,7 +20,7 @@
           <el-table-column
             align="center"
             prop="name"
-            width="100"
+            width="150"
             show-overflow-tooltip
             label="权限名称">
           </el-table-column>

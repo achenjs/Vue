@@ -13,9 +13,9 @@
           <el-table-column
             align="center"
             prop="id"
-            width="70"
+            width="50"
             show-overflow-tooltip
-            label="阶段编号">
+            label="编号">
           </el-table-column>
           <el-table-column
             align="center"

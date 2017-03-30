@@ -45,7 +45,7 @@
             prop="id"
             label="订单号"
             show-overflow-tooltip
-            width="50">
+            width="60">
          </el-table-column>
          <el-table-column
             align="center"

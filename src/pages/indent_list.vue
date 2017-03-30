@@ -94,7 +94,7 @@
            align="center"
            prop="service_category_name"
            label="服务项类别"
-           width="110"
+           width="120"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
@@ -102,7 +102,7 @@
            align="center"
            prop="category_name"
            label="服务项类别"
-           width="110"
+           width="120"
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column

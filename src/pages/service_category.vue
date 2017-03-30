@@ -13,8 +13,8 @@
           <el-table-column
             align="center"
             prop="id"
-            label="类别编号"
-            width="70"
+            label="编号"
+            width="50"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column

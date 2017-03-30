@@ -11,7 +11,7 @@
           <el-table-column
             align="center"
             prop="name"
-            width="100"
+            width="120"
             label="角色名称"
             show-overflow-tooltip>
           </el-table-column>

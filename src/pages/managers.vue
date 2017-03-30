@@ -33,8 +33,8 @@
           <el-table-column
             align="center"
             prop="gmt_create"
-            width="80"
-            label="登陆时间"
+            width="120"
+            label="最后登陆时间"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
