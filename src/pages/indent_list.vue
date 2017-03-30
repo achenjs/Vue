@@ -71,9 +71,9 @@
      <div class="query">
        <span @click="search">查&nbsp;&nbsp;询</span>
      </div>
-     <div class="" style="margin-bottom: 20px;">
-       <el-button type="primary" class="tab-button" :class="{active: !isActive}" @click="tabQuery">系统服务项</el-button>
-       <el-button type="primary" class="tab-button" :class="{active: isActive}" @click="tabCustom">自定义服务项</el-button>
+     <div class="tabIsCustom">
+       <button class="tab-button" :class="{active: !isActive}" @click="tabQuery">系统服务项</button>
+       <button class="tab-button" :class="{active: isActive}" @click="tabCustom">自定义服务项</button>
      </div>
      <div class="deliverable_table">
        <el-table
@@ -605,19 +605,29 @@ export default {
       margin-bottom: 5px;
     }
     .el-select {
-        width: 100%;
+      width: 100%;
     }
   }
   .buttons {
     margin: 30px 0;
     text-align: center;
   }
-  .tab-button {
-    background-color: #dddddd;
-    border: none;
-  }
-  .tab-button.active {
-    background-color: #20a0ff;
+  .tabIsCustom {
+    .tab-button {
+      background-color: #dddddd;
+      border: none;
+      padding: 10px 15px;
+      color: #232323;
+      cursor: pointer;
+      margin: 0px;
+      outline: none;
+    }
+    .tab-button.active {
+      background-color: #ffffff;
+      color: #20a0ff;
+      border: 1px solid #d1dbe5;
+      border-bottom: none;
+    }
   }
   .query {
     margin: 30px 0;

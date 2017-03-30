@@ -388,19 +388,19 @@ export default {
         width: 100%;
     }
   }
-   .query {
-      margin-top: 30px;
-      text-align: center;
-      span {
-          display: inline-block;
-          font-size: 14px;
-          width: 300px;
-          height: 40px;
-          line-height: 40px;
-          cursor: pointer;
-          background-color: #027ee5;
-          color: #ffffff;
-      }
+ .query {
+    margin-top: 30px;
+    text-align: center;
+    span {
+        display: inline-block;
+        font-size: 14px;
+        width: 300px;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        background-color: #027ee5;
+        color: #ffffff;
+    }
   }
   .modal-dialog {
     width: 80% !important;

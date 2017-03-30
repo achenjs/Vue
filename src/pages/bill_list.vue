@@ -128,7 +128,17 @@ export default {
           var data = result.result
           _this.total = data.total
           for (var i in data.items) {
-            data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+            var DateTime = data.items[i].gmt_create
+  					var timer = new Date(DateTime)
+  					timer.setTime(timer.getTime()+0)
+			      var  year = timer.getUTCFullYear(),
+          			 month = timer.getUTCMonth()+1,
+          			 date = timer.getUTCDate(),
+          			 hour = timer.getUTCHours(),
+          			 minute = timer.getUTCMinutes(),
+          			 second = timer.getUTCSeconds(),
+         			   time = year + "-" + month + "-" + date
+            data.items[i].gmt_create = time
           }
           _this.tableData = data.items
         },
@@ -164,6 +174,20 @@ export default {
     .el-select {
         width: 100%;
     }
+  }
+  .query {
+     margin: 30px 0;
+     text-align: center;
+     span {
+         display: inline-block;
+         font-size: 14px;
+         width: 300px;
+         height: 40px;
+         line-height: 40px;
+         cursor: pointer;
+         background-color: #027ee5;
+         color: #ffffff;
+     }
   }
   .buttons {
     margin: 30px 0;
