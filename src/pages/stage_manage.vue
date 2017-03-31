@@ -57,23 +57,25 @@
               ref="table"
               row-key="id"
               height="300"
+              border
               @change="changed"
               style="width: 100%">
                 <el-table-column
                 :reserve-selection="true"
                 width="50"
+                align="center"
                 type="selection">
                 </el-table-column>
                 <el-table-column
-                  align="center"
                   prop="id"
-                  width="80"
+                  width="50"
+                  align="center"
                   label="编号">
                 </el-table-column>
                 <el-table-column
-                  align="center"
                   show-overflow-tooltip
                   width="120"
+                  align="center"
                   prop="name"
                   label="交付物名称">
                 </el-table-column>

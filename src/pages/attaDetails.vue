@@ -155,50 +155,62 @@ export default {
     ensure() {
       var _this = this
       this.form.status = 'Confirmed'
-      var statusReq = new Promise((resolve, reject) => {
-        $.ajax({
-          url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
-            return resolve()
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
-            }
-          }
-        })
-      })
-      var commentReq = new Promise((resolve, reject) => {
-        $.ajax({
-          url: '/admin/api/v1/attachment_details/' + this.padid,
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.comment),
-          success: function(result) {
-            return resolve()
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
-            }
-          }
-        })
-      })
-      Promise.all([statusReq, commentReq]).then(([status, comment]) => {
-        this.$message({
-          message: '评审成功',
-          type: 'success'
-        })
-        this.addShow = false
-        this.reset()
-      }).catch((err) => {
-        this.$message.error(err)
-      })
+      this.$confirm('是否继续?', '提示', {
+         confirmButtonText: '确定',
+         cancelButtonText: '取消',
+         type: 'warning'
+       }).then(() => {
+         var statusReq = new Promise((resolve, reject) => {
+           $.ajax({
+             url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
+             type: 'post',
+             contentType: 'application/json',
+             data: JSON.stringify(this.form),
+             success: function(result) {
+               return resolve()
+             },
+             error: function(err) {
+               if (err.status == '401') {
+                 _this.$message.error(JSON.parse(err.responseText).message)
+                 _this.$router.push('/admin/signin')
+               }
+             }
+           })
+         })
+         var commentReq = new Promise((resolve, reject) => {
+           $.ajax({
+             url: '/admin/api/v1/attachment_details/' + this.padid,
+             type: 'post',
+             contentType: 'application/json',
+             data: JSON.stringify(this.comment),
+             success: function(result) {
+               return resolve()
+             },
+             error: function(err) {
+               if (err.status == '401') {
+                 _this.$message.error(JSON.parse(err.responseText).message)
+                 _this.$router.push('/admin/signin')
+               }
+             }
+           })
+         })
+         Promise.all([statusReq, commentReq]).then(([status, comment]) => {
+           this.$message({
+             message: '评审成功',
+             type: 'success'
+           })
+           this.addShow = false
+           this.$router.go(0)
+           this.reset()
+         }).catch((err) => {
+           this.$message.error(err)
+         })
+       }).catch(() => {
+         this.$message({
+           type: 'info',
+           message: '已取消'
+         })
+       })
     },
     //  驳回
     cancel() {
@@ -209,50 +221,62 @@ export default {
       } else {
         this.form.status = 'Rejected'
       }
-      var statusReq = new Promise((resolve, reject) => {
-        $.ajax({
-          url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
-            return resolve()
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
-            }
-          }
-        })
-      })
-      var commentReq = new Promise((resolve, reject) => {
-        $.ajax({
-          url: '/admin/api/v1/attachment_details/' + this.padid,
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.comment),
-          success: function(result) {
-            return resolve()
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
-            }
-          }
-        })
-      })
-      Promise.all([statusReq, commentReq]).then(() => {
-        this.$message({
-          message: '评审成功',
-          type: 'success'
-        })
-        this.addShow = false
-        this.reset()
-      }).catch((err) => {
-        this.$message.error(err)
-      })
+      this.$confirm('是否继续?', '提示', {
+         confirmButtonText: '确定',
+         cancelButtonText: '取消',
+         type: 'warning'
+       }).then(() => {
+         var statusReq = new Promise((resolve, reject) => {
+           $.ajax({
+             url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
+             type: 'post',
+             contentType: 'application/json',
+             data: JSON.stringify(this.form),
+             success: function(result) {
+               return resolve()
+             },
+             error: function(err) {
+               if (err.status == '401') {
+                 _this.$message.error(JSON.parse(err.responseText).message)
+                 _this.$router.push('/admin/signin')
+               }
+             }
+           })
+         })
+         var commentReq = new Promise((resolve, reject) => {
+           $.ajax({
+             url: '/admin/api/v1/attachment_details/' + this.padid,
+             type: 'post',
+             contentType: 'application/json',
+             data: JSON.stringify(this.comment),
+             success: function(result) {
+               return resolve()
+             },
+             error: function(err) {
+               if (err.status == '401') {
+                 _this.$message.error(JSON.parse(err.responseText).message)
+                 _this.$router.push('/admin/signin')
+               }
+             }
+           })
+         })
+         Promise.all([statusReq, commentReq]).then(() => {
+           this.$message({
+             message: '评审成功',
+             type: 'success'
+           })
+           this.addShow = false
+           this.$router.go(0)
+           this.reset()
+         }).catch((err) => {
+           this.$message.error(err)
+         })
+       }).catch(() => {
+         this.$message({
+           type: 'info',
+           message: '已取消'
+         })
+       })
     },
     //  关闭模态框
     closeModel() {

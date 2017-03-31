@@ -38,6 +38,20 @@
           </el-table-column>
           <el-table-column
             align="center"
+            width="120"
+            prop="input"
+            label="输入"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            width="120"
+            prop="output"
+            label="输出"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            align="center"
             width="50"
             label="附件">
             <template scope="scope">
@@ -82,8 +96,14 @@
                 :key="item.id">
                 </el-option>
               </el-select>
+              <input type="file" @change="uploadFile($event)" id="upLog" style="margin: 10px 0;">
+              <input type="hidden" id="hiddens" v-model="form.zip_url">
               <label for="">报价(硬豆)</label>
               <el-input placeholder="报价" v-model="form.price"></el-input>
+              <label for="">输入</label>
+              <el-input placeholder="输入" v-model="form.input"></el-input>
+              <label for="">输出</label>
+              <el-input placeholder="输出" v-model="form.output"></el-input>
             </div>
             <div class="modal-footer">
               <el-button type="primary" @click="ensure">确认</el-button>
@@ -98,6 +118,7 @@
 
 <script>
 import pages from '../components/pages/pages.vue'
+import upload from '../assets/js/upload'
 export default {
     data() {
       return {
@@ -110,7 +131,10 @@ export default {
           desc: '',
           name: '',
           price: '',
-          category_id: ''
+          category_id: '',
+          output: '',
+          input: '',
+          zip_url: ''
         },
         loading: false,
         total: 1,
@@ -149,6 +173,13 @@ export default {
       })
     },
     methods: {
+      //  上传
+      uploadFile(ele) {
+        var _this = this
+        upload(ele.target, 2, () => {
+          _this.form.zip_url = $("#hiddens").val()
+        })
+      },
       reset() {
         for(var name in this.$data.form) {
           this.$data.form[name] = ''
@@ -227,7 +258,7 @@ export default {
                 $.ajax({
                   url: '/main/api/v1/files/' + data.items[i].zip_url,
                   success: function(result) {
-                    data.items[i].url = result
+                    data.items[i].zip_url = result
                   }
                 })
               }

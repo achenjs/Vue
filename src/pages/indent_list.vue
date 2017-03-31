@@ -129,7 +129,7 @@
          <el-table-column
            align="center"
            prop="gmt_create"
-           width="80"
+           width="140"
            label="下单时间"
            show-overflow-tooltip>
          </el-table-column>
@@ -382,7 +382,17 @@ export default {
           var data = result.result
           _this.total = data.total
           for (var i in data.items) {
-            data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+            var DateTime = data.items[i].gmt_create
+  					var timer = new Date(DateTime)
+  					timer.setTime(timer.getTime()+0)
+			      var  year = timer.getUTCFullYear(),
+          			 month = timer.getUTCMonth()+1,
+          			 date = timer.getUTCDate(),
+          			 hour = timer.getUTCHours(),
+          			 minute = timer.getUTCMinutes(),
+          			 second = timer.getUTCSeconds(),
+         			   time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
+            data.items[i].gmt_create = time
           }
           _this.tableData = data.items
         },
@@ -441,7 +451,7 @@ export default {
           			 hour = timer.getUTCHours(),
           			 minute = timer.getUTCMinutes(),
           			 second = timer.getUTCSeconds(),
-         			   time = year + "-" + month + "-" + date
+         			   time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
             data.items[i].gmt_create = time
           }
           _this.tableData = data.items

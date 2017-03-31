@@ -37,11 +37,11 @@
         </template>
       </el-table-column>
     </el-table>
+    <v-pages :total="total" v-on:currentChange="nextAtta"></v-pages>
     <div class="submit">
       <el-button type="primary" @click="ensure">同意进入下一阶段</el-button>
       <el-button type="primary" @click="cancel">驳回</el-button>
     </div>
-    <v-pages :total="total" v-on:currentChange="nextAtta"></v-pages>
   </div>
 </template>
 

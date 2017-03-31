@@ -40,7 +40,7 @@
           <el-table-column
             align="center"
             prop="gmt_create"
-            width="120"
+            width="140"
             label="最后登录时间"
             show-overflow-tooltip>
           </el-table-column>
@@ -70,13 +70,13 @@
               <span>创建操作员</span>
             </div>
             <div class="modal-content">
-              <label for="">姓名</label>
+              <label for=""><i>*</i>姓名</label>
               <el-input placeholder="姓名" v-model="form.name"></el-input>
-              <label for="">邮箱</label>
+              <label for=""><i>*</i>邮箱</label>
               <el-input placeholder="邮箱" type="email" v-model="form.email"></el-input>
-              <label for="">密码</label>
+              <label for=""><i>*</i>密码</label>
               <el-input placeholder="密码" type="password" v-model="form.password"></el-input>
-              <label for="">部门</label>
+              <label for=""><i>*</i>部门</label>
               <el-select v-model="form.dept_id" placeholder="请选择">
                 <el-option
                 v-for="item in departments"
@@ -85,7 +85,7 @@
                 :key="item.value">
                 </el-option>
               </el-select>
-              <label for="">角色</label>
+              <label for=""><i>*</i>角色</label>
               <el-select v-model="form.role_id" placeholder="请选择">
                 <el-option
                 v-for="item in roles"
@@ -94,7 +94,7 @@
                 :key="item.value">
                 </el-option>
               </el-select>
-              <label for="">状态</label>
+              <label for=""><i>*</i>状态</label>
               <el-select v-model="form.status" placeholder="请选择">
                 <el-option
                 v-for="item in states"
@@ -354,6 +354,11 @@ export default {
       width: 100%;
       height: 100%;
       font-size: 18px;
+    }
+  }
+  label {
+    i {
+      color: red;
     }
   }
 }

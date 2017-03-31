@@ -29,8 +29,39 @@ import bp_details from '@/pages/bp_details.vue'
 import NotFound from '@/pages/notFound.vue'
 
 Vue.use(Router)
-const role_name = localStorage.getItem('role_name')
-const route = {}
+var role_name = localStorage.getItem('role_name')
+var route = {
+  mode: 'history',
+  routes: [{
+    path: '/',
+    name: '',
+    redirect: '/admin/signin',
+    hidden: true
+  },
+  {
+    path: '/admin',
+    name: '',
+    redirect: '/admin/signin',
+    hidden: true
+  },
+  {
+    path: '/admin/signin',
+    name: '',
+    component: signin,
+    hidden: true
+  },
+  {
+    path: '/admin/admin_list',
+    name: '用户管理',
+    iconCls: 'icon-user',
+    component: Home,
+    children: [
+      {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
+      {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
+      // {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
+    ]
+  }]
+}
 if (role_name === '运营总监') {
   route = {
     mode: 'history',
@@ -151,7 +182,6 @@ if (role_name === '运营专员') {
         component: Home,
         children: [
           {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
-          {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
         ]
       },
       {
@@ -219,17 +249,6 @@ if (role_name === '硬件总监') {
         hidden: true
       },
       {
-        path: '/admin/admin_list',
-        name: '用户管理',
-        iconCls: 'icon-user',
-        component: Home,
-        children: [
-          {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
-          {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
-          // {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
-        ]
-      },
-      {
         path: '/admin/project_list',
         name: '项目管理',
         iconCls: 'icon-project',
@@ -257,6 +276,17 @@ if (role_name === '硬件总监') {
         component: Home,
         children: [
           {path: '/admin/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
+        ]
+      },
+      {
+        path: '/admin/deliverable_list',
+        name: '交付物审核管理',
+        // name: '用户需求评审',
+        iconCls: 'icon-examine',
+        component: Home,
+        children: [
+          {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
+          // {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '阶段评审'},
         ]
       },
       {
