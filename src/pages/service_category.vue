@@ -1,7 +1,7 @@
 <template>
    <div class="service_category">
       <el-col :span="4" class="add_item">
-        <span @click="addOpen">新增服务包类别</span>
+        <span @click="addOpen">新增服务项类别</span>
       </el-col>
       <div class="">
         <el-table
@@ -47,10 +47,10 @@
               <span>新增类别</span>
             </div>
             <div class="modal-content">
-              <label for="">服务包类别名称</label>
-              <el-input placeholder="服务包类别名称" v-model="form.name"></el-input>
-              <label for="">阶服务包类描述</label>
-              <el-input placeholder="阶服务包类描述" v-model="form.description"></el-input>
+              <label for="">服务项类别名称</label>
+              <el-input placeholder="服务项类别名称" v-model="form.name"></el-input>
+              <label for="">服务项类别描述</label>
+              <el-input placeholder="服务项类别描述" v-model="form.description"></el-input>
             </div>
             <div class="modal-footer">
               <el-button type="primary" @click="ensure">确认</el-button>

@@ -12,6 +12,13 @@
         style="width: 100%">
           <el-table-column
             align="center"
+            prop="id"
+            label="编号"
+            width="50"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            align="center"
             prop="name"
             label="姓名"
             width="60"
@@ -34,7 +41,14 @@
             align="center"
             prop="gmt_create"
             width="120"
-            label="最后登陆时间"
+            label="最后登录时间"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="active"
+            width="60"
+            label="状态"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
@@ -249,7 +263,22 @@ export default {
             _this.loading = false
             _this.total = data.total
             for (var i in data.items) {
-              data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+              var DateTime = data.items[i].gmt_create
+    					var timer = new Date(DateTime)
+    					timer.setTime(timer.getTime()+0)
+  			      var  year = timer.getUTCFullYear(),
+            			 month = timer.getUTCMonth()+1,
+            			 date = timer.getUTCDate(),
+            			 hour = timer.getUTCHours(),
+            			 minute = timer.getUTCMinutes(),
+            			 second = timer.getUTCSeconds(),
+           			   time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
+              data.items[i].gmt_create = time
+              if (data.items[i].active == true) {
+                data.items[i].active = '启用'
+              } else {
+                data.items[i].active = '禁用'
+              }
             }
             _this.tableData = data.items
           },

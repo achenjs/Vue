@@ -3,24 +3,24 @@
     <div class="admin_line clearfix">
       <el-col :span="8" :offset="8">
         <div style="width: 100%;">
-          <label for="">姓名</label>
-          <el-input placeholder="姓名" v-model="form.name"></el-input>
+          <label for=""><i>*</i>姓名</label>
+          <el-input placeholder="姓名" v-model="form.name" @blur="isName($event)"></el-input>
         </div>
       </el-col>
     </div>
     <div class="admin_line clearfix">
       <el-col :span="8" :offset="8">
         <div style="width: 100%;">
-          <label for="">邮箱</label>
-          <el-input placeholder="邮箱" type="email" v-model="form.email"></el-input>
+          <label for=""><i>*</i>邮箱</label>
+          <el-input placeholder="邮箱" type="email" v-model="form.email" @blur="isEmail($event)"></el-input>
         </div>
       </el-col>
     </div>
     <div class="admin_line clearfix">
       <el-col :span="8" :offset="8">
         <div style="width: 100%;">
-          <label for="">密码</label>
-          <el-input placeholder="请输入您的密码" type="password" v-model="form.password"></el-input>
+          <label for=""><i>*</i>密码</label>
+          <el-input placeholder="请输入您的密码" type="password" v-model="form.password" @blur="isPas($event)"></el-input>
         </div>
       </el-col>
     </div>
@@ -43,14 +43,17 @@
 <script>
 export default {
     data () {
-        return {
-          form: {
-            name: '',
-            email: '',
-            phone: '',
-            password: ''
-          }
-        }
+      return {
+        form: {
+          name: '',
+          email: '',
+          phone: '',
+          password: ''
+        },
+        isNames: false,
+        isEmails: false,
+        isPass: false
+      }
     },
     methods: {
       reset() {
@@ -58,14 +61,42 @@ export default {
           this.$data.form[name] = ''
         }
       },
+      //  判断name是否合法
+      isName(el) {
+        const val = el.target.value.trim()
+        if (val.length == 0) {
+          this.$message.error('对不起姓名不能为空和空格！')
+        } else {
+          this.isNames = true
+        }
+      },
+      //  判断email是否合法
+      isEmail(el) {
+        const val = el.target.value.trim()
+        if (val.length!=0) {
+           const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+           if (!reg.test(val)) {
+             this.$message.error("对不起，您输入的字符串类型格式不正确!")
+           } else {
+             this.isEmails = true
+           }
+        }
+      },
+      //  判断密码是否合法
+      isPas(el) {
+        const val = el.target.value.trim()
+        if (val.length == 0) {
+          this.$message.error('密码只能是字母和数字组成！')
+        } else if (val.length < 6 || val.length > 12) {
+          this.$message.error('密码在6-12个字符之间！')
+        } else {
+          this.isPass = true
+        }
+      },
+      //  创建
       addUser() {
         var _this = this
-        if (this.form.name == '' && this.form.email == '' && this.form.phone == '' && this.form.password == '') {
-          _this.$message({
-            message: '请输入完整信息',
-            type: 'warning'
-          })
-        } else {
+        if (this.isNames && this.isEmails && this.isPass) {
           $.ajax({
             url: '/admin/api/v1/users',
             type: 'post',
@@ -85,6 +116,11 @@ export default {
               }
             }
           })
+        } else {
+          this.$message({
+            message: '请输入完整信息',
+            type: 'warning'
+          })
         }
       }
     }
@@ -98,6 +134,9 @@ export default {
     label {
       display: block;
       margin-bottom: 5px;
+      i {
+        color: red;
+      }
     }
     .el-date-editor.el-input {
       width: 420px;

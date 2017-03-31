@@ -10,6 +10,13 @@
         style="width: 100%">
           <el-table-column
             align="center"
+            prop="id"
+            width="50"
+            label="编号"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            align="center"
             prop="name"
             width="120"
             label="角色名称"
@@ -62,14 +69,19 @@
                 ref="table"
                 @selection-change="handleSelectionChange">
                 <el-table-column
+                  align="center"
                   type="selection">
                 </el-table-column>
                 <el-table-column
                   prop="name"
+                  width="170"
+                  align="center"
+                  show-overflow-tooltip
                   label="名称">
                 </el-table-column>
                 <el-table-column
                   prop="description"
+                  align="center"
                   label="描述"
                   show-overflow-tooltip>
                 </el-table-column>
@@ -134,7 +146,7 @@ export default {
             _this.form.name = data.name
             _this.form.description = data.description
             for(var i=0; i<data.permissions.length; i++) {
-              _this.$refs.table.toggleRowSelection(_this.tableData3.find(d => d.value === data.permissions[i]))
+              _this.$refs.table.toggleRowSelection(_this.tableData3.find(d => d.key === data.permissions[i]))
             }
             _this.form.status = data.status
           },
@@ -166,7 +178,7 @@ export default {
         var _this = this
         var arr = []
         for (var i=0; i<this.multipleSelection.length; i++) {
-          arr.push(this.multipleSelection[i].id)
+          arr.push(this.multipleSelection[i].key)
         }
         this.form.permissions = arr.join()
         if (this.id === '') {
@@ -242,7 +254,14 @@ export default {
         url: '/admin/api/v1/permissions',
         success: function(result) {
           var data = result.result
-          _this.tableData3 = data.items
+          for (var i in data) {
+            data[i]['key'] = i
+          }
+          var arr = []
+          for (var i in data) {
+            arr.push(data[i])
+          }
+          _this.tableData3 = arr
         },
         error: function(err) {
           if (err.status == '401') {

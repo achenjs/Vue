@@ -44,7 +44,8 @@
          width="60"
          label="附件">
          <template scope="scope">
-           <a href="scope.row.file_name">下载</a>
+           <a v-if="scope.row.file_name == '#'" style="color: #ececec;">暂无</a>
+           <a v-else :href="scope.row.file_name">下载</a>
          </template>
        </el-table-column>
        <el-table-column
@@ -166,7 +167,7 @@ export default {
               $.ajax({
                 url: '/main/api/v1/files/' + data.items[i].file_name,
                 success: function(result) {
-                  data.items[i].url = result
+                  data.items[i].file_name = result
                 }
               })
             }

@@ -90,6 +90,13 @@
            show-overflow-tooltip>
          </el-table-column>
          <el-table-column
+           align="center"
+           prop="project_name"
+           label="项目名称"
+           width="80"
+           show-overflow-tooltip>
+         </el-table-column>
+         <el-table-column
            v-if="isCustom"
            align="center"
            prop="service_category_name"
@@ -306,50 +313,10 @@ export default {
       this.addShow = true
       this.reset()
       if(this.isCustom) {
-        this.UserDetail(id)
+        this.$router.push({path: '/admin/indentDetails', query: {id: id}})
       } else {
         this.CustomDetail(id)
       }
-    },
-    //  系统服务项详情
-    UserDetail(id) {
-      var _this = this
-      $.ajax({
-        url: '/admin/api/v1/user_service_items/' + id,
-        success: function(result) {
-          var data = result.result
-          _this.UserDetails.price = data.service_item.price
-          _this.details.category_id = data.service_item.category_id
-          var status = data.status
-          switch (status) {
-            case '已取消':
-              _this.details.status = 'Canceled'
-              break;
-            case '已支付':
-              _this.details.status = 'Paid'
-              break;
-            case '待提交':
-              _this.details.status = 'Submitting'
-              break;
-            case '已提交':
-              _this.details.status = 'Submitted'
-              break;
-            case '已确认':
-              _this.details.status = 'Confirmed'
-              break;
-            case '已完成':
-              _this.details.status = 'Finished'
-              break;
-          }
-          _this.details.status = data.status
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
-          }
-        }
-      })
     },
     //  自定义服务项详情
     CustomDetail(id) {
@@ -465,7 +432,17 @@ export default {
           var data = result.result
           _this.total = data.total
           for (var i in data.items) {
-            data.items[i].gmt_create = data.items[i].gmt_create.split('T')[0]
+            var DateTime = data.items[i].gmt_create
+  					var timer = new Date(DateTime)
+  					timer.setTime(timer.getTime()+0)
+			      var  year = timer.getUTCFullYear(),
+          			 month = timer.getUTCMonth()+1,
+          			 date = timer.getUTCDate(),
+          			 hour = timer.getUTCHours(),
+          			 minute = timer.getUTCMinutes(),
+          			 second = timer.getUTCSeconds(),
+         			   time = year + "-" + month + "-" + date
+            data.items[i].gmt_create = time
           }
           _this.tableData = data.items
         },
@@ -491,101 +468,51 @@ export default {
       }
     },
     ensure() {
-      if(this.isCustom) {
-        //  修改系统服务项
-        var status = this.details.status
-        switch (status) {
-          case '已取消':
-            this.details.status = 'Canceled'
-            break;
-          case '已支付':
-            this.details.status = 'Paid'
-            break;
-          case '待提交':
-            this.details.status = 'Submitting'
-            break;
-          case '已提交':
-            this.details.status = 'Submitted'
-            break;
-          case '已确认':
-            this.details.status = 'Confirmed'
-            break;
-          case '已完成':
-            this.details.status = 'Finished'
-            break;
-        }
-        var obj = {
-          status: this.details.status,
-          price: this.UserDetails.price,
-          category_id: this.details.category_id
-        }
-        var _this = this
-        $.ajax({
-          url: '/admin/api/v1/user_service_items/' + this.id,
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(obj),
-          success: function(result) {
-            _this.addShow = false
-            _this.$message({
-              message: result.message,
-              type: 'success'
-            })
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
-            }
-          }
-        })
-      } else {
-        //  修改自定义服务项
-        var status = this.details.status
-        switch (status) {
-          case '已取消':
-            this.details.status = 'Canceled'
-            break;
-          case '已支付':
-            this.details.status = 'Paid'
-            break;
-          case '待提交':
-            this.details.status = 'Submitting'
-            break;
-          case '已提交':
-            this.details.status = 'Submitted'
-            break;
-          case '已确认':
-            this.details.status = 'Confirmed'
-            break;
-          case '已完成':
-            this.details.status = 'Finished'
-            break;
-        }
-        var obj = {
-          status: this.details.status,
-        }
-        var _this = this
-        $.ajax({
-          url: '/admin/api/v1/custom_service_items/' + this.id,
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(obj),
-          success: function(result) {
-            _this.addShow = false
-            _this.$message({
-              message: result.message,
-              type: 'success'
-            })
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
-            }
-          }
-        })
+      //  修改自定义服务项
+      var status = this.details.status
+      switch (status) {
+        case '已取消':
+          this.details.status = 'Canceled'
+          break;
+        case '已支付':
+          this.details.status = 'Paid'
+          break;
+        case '待提交':
+          this.details.status = 'Submitting'
+          break;
+        case '已提交':
+          this.details.status = 'Submitted'
+          break;
+        case '已确认':
+          this.details.status = 'Confirmed'
+          break;
+        case '已完成':
+          this.details.status = 'Finished'
+          break;
       }
+      var obj = {
+        status: this.details.status,
+      }
+      var _this = this
+      $.ajax({
+        url: '/admin/api/v1/custom_service_items/' + this.id,
+        type: 'post',
+        contentType: 'application/json',
+        data: JSON.stringify(obj),
+        success: function(result) {
+          _this.addShow = false
+          _this.$message({
+            message: result.message,
+            type: 'success'
+          })
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/admin/signin')
+          }
+        }
+      })
       this.addShow = false
     },
     cancel() {

@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import './assets/css/reset.scss'
 import ElementUI from 'element-ui'
+require('es6-promise').polyfill()
 import axios from 'axios'
 import 'element-ui/lib/theme-default/index.css'
 import router from './router'

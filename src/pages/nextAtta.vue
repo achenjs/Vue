@@ -113,7 +113,7 @@ export default {
       var _this = this
       var obj = {
         ppid: this.nextAttaId,
-        status: 'Rejected'
+        status: 'Submitting'
       }
       $.ajax({
         url: '/admin/api/v1/project_phase_review/',
