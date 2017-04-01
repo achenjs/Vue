@@ -382,7 +382,6 @@ export default {
         },
         timeout: 5000,
         success: function(result) {
-          _this.loading = false
           var data = result.result
           _this.total = data.total
           for (var i in data.items) {
@@ -399,6 +398,9 @@ export default {
             data.items[i].gmt_create = time
           }
           _this.tableData = data.items
+          setTimeout(function() {
+            _this.loading = false
+          }, 500)
         },
         complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
     　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
@@ -442,7 +444,6 @@ export default {
         },
         timeout: 5000,
         success: function(result) {
-          _this.loading = false
           var data = result.result
           _this.total = data.total
           for (var i in data.items) {
@@ -459,6 +460,9 @@ export default {
             data.items[i].gmt_create = time
           }
           _this.tableData = data.items
+          setTimeout(function() {
+            _this.loading = false
+          }, 500)
         },
         complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
     　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
