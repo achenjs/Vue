@@ -12,7 +12,7 @@ function uploadComplete(evt){
    $('.xs').text('上传成功')
    $('.xs').stop().animate({'top': '10px'}, 300)
    setTimeout(function(){
-      $('.xs').stop().animate({'top': '-50px'}, 300)
+      $('.xs').stop().animate({'top': '-53px'}, 300)
    },1500)
     var obj = JSON.parse(evt.target.responseText).obj
     if (obj) {
@@ -32,6 +32,8 @@ function uploadFailed(evt) {
 module.exports = function uploadFile(f, type, fn){
   var url1 = 'https://apl-docs.oss-cn-beijing.aliyuncs.com'
   var file = document.getElementById(f.id).files[0]
+  var filename = file.name
+  $('#filename').val(filename)
   var k = file.name.substr(file.name.lastIndexOf('.'))
   //.doc.docx.ppt.pptx.xls.xlsx.txt.rtf.ppt.bmp.png.jpg.jpeg.zip.prt.stp.dxf.dwg.sch.pcb.dsn.brd
   if (type === 1) {

@@ -1,5 +1,6 @@
 <template>
    <div class="attachments">
+     <div class="xs"></div>
       <el-col :span="4" class="add_item">
         <span @click="addOpen">新增交付物</span>
       </el-col>
@@ -58,8 +59,11 @@
               <label for="">交付物名称</label>
               <el-input placeholder="交付物名称" v-model="form.name"></el-input>
               <label for="">附件</label>
-              <input type="text" name="" value="" id="hiddens" v-model="form.url" :disabled="true">
-              <input type="file" @change="uploadFile($event)" id="upLog">
+              <input type="text" name="" value="" id="filename" :disabled="true" v-model="form.url">
+              <input type="hidden" name="" value="" id="hiddens">
+              <a href="javascript:;" class="file" style="vertical-align: middle;">上传附件
+                <input type="file" name="" id="upLog" @change="uploadFile($event)">
+              </a>
               <label for="">描述</label>
               <el-input placeholder="描述" v-model="form.description"></el-input>
             </div>
@@ -107,6 +111,7 @@ export default {
       },
       addOpen() {
         this.reset()
+        this.id = ''
         this.addShow = true
       },
       cancel() {

@@ -194,6 +194,7 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+              _this.query(1)
             },
             error: function(err) {
               if (err.status == '401') {

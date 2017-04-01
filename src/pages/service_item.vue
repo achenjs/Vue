@@ -1,5 +1,8 @@
 <template>
    <div class="service_item">
+     <div class="xs">
+
+     </div>
       <el-col :span="4" class="add_item">
         <span @click="addOpen">新增服务项</span>
       </el-col>
@@ -96,7 +99,9 @@
                 :key="item.id">
                 </el-option>
               </el-select>
-              <input type="file" @change="uploadFile($event)" id="upLog" style="margin: 10px 0;">
+              <a href="javascript:;" class="file" style="margin: 10px 0;">上传附件
+                <input type="file" name="" id="upLog" @change="uploadFile($event)">
+              </a>
               <input type="hidden" id="hiddens" v-model="form.zip_url">
               <label for="">报价(硬豆)</label>
               <el-input placeholder="报价" v-model="form.price"></el-input>

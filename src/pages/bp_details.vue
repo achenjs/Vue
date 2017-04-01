@@ -1,6 +1,8 @@
 <template lang="html">
   <div class="bp_manage">
-    <input type="file" @change="uploadFile($event)" id="upLog">
+    <a href="javascript:;" class="file">上传BP
+      <input type="file" name="" id="upLog" @change="uploadFile($event)">
+    </a>
     <input type="hidden" id="hiddens" v-model="form.bp_url">
     <div class="xs"></div>
     <el-tabs type="border-card" style="margin-top: 30px;">
@@ -452,20 +454,4 @@ import upload from '../assets/js/upload'
 </script>
 
 <style lang="scss">
-.bp_manage {
-  .xs {
-    width:500px;
-    height:50px;
-    background:#fff;
-    position: fixed;
-    top:-50px;
-    left:50%;
-    margin-left:-250px;
-    z-index:4;
-    border-radius:6px;
-    border:1px solid #efefef;
-    line-height:50px;
-    padding-left:15px;
-  }
-}
 </style>

@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="indentDetails">
+    <div class="xs"></div>
     <el-table
       :data="tableData"
       border
@@ -90,7 +91,7 @@
     <div>
       <div class="chatroom">
         <h3>留言板</h3>
-        <div class="box">
+        <div class="box" ref="box">
           <div class="record clearfix" v-for="(item, key) in message">
             <div class="avatar" v-if="item.admin_id === null">
               <img :src="item.avatar_url" alt="" width="38" height="38">
@@ -98,7 +99,7 @@
             </div>
             <div class="avatar right" v-else>
               <img :src="item.avatar_url" alt="" width="38" height="38">
-              <span class="name">{{item.customer_name}}</span>
+              <span class="name">{{item.admin_name}}</span>
             </div>
             <div class="message" v-if="item.admin_id === null">
               <p class="date">{{item.gmt_create}}</p>
@@ -117,7 +118,9 @@
           </div>
         </div>
         <div class="reply">
-          <input type="file" @change="uploadFile($event)" id="upLog">
+          <a href="javascript:;" class="file" style="vertical-align: middle;">上传附件
+            <input type="file" name="" id="upLog" @change="uploadFile($event)">
+          </a>
           <input type="hidden" id="hiddens" v-model="form.file_name">
           <el-input type="textarea" :row="5" placeholder="在此输入回复内容" v-model="form.content"></el-input>
         </div>
@@ -292,6 +295,7 @@ export default {
     //  回复消息
     messages() {
       const _this = this
+      
       $.ajax({
         url: '/admin/api/v1/user_service_items/message',
         type: 'post',
@@ -299,6 +303,7 @@ export default {
         data: JSON.stringify(this.form),
         success: function(result) {
           _this.UserDetail()
+          _this.$refs.box.scrollTop = _this.$refs.box.scrollHeight
         }
       })
     },
@@ -378,7 +383,7 @@ export default {
             display: inline-block;
           }
           .name {
-            font-size: 14px;
+            font-size: 12px;
             color: #807f8a;
           }
         }
