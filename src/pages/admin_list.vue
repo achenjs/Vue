@@ -191,6 +191,7 @@
 
 <script>
 import pages from '../components/pages/pages.vue'
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -228,7 +229,7 @@ export default {
   },
   created() {
     var _this = this
-    //  所属行业
+    // 所属行业
     // axios.get('/main/api/v1/industries')
     //   .then((result) => {
     //     const data = result.data
@@ -236,8 +237,12 @@ export default {
     //     _this.industries[''] = '全部行业'
     //   })
     //   .catch((err) => {
-    //
+    //     console.log(err)
     //   })
+    if (this.$route.query == 1) {
+      this.$router.go(0)
+    }
+
     $.ajax({
       url: '/main/api/v1/industries',
       success: function(result) {

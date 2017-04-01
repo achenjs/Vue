@@ -58,10 +58,10 @@ var route = {
     children: [
       {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
       {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
-      // {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
     ]
   }]
 }
+
 if (role_name === '运营总监') {
   route = {
     mode: 'history',
@@ -98,7 +98,15 @@ if (role_name === '运营总监') {
         children: [
           {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
           {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
-          // {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
+        ]
+      },
+      {
+        path: '/admin/bp_list',
+        name: 'BP管理',
+        iconCls: 'icon-BP',
+        component: Home,
+        children: [
+          {path: '/admin/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
         ]
       },
       {
@@ -108,7 +116,6 @@ if (role_name === '运营总监') {
         component: Home,
         children: [
           {path: '/admin/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
-          // {path: '/comment_list', component: comment_list, name: '点评记录'}
         ]
       },
       {
@@ -127,15 +134,6 @@ if (role_name === '运营总监') {
         component: Home,
         children: [
           {path: '/admin/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
-        ]
-      },
-       {
-        path: '/admin/bp_list',
-        name: 'BP管理',
-        iconCls: 'icon-BP',
-        component: Home,
-        children: [
-          {path: '/admin/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
         ]
       },
       {
@@ -249,24 +247,23 @@ if (role_name === '硬件总监') {
         hidden: true
       },
       {
-        path: '/admin/project_list',
-        name: '项目管理',
-        iconCls: 'icon-project',
+        path: '/admin/indent_list',
+        name: '订单管理',
+        iconCls: 'icon-serverList',
         component: Home,
         children: [
-          {path: '/admin/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
-          {path: '/admin/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
-          // {path: '/comment_list', component: comment_list, name: '点评记录'}
+          {
+            path: '/admin/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表',
+          },
         ]
       },
       {
-        path: '/admin/service_category',
-        name: '服务项管理',
-        iconCls: 'icon-server',
+        path: '/admin/deliverable_list',
+        name: '交付物审核管理',
+        iconCls: 'icon-examine',
         component: Home,
         children: [
-          {path: '/admin/service_category', component: service_category, iconCls: 'icon-page7', name: '服务项类别管理'},
-          {path: '/admin/service_item', component: service_item, iconCls: 'icon-page8', name: '服务项管理'},
+          {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
         ]
       },
       {
@@ -279,25 +276,23 @@ if (role_name === '硬件总监') {
         ]
       },
       {
-        path: '/admin/deliverable_list',
-        name: '交付物审核管理',
-        // name: '用户需求评审',
-        iconCls: 'icon-examine',
+        path: '/admin/project_list',
+        name: '项目管理',
+        iconCls: 'icon-project',
         component: Home,
         children: [
-          {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
-          // {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '阶段评审'},
+          {path: '/admin/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
+          {path: '/admin/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
         ]
       },
       {
-        path: '/admin/indent_list',
-        name: '订单管理',
-        iconCls: 'icon-serverList',
+        path: '/admin/service_category',
+        name: '服务项管理',
+        iconCls: 'icon-server',
         component: Home,
         children: [
-          {
-            path: '/admin/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表',
-          },
+          {path: '/admin/service_category', component: service_category, iconCls: 'icon-page7', name: '服务项类别管理'},
+          {path: '/admin/service_item', component: service_item, iconCls: 'icon-page8', name: '服务项管理'},
         ]
       },
       {
@@ -356,26 +351,6 @@ if (role_name === '硬件专员') {
         hidden: true
       },
       {
-        path: '/admin/service_custom',
-        name: '定制化需求管理',
-        iconCls: 'icon-custom',
-        component: Home,
-        children: [
-          {path: '/admin/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
-        ]
-      },
-      {
-        path: '/admin/deliverable_list',
-        name: '交付物审核管理',
-        // name: '用户需求评审',
-        iconCls: 'icon-examine',
-        component: Home,
-        children: [
-          {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
-          // {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '阶段评审'},
-        ]
-      },
-      {
         path: '/admin/indent_list',
         name: '订单管理',
         iconCls: 'icon-serverList',
@@ -384,6 +359,24 @@ if (role_name === '硬件专员') {
           {
             path: '/admin/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表',
           },
+        ]
+      },
+      {
+        path: '/admin/deliverable_list',
+        name: '交付物审核管理',
+        iconCls: 'icon-examine',
+        component: Home,
+        children: [
+          {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
+        ]
+      },
+      {
+        path: '/admin/service_custom',
+        name: '定制化需求管理',
+        iconCls: 'icon-custom',
+        component: Home,
+        children: [
+          {path: '/admin/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
         ]
       },
       {

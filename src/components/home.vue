@@ -85,7 +85,6 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 						_this.User.email = data.email
 						_this.User.name = data.name
 						_this.User.role_name = data.role_name
-						localStorage.setItem('role_name', data.role_name)
 						_this.User.avatar_url = data.avatar_url === '' ? '' :  URL + data.avatar_url
 					}
 				})
@@ -158,9 +157,11 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 		overflow-y: auto;
 		aside {
 			width: 230px;
+			height: 700px;
 			margin-top: 20px;
 			background-color: #ffffff;
 			position: fixed;
+			overflow-y: auto;
 			left: 0;
 			top: 60px;
 			.Introduction {

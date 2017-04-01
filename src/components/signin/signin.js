@@ -36,9 +36,28 @@ module.exports = {
     },
     signin() {
       var _this = this
-      axios.post('/admin/api/v1/', this.form)
+      axios.post('/admin/api/v1/',this.form)
         .then((result) => {
-          _this.$router.push('/admin/admin_list')
+          _this.$message({
+            message: result.data.message,
+            type: 'success'
+          })
+          axios.get('/admin/api/v1/profile')
+            .then((result) => {
+              const userInfo = result.data.result
+              const role_name = userInfo.role_name
+              localStorage.setItem('role_name', role_name)
+              setTimeout(function() {
+                if (role_name === '硬件总监' || role_name === '硬件专员') {
+                  _this.$router.push({path: '/admin/indent_list', query: 1})
+                } else {
+                  _this.$router.push({path: '/admin/admin_list', query: 1})
+                }
+              }, 1000)
+            })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
         })
         .catch((err) => {
           _this.$message.error(err.message)

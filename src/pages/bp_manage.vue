@@ -381,6 +381,7 @@ import upload from '../assets/js/upload'
           success: function(result) {
             var data = result.result
             _this.citys = data
+            _this.form.city = data[0].area_id
           },
           error: function(err) {
             if (err.status == '401') {

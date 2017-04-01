@@ -379,6 +379,7 @@ import upload from '../assets/js/upload'
       //  修改BP
       submitBP() {
         var _this = this
+        this.form.city = this.city_id
         if (this.form.start_from === '') {
           this.form.start_from = ''
         } else {

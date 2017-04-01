@@ -154,6 +154,11 @@ export default {
     //  通过
     ensure() {
       var _this = this
+      if (this.status === '请求忽略') {
+        this.form.status = 'Ignored'
+      } else {
+        this.form.status = 'Rejected'
+      }
       this.form.status = 'Confirmed'
       this.$confirm('是否继续?', '提示', {
          confirmButtonText: '确定',
@@ -216,11 +221,7 @@ export default {
     cancel() {
       var _this = this
       this.addShow = false
-      if (this.status === '请求忽略') {
-        this.form.status = 'Ignored'
-      } else {
-        this.form.status = 'Rejected'
-      }
+      this.form.status = 'Rejected'
       this.$confirm('是否继续?', '提示', {
          confirmButtonText: '确定',
          cancelButtonText: '取消',

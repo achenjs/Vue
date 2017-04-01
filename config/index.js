@@ -32,14 +32,14 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/main/api/v1': {
-        target: ServerPost.qingge,
+        target: ServerPost.wuge,
         changeOrigin: true,
         pathRewrite: {
           '^/main/api/v1': '/main/api/v1'
         }
       },
       '/admin/api': {
-        target: ServerPost.qingge,
+        target: ServerPost.wuge,
         changeOrigin: true,
         pathRewrite: {
           '^/admin/api': '/admin/api'

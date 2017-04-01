@@ -71,11 +71,11 @@
             </div>
             <div class="modal-content">
               <label for=""><i>*</i>姓名</label>
-              <el-input placeholder="姓名" v-model="form.name"></el-input>
+              <el-input placeholder="姓名" v-model="form.name" @blur="isName($event)"></el-input>
               <label for=""><i>*</i>邮箱</label>
-              <el-input placeholder="邮箱" type="email" v-model="form.email"></el-input>
+              <el-input placeholder="邮箱" type="email" v-model="form.email" @blur="isEmail($event)"></el-input>
               <label for=""><i>*</i>密码</label>
-              <el-input placeholder="密码" type="password" v-model="form.password"></el-input>
+              <el-input placeholder="密码" type="password" v-model="form.password" @blur="isPas($event)"></el-input>
               <label for=""><i>*</i>部门</label>
               <el-select v-model="form.dept_id" placeholder="请选择">
                 <el-option
@@ -142,7 +142,10 @@ export default {
         page: '',
         total: 1,
         addShow: false,
-        id: ''
+        id: '',
+        isNames: false,
+        isEmails: false,
+        isPass: false
       }
     },
     created() {
@@ -179,6 +182,38 @@ export default {
       })
     },
     methods: {
+      //  判断name是否合法
+      isName(el) {
+        const val = el.target.value.trim()
+        if (val.length == 0) {
+          this.$message.error('对不起姓名不能为空和空格！')
+        } else {
+          this.isNames = true
+        }
+      },
+      //  判断email是否合法
+      isEmail(el) {
+        const val = el.target.value.trim()
+        if (val.length!=0) {
+           const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+           if (!reg.test(val)) {
+             this.$message.error("对不起，您输入的字符串类型格式不正确!")
+           } else {
+             this.isEmails = true
+           }
+        }
+      },
+      //  判断密码是否合法
+      isPas(el) {
+        const val = el.target.value.trim()
+        if (val.length == 0) {
+          this.$message.error('密码只能是字母和数字组成！')
+        } else if (val.length < 6 || val.length > 12) {
+          this.$message.error('密码在6-12个字符之间！')
+        } else {
+          this.isPass = true
+        }
+      },
       reset() {
         for(var name in this.$data.form) {
           this.$data.form[name] = ''
@@ -187,6 +222,7 @@ export default {
       addOpen() {
         this.reset()
         this.id = ''
+        this.form.status = true
         this.addShow = true
       },
       cancel() {
@@ -197,9 +233,9 @@ export default {
         var _this = this
         if (this.id === '') {
           //  新增
-          if (this.form.dept_id == '' && this.form.role_id == '') {
+          if (this.form.dept_id == '' || this.form.role_id == '' || !this.isEmails || !this.isPass || !this.isNames) {
             _this.$message({
-              message: '角色和部门必选!',
+              message: '请填写完整的信息!',
               type: 'warning'
             })
           } else {
@@ -316,7 +352,7 @@ export default {
                 _this.form.role_id = _this.roles[i].id
               }
             }
-            _this.form.status = data.status
+            _this.form.active = data.active
           },
           error: function(err) {
             if (err.status == '401') {

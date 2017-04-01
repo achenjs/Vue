@@ -272,6 +272,10 @@ export default {
   },
   created() {
     var _this = this
+
+    if (this.$route.query == 1) {
+      this.$router.go(0)
+    }
     //  获取所有服务包类
     $.ajax({
       url: '/admin/api/v1/service_categories?page=1',

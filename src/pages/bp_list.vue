@@ -10,6 +10,13 @@
           style="width: 100%">
           <el-table-column
             align="center"
+            prop="id"
+            label="编号"
+            width="50"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            align="center"
             prop="project_name"
             label="项目名称"
             show-overflow-tooltip>
