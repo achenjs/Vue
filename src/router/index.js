@@ -8,7 +8,6 @@ import project_list from '@/pages/project_list.vue'
 import project_details from '@/pages/project_details.vue'
 import stage_manage from '@/pages/stage_manage.vue'
 import attachments from '@/pages/attachments.vue'
-// import comment_list from '@/pages/comment_list.vue'
 import service_category from '@/pages/service_category.vue'
 import service_item from '@/pages/service_item.vue'
 import service_custom from '@/pages/service_custom.vue'
@@ -442,7 +441,6 @@ if (role_name === '产品' || role_name === '超级管理员') {
         children: [
           {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
           {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
-          // {path: '/page3', component: Page3, iconCls: 'icon-page3', name: '身份及权限管理'}
         ]
       },
       {
@@ -455,7 +453,6 @@ if (role_name === '产品' || role_name === '超级管理员') {
           {path: '/admin/project_details', component: project_details, name: '项目详情', hidden: true},
           {path: '/admin/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
           {path: '/admin/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
-          // {path: '/comment_list', component: comment_list, name: '点评记录'}
         ]
       },
       {
@@ -480,12 +477,10 @@ if (role_name === '产品' || role_name === '超级管理员') {
       {
         path: '/admin/deliverable_list',
         name: '交付物审核管理',
-        // name: '用户需求评审',
         iconCls: 'icon-examine',
         component: Home,
         children: [
           {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
-          // {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '阶段评审'},
           {path: '/admin/nextAtta', component: nextAtta, name: '交付物评审', hidden: true},
           {path: '/admin/attaDetails', component: attaDetails, name: '交付物详情', hidden: true}
         ]
@@ -525,7 +520,6 @@ if (role_name === '产品' || role_name === '超级管理员') {
           {path: '/admin/managers', component: managers, iconCls: 'icon-page12', name: '操作员管理'},
           {path: '/admin/department', component: department, iconCls: 'icon-page13', name: '部门管理'},
           {path: '/admin/role', component: role, iconCls: 'icon-page11', name: '角色管理'},
-          // {path: '/admin/permissions', component: permissions, iconCls: 'icon-page7', name: '权限管理'},
           {path: '/admin/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
         ]
       },

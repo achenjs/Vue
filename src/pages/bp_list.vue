@@ -100,12 +100,8 @@ export default {
       },
       //  详情修改
       queryClick(id) {
-        if (typeof id === 'object') {
-          this.$message.error('没有获取到id值')
-        } else {
-          this.$router.push('/admin/bp_details')
-          localStorage.setItem('bpDetailsId', id)
-        }
+        this.$router.push('/admin/bp_details')
+        localStorage.setItem('bpDetailsId', id)
       }
     },
     components: {

@@ -452,6 +452,3 @@ import upload from '../assets/js/upload'
     }
   }
 </script>
-
-<style lang="scss">
-</style>
