@@ -58,7 +58,7 @@
               row-key="id"
               height="300"
               border
-              @change="changed"
+              @selection-change="changed"
               clearSelection="clearSelection"
               style="width: 100%">
                 <el-table-column
@@ -128,10 +128,7 @@ export default {
       this.queryAttachment(1)
     },
     methods: {
-      clearSelection() {
-
-      },
-      changed(selection, row) {
+      changed (selection, row) {
         this.selection = selection
       },
       reset() {
@@ -149,11 +146,9 @@ export default {
       ensure() {
         var _this = this
         var arr = []
-        for (var i=0; i<this.selection.length; i++) {
+        for (var i=0; i < this.selection.length; i++) {
           arr.push(this.selection[i].id)
         }
-        // var set = new Set(this.arrChecked.sort())
-        // this.arrChecked = [...set]
         this.form.attachments = arr.join()
         if (this.id === '') {
           //  新建
