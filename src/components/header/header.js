@@ -14,7 +14,7 @@ module.exports = {
       }).then(() => {
         axios.get('/admin/api/v1/logout')
           .then((result) => {
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           })
       }).catch(() => {
 
