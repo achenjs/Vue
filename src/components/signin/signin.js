@@ -49,9 +49,9 @@ module.exports = {
               localStorage.setItem('role_name', role_name)
               setTimeout(function() {
                 if (role_name === '硬件总监' || role_name === '硬件专员') {
-                  _this.$router.push({path: '/admin/indent_list', query: 1})
+                  _this.$router.push({path: '/indent_list', query: 1})
                 } else {
-                  _this.$router.push({path: '/admin/admin_list', query: 1})
+                  _this.$router.push({path: '/admin_list', query: 1})
                 }
               }, 1000)
             })
@@ -67,7 +67,7 @@ module.exports = {
       var _this = this
       axios.get('/admin/api/v1/')
         .then((result) => {
-          _this.$router.push('/admin/admin_list')
+          _this.$router.push('/admin_list')
         })
         .catch((err) => {
           _this.$message.error(err.message)
