@@ -1,8 +1,6 @@
 <template>
    <div class="service_item">
-     <div class="xs">
-
-     </div>
+     <div class="xs"></div>
       <el-col :span="4" class="add_item">
         <span @click="addOpen">新增服务项</span>
       </el-col>
@@ -189,6 +187,7 @@ export default {
         for(var name in this.$data.form) {
           this.$data.form[name] = ''
         }
+        this.$data.id = ''
       },
       addOpen() {
         this.reset()

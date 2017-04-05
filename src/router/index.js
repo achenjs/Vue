@@ -36,30 +36,41 @@ var route = {
   routes: [{
     path: '',
     name: '',
-    redirect: '/admin/signin',
+    redirect: '/signin',
     hidden: true
   },
   {
     path: '/admin',
     name: '',
-    redirect: '/admin/signin',
+    redirect: '/signin',
     hidden: true
   },
   {
-    path: '/admin/signin',
+    path: '/signin',
     name: '',
     component: signin,
     hidden: true
   },
   {
-    path: '/admin/admin_list',
+    path: '/admin_list',
     name: '用户管理',
     iconCls: 'icon-user',
     component: Home,
     children: [
-      {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
-      {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
+      {path: '/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
+      {path: '/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
     ]
+  },
+  {
+    path: '/404',
+    name: '未找到该页面',
+    component: NotFound,
+    hidden: true
+  },
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }]
 }
 
@@ -71,76 +82,76 @@ if (role_name === '运营总监') {
       {
         path: '',
         name: '',
-        redirect: '/admin/signin',
+        redirect: '/signin',
         hidden: true
       },
       {
         path: '/admin',
         name: '',
-        redirect: '/admin/signin',
+        redirect: '/signin',
         hidden: true
       },
       {
-        path: '/admin/signin',
+        path: '/signin',
         name: '',
         component: signin,
         hidden: true
       },
       {
-        path: '/admin/404',
+        path: '/404',
         name: '未找到该页面',
         component: NotFound,
         hidden: true
       },
       {
-        path: '/admin/admin_list',
+        path: '/admin_list',
         name: '用户管理',
         iconCls: 'icon-user',
         component: Home,
         children: [
-          {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
-          {path: '/admin/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
+          {path: '/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
+          {path: '/admin_new', component: admin_new, iconCls: 'icon-page2', name: '开通新账户'},
         ]
       },
       {
-        path: '/admin/bp_list',
+        path: '/bp_list',
         name: 'BP管理',
         iconCls: 'icon-BP',
         component: Home,
         children: [
-          {path: '/admin/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
+          {path: '/bp_list', component: bp_list, iconCls: 'icon-page14', name: 'BP列表'},
         ]
       },
       {
-        path: '/admin/project_list',
+        path: '/project_list',
         name: '项目管理',
         iconCls: 'icon-project',
         component: Home,
         children: [
-          {path: '/admin/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
+          {path: '/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
         ]
       },
       {
-        path: '/admin/bill_list',
+        path: '/bill_list',
         name: '交易管理',
         iconCls: 'icon-serverList',
         component: Home,
         children: [
-          {path: '/admin/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
+          {path: '/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
         ]
       },
       {
-        path: '/admin/managers',
+        path: '/managers',
         name: '系统管理',
         iconCls: 'icon-system',
         component: Home,
         children: [
-          {path: '/admin/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
+          {path: '/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
         ]
       },
       {
         path: '*',
-        redirect: {path: '/admin/404'},
+        redirect: '/404',
         hidden: true
       },
     ]
@@ -155,66 +166,66 @@ if (role_name === '运营专员') {
       {
         path: '',
         name: '',
-        redirect: '/admin/signin',
+        redirect: '/signin',
         hidden: true
       },
       {
-        path: '/admin',
+        path: '',
         name: '',
-        redirect: '/admin/signin',
+        redirect: '/signin',
         hidden: true
       },
       {
-        path: '/admin/signin',
+        path: '/signin',
         name: '',
         component: signin,
         hidden: true
       },
       {
-        path: '/admin/404',
+        path: '/404',
         name: '未找到该页面',
         component: NotFound,
         hidden: true
       },
       {
-        path: '/admin/admin_list',
+        path: '/admin_list',
         name: '用户管理',
         iconCls: 'icon-user',
         component: Home,
         children: [
-          {path: '/admin/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
+          {path: '/admin_list', component: admin_list, iconCls: 'icon-page1', name: '会员列表'},
         ]
       },
       {
-        path: '/admin/project_list',
+        path: '/project_list',
         name: '项目管理',
         iconCls: 'icon-project',
         component: Home,
         children: [
-          {path: '/admin/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
+          {path: '/project_list', component: project_list, iconCls: 'icon-page4', name: '项目列表'},
         ]
       },
       {
-        path: '/admin/bill_list',
+        path: '/bill_list',
         name: '交易管理',
         iconCls: 'icon-serverList',
         component: Home,
         children: [
-          {path: '/admin/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
+          {path: '/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
         ]
       },
       {
-        path: '/admin/managers',
+        path: '/managers',
         name: '系统管理',
         iconCls: 'icon-system',
         component: Home,
         children: [
-          {path: '/admin/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
+          {path: '/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
         ]
       },
       {
         path: '*',
-        redirect: {path: '/admin/404'},
+        redirect: '/404',
         hidden: true
       },
     ]
@@ -229,97 +240,97 @@ if (role_name === '硬件总监') {
       {
         path: '',
         name: '',
-        redirect: '/admin/signin',
+        redirect: '/signin',
         hidden: true
       },
       {
         path: '/admin',
         name: '',
-        redirect: '/admin/signin',
+        redirect: '/signin',
         hidden: true
       },
       {
-        path: '/admin/signin',
+        path: '/signin',
         name: '',
         component: signin,
         hidden: true
       },
       {
-        path: '/admin/404',
+        path: '/404',
         name: '未找到该页面',
         component: NotFound,
         hidden: true
       },
       {
-        path: '/admin/indent_list',
+        path: '/indent_list',
         name: '订单管理',
         iconCls: 'icon-serverList',
         component: Home,
         children: [
           {
-            path: '/admin/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表',
+            path: '/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表',
           },
         ]
       },
       {
-        path: '/admin/deliverable_list',
+        path: '/deliverable_list',
         name: '交付物审核管理',
         iconCls: 'icon-examine',
         component: Home,
         children: [
-          {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
+          {path: '/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
         ]
       },
       {
-        path: '/admin/service_custom',
+        path: '/service_custom',
         name: '定制化需求管理',
         iconCls: 'icon-custom',
         component: Home,
         children: [
-          {path: '/admin/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
+          {path: '/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
         ]
       },
       {
-        path: '/admin/project_list',
+        path: '/project_list',
         name: '项目管理',
         iconCls: 'icon-project',
         component: Home,
         children: [
-          {path: '/admin/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
-          {path: '/admin/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
+          {path: '/stage_manage', component: stage_manage, iconCls: 'icon-page5', name: '阶段管理'},
+          {path: '/attachments', component: attachments, iconCls: 'icon-page6', name: '交付物管理'},
         ]
       },
       {
-        path: '/admin/service_category',
+        path: '/service_category',
         name: '服务项管理',
         iconCls: 'icon-server',
         component: Home,
         children: [
-          {path: '/admin/service_category', component: service_category, iconCls: 'icon-page7', name: '服务项类别管理'},
-          {path: '/admin/service_item', component: service_item, iconCls: 'icon-page8', name: '服务项管理'},
+          {path: '/service_category', component: service_category, iconCls: 'icon-page7', name: '服务项类别管理'},
+          {path: '/service_item', component: service_item, iconCls: 'icon-page8', name: '服务项管理'},
         ]
       },
       {
-        path: '/admin/bill_list',
+        path: '/bill_list',
         name: '交易管理',
         iconCls: 'icon-serverList',
         component: Home,
         children: [
-          {path: '/admin/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
+          {path: '/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
         ]
       },
       {
-        path: '/admin/managers',
+        path: '/managers',
         name: '系统管理',
         iconCls: 'icon-system',
         component: Home,
         children: [
-          {path: '/admin/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
+          {path: '/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
         ]
       },
       {
         path: '*',
-        redirect: {path: '/admin/404'},
+        redirect: '/404',
         hidden: true
       },
     ]
@@ -334,75 +345,75 @@ if (role_name === '硬件专员') {
       {
         path: '',
         name: '',
-        redirect: '/admin/signin',
+        redirect: '/signin',
         hidden: true
       },
       {
-        path: '/admin',
+        path: '',
         name: '',
-        redirect: '/admin/signin',
+        redirect: '/signin',
         hidden: true
       },
       {
-        path: '/admin/signin',
+        path: '/signin',
         name: '',
         component: signin,
         hidden: true
       },
       {
-        path: '/admin/404',
+        path: '/404',
         name: '未找到该页面',
         component: NotFound,
         hidden: true
       },
       {
-        path: '/admin/indent_list',
+        path: '/indent_list',
         name: '订单管理',
         iconCls: 'icon-serverList',
         component: Home,
         children: [
-          {path: '/admin/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表'},
+          {path: '/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表'},
         ]
       },
       {
-        path: '/admin/deliverable_list',
+        path: '/deliverable_list',
         name: '交付物审核管理',
         iconCls: 'icon-examine',
         component: Home,
         children: [
-          {path: '/admin/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
+          {path: '/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
         ]
       },
       {
-        path: '/admin/service_custom',
+        path: '/service_custom',
         name: '定制化需求管理',
         iconCls: 'icon-custom',
         component: Home,
         children: [
-          {path: '/admin/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
+          {path: '/service_custom', component: service_custom, iconCls: 'icon-page9', name: '定制化需求管理列表'}
         ]
       },
       {
-        path: '/admin/bill_list',
+        path: '/bill_list',
         name: '交易管理',
         iconCls: 'icon-serverList',
         component: Home,
         children: [
-          {path: '/admin/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
+          {path: '/bill_list', component: bill_list, iconCls: 'icon-page11', name: '消费记录'}
         ]
       },
       {
-        path: '/admin/managers',
+        path: '/managers',
         name: '系统管理',
         iconCls: 'icon-system',
         component: Home,
         children: [
-          {path: '/admin/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
+          {path: '/settings', component: settings, iconCls: 'icon-page8', name: '修改密码'}
         ]
       },
       {
         path: '*',
-        redirect: {path: '/admin/404'},
+        redirect: '/404',
         hidden: true
       },
     ]
@@ -489,10 +500,10 @@ if (role_name === '产品' || role_name === '超级管理员') {
         iconCls: 'icon-examine',
         component: Home,
         children: [
-          {path: '/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表'},
-          // {path: '/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '阶段评审'},
-          {path: '/nextAtta', component: nextAtta, name: '交付物评审', hidden: true},
-          {path: '/attaDetails', component: attaDetails, name: '交付物详情', hidden: true}
+          {path: '/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表', children: [
+            {path: '/deliverable_list/:id', component: nextAtta, name: '交付物评审', hidden: true},
+            {path: '/attaDetails/:id', component: attaDetails, name: '交付物详情', hidden: true}
+          ]},
         ]
       },
       {

@@ -30,7 +30,6 @@ function uploadFailed(evt) {
 }
 
 module.exports = function uploadFile(f, type, fn){
-  var url1 = 'https://apl-docs.oss-cn-beijing.aliyuncs.com'
   var file = document.getElementById(f.id).files[0]
   var filename = file.name
   $('#filename').val(filename)
@@ -38,6 +37,7 @@ module.exports = function uploadFile(f, type, fn){
   //.doc.docx.ppt.pptx.xls.xlsx.txt.rtf.ppt.bmp.png.jpg.jpeg.zip.prt.stp.dxf.dwg.sch.pcb.dsn.brd
   if (type === 1) {
     // 上传头像
+    var url1 = 'https://apl-static.oss-cn-beijing.aliyuncs.com'
     if(!/.(png|jpg|jpeg)$/.test(k)){
        $('.xs').text('文件格式有误')
        $('.xs').stop().animate({'top': '10px'}, 300)
@@ -67,6 +67,7 @@ module.exports = function uploadFile(f, type, fn){
        })
      }
   } else {
+    var url1 = 'https://apl-docs.oss-cn-beijing.aliyuncs.com'
     if(!/.(doc|docx|ppt|pptx|xls|xlsx|txt|rtf|ppt|bmp|png|jpg|jpeg|zip|prt|stp|dxf|dwg|sch|pcb|dsn|brd)$/.test(k)){
        $('.xs').text('文件格式有误')
        $('.xs').stop().animate({'top': '10px'}, 300)

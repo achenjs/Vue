@@ -78,6 +78,10 @@ export default {
       }
     },
     created() {
+      this.id = this.$route.params.id
+      if (this.id == undefined) {
+        this.id = ''
+      }
       this.search(1)
     },
     watch: {

@@ -192,6 +192,10 @@ export default {
     }
   },
   created() {
+    this.id = this.$route.params.id
+    if (this.id == undefined) {
+      this.id = ''
+    }
     var _this = this
     //  所属行业
     $.ajax({

@@ -35,7 +35,8 @@
             label="附件"
             width="60">
             <template scope="scope">
-              <a :href="scope.row.url" style="">下载</a>
+              <span v-if="scope.row.url == '#'" style="color: #eeeeee;">下载</span>
+              <a v-else :href="scope.row.url">下载</a>
             </template>
           </el-table-column>
           <el-table-column
@@ -132,6 +133,7 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+              _this.query(1)
             },
             error: function(err) {
               if (err.status == '401') {
@@ -178,7 +180,7 @@ export default {
             var data = result.result
             _this.loading = false
             _this.total = data.total
-            for (let i in data.items) {
+            for (var i in data.items) {
               if (data.items[i].url === '' || data.items[i].url === null) {
                   data.items[i].url = '#'
               } else {
@@ -216,6 +218,7 @@ export default {
           success: function(result) {
             var data = result.result
             _this.form = data
+            _this.query(1)
           },
           error: function(err) {
             if (err.status == '401') {

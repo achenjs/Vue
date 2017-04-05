@@ -1,48 +1,48 @@
 <template lang="html">
   <div class="nextAtta">
-    <el-table
-    :data="tableData"
-    v-loading="loading"
-    border
-    element-loading-text="拼命加载中"
-    style="width: 100%">
-      <el-table-column
-        align="center"
-        prop="id"
-        label="编号"
-        width="50"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="attachment_name"
-        label="交互物名称"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="status"
-        label="状态"
-        width="80"
-        show-overflow-tooltip>
-      </el-table-column>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        fixed="right"
-        width="60"
-        label="操作">
-        <template scope="scope">
-          <el-button @click="details(scope.row.id)" type="text" size="small">详情</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <v-pages :total="total" v-on:currentChange="nextAtta"></v-pages>
-    <div class="submit">
-      <el-button type="primary" @click="ensure">同意进入下一阶段</el-button>
-      <el-button type="primary" @click="cancel">驳回</el-button>
+      <el-table
+      :data="tableData"
+      v-loading="loading"
+      border
+      element-loading-text="拼命加载中"
+      style="width: 100%">
+        <el-table-column
+          align="center"
+          prop="id"
+          label="编号"
+          width="50"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="attachment_name"
+          label="交互物名称"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="status"
+          label="状态"
+          width="80"
+          show-overflow-tooltip>
+        </el-table-column>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          fixed="right"
+          width="60"
+          label="操作">
+          <template scope="scope">
+            <el-button @click="details(scope.row.id)" type="text" size="small">详情</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <v-pages :total="total" v-on:currentChange="nextAtta"></v-pages>
+      <div class="submit">
+        <el-button type="primary" @click="ensure">同意进入下一阶段</el-button>
+        <el-button type="primary" @click="cancel">驳回</el-button>
+      </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -53,18 +53,25 @@ export default {
       loading: false,
       tableData: [],
       total: 1,
-      nextAttaId: ''
+      nextAttaId: '',
+      id: ''
     }
   },
   created() {
-    this.nextAttaId = localStorage.getItem('nextAttaId')
+    this.nextAttaId = this.$route.params.id
     this.nextAtta(1)
+  },
+  watch: {
+    '$route' (to, from) {
+      const toDepath = to.path.split('/').length
+      const fromDepath = from.path.split('/').length
+    }
   },
   methods: {
     //  进入交付物详情
     details(id) {
-      this.$router.push('/attaDetails')
-      localStorage.setItem('attaDetailsId', id)
+      this.nextAttaId = id
+      this.$router.push('/attaDetails/' + id)
     },
     //  阶段下交付物列表
     nextAtta(page) {

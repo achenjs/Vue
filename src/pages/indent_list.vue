@@ -276,9 +276,12 @@ export default {
   },
   created() {
     var _this = this
-
+    this.id = this.$route.params.id
     if (this.$route.query == 1) {
       this.$router.go(0)
+    }
+    if (this.id == undefined) {
+      this.id = ''
     }
     //  获取所有服务包类
     $.ajax({

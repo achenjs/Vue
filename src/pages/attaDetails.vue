@@ -87,7 +87,7 @@ export default {
     }
   },
   created() {
-    this.attaDetailsId = localStorage.getItem('attaDetailsId')
+    this.attaDetailsId = this.$route.params.id
     this.details(1)
     this.isStatus()
   },

@@ -59,9 +59,10 @@
               height="300"
               border
               @change="changed"
+              clearSelection="clearSelection"
               style="width: 100%">
                 <el-table-column
-                :reserve-selection="true"
+                reserve-selection
                 width="50"
                 align="center"
                 type="selection">
@@ -127,6 +128,9 @@ export default {
       this.queryAttachment(1)
     },
     methods: {
+      clearSelection() {
+
+      },
       changed(selection, row) {
         this.selection = selection
       },
@@ -163,6 +167,7 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+              _this.query(1)
               _this.addShow = false
             }
           })

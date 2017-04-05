@@ -1,49 +1,52 @@
 <template lang="html">
   <div class="phases_details">
-    <el-table
-    :data="tableData"
-    v-loading="loading"
-    border
-    element-loading-text="拼命加载中"
-    style="width: 100%">
-      <el-table-column
-        align="center"
-        prop="id"
-        label="编号"
-        width="50"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="project_name"
-        label="项目名称"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="phase_name"
-        label="阶段名称"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="status"
-        label="状态"
-        width="60"
-        show-overflow-tooltip>
-      </el-table-column>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        fixed="right"
-        width="60"
-        label="操作">
-        <template scope="scope">
-          <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <v-pages :total="total" v-on:currentChange="nextPhases"></v-pages>
+    <div v-if="id === ''">
+      <el-table
+      :data="tableData"
+      v-loading="loading"
+      border
+      element-loading-text="拼命加载中"
+      style="width: 100%">
+        <el-table-column
+          align="center"
+          prop="id"
+          label="编号"
+          width="50"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="project_name"
+          label="项目名称"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="phase_name"
+          label="阶段名称"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="status"
+          label="状态"
+          width="60"
+          show-overflow-tooltip>
+        </el-table-column>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          fixed="right"
+          width="60"
+          label="操作">
+          <template scope="scope">
+            <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <v-pages :total="total" v-on:currentChange="nextPhases"></v-pages>
+    </div>
+    <router-view v-else></router-view>
   </div>
 </template>
 
@@ -54,13 +57,24 @@ export default {
     return {
       loading: false,
       tableData: [],
-      form: {
-
-      },
-      total: 1
+      total: 1,
+      id: ''
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+        const toDepath = to.path.split('/').length
+        const fromDepath = from.path.split('/').length
+        if (toDepath === 2) {
+          this.id = ''
+        }
     }
   },
   created() {
+    this.id = this.$route.params.id
+    if (this.id == undefined) {
+      this.id = ''
+    }
     this.nextPhases(1)
   },
   methods: {
@@ -118,8 +132,8 @@ export default {
     },
     //  阶段下详情
     midClick(id) {
-      this.$router.push('/nextAtta')
-      localStorage.setItem('nextAttaId', id)
+      this.id = id
+      this.$router.push('/deliverable_list/' + id)
     },
   },
   components: {
