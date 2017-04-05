@@ -304,10 +304,9 @@ export default {
     '$route' (to, from) {
       const toDepth = to.path.split('/').length
       const fromDepth = from.path.split('/').length
-      console.log(toDepth, fromDepth)
       if (toDepth === 2) {
         this.id = ''
-        this.$router.go(0)
+        this.query(1)
       }
     }
   },

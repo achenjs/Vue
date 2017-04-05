@@ -35,7 +35,7 @@
             width="60"
             label="操作">
             <template scope="scope">
-              <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+              <el-button @click="midClick(scope.row.id)" :key="scope.row.id" type="text" size="small">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -58,11 +58,13 @@
               row-key="id"
               height="200"
               border
+              @select="handleSelect"
+              @select-all="handleSelectAll"
               @selection-change="changed"
               clearSelection="clearSelection"
               style="width: 100%">
                 <el-table-column
-                reserve-selection
+                :reserve-selection="true"
                 width="50"
                 align="center"
                 type="selection">
@@ -119,6 +121,7 @@ export default {
         id: '',
         selection: '',
         arrChecked: [],
+        arrId: []
       }
     },
     created() {
@@ -128,22 +131,28 @@ export default {
       this.queryAttachment(1)
     },
     methods: {
-      changed (selection, row) {
+      handleSelect() {
+
+      },
+      handleSelectAll() {
+
+      },
+      changed(selection, row) {
         this.selection = selection
       },
-      reset() {
+      reset(){
         for(var name in this.$data.form) {
           this.$data.form[name] = ''
         }
       },
-      addOpen() {
+      addOpen(){
         this.reset()
         this.addShow = true
       },
-      cancel() {
+      cancel(){
         this.addShow = false
       },
-      ensure() {
+      ensure(){
         var _this = this
         var arr = []
         for (var i=0; i < this.selection.length; i++) {
@@ -219,10 +228,11 @@ export default {
           }
         })
       },
-      //  根据id查看详情和修改
+      //  根据id查看详情
       midClick(id) {
         var _this = this
         this.addShow = true
+        console.log(id)
         this.id = id
         $.ajax({
           url: '/admin/api/v1/phases/' + id,
@@ -231,6 +241,7 @@ export default {
             _this.form.name = data.name
             _this.form.description = data.description
             var arrId = data.atts
+            _this.arrId = arrId
             for(var i = 0; i < arrId.length; i++) {
               _this.$refs.table.toggleRowSelection(_this.tableData1.find(d => d.id === arrId[i].id))
             }
@@ -263,6 +274,13 @@ export default {
             }
           }
         })
+      }
+    },
+    watch: {
+      tableData1: function() {
+        for(var i = 0; i < this.arrId.length; i++) {
+          this.$refs.table.toggleRowSelection(this.tableData1.find(d => d.id === this.arrId[i].id))
+        }
       }
     },
     components: {

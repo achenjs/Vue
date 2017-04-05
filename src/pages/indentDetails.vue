@@ -233,9 +233,9 @@ export default {
               break;
           }
           _this.details.price = userService.price
-          for (var i in data.items) {
+          for (var i = 0; i < data.items.length; i++) {
             var timer = data.items[i].gmt_create;
-			      var timer = new Date(timer);
+			      var timer = new Date(timer)
 					  timer.setTime(timer.getTime()+0);
 		        var year = timer.getUTCFullYear(),
       			month = timer.getUTCMonth()+1,
@@ -244,7 +244,7 @@ export default {
       			minute = timer.getUTCMinutes(),
       			second = timer.getUTCSeconds(),
      			  time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
-      		  data.items[i].gmt_create = year + "-" + month + "-" + date + "  " + hour + ":" + minute + ":" + second
+      		  data.items[i].gmt_create = time
             //  判断是否有头像
             var avatar_url = data.items[i].avatar_url
             if (avatar_url === null || avatar_url === '') {
@@ -255,7 +255,7 @@ export default {
             //  判断是否有上传附件
             var file_name = data.items[i].file_name
             if (file_name === null || file_name === '') {
-                data.items[i].file_name = '#'
+              data.items[i].file_name = '#'
             } else {
               $.ajax({
                 url: '/main/api/v1/files/' + data.items[i].file_name,
