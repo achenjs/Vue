@@ -56,7 +56,7 @@
               :data="tableData1"
               ref="table"
               row-key="id"
-              height="300"
+              height="200"
               border
               @selection-change="changed"
               clearSelection="clearSelection"
@@ -231,7 +231,7 @@ export default {
             _this.form.name = data.name
             _this.form.description = data.description
             var arrId = data.atts
-            for(var i=0; i<arrId.length; i++) {
+            for(var i = 0; i < arrId.length; i++) {
               _this.$refs.table.toggleRowSelection(_this.tableData1.find(d => d.id === arrId[i].id))
             }
           },

@@ -307,6 +307,7 @@ export default {
       console.log(toDepth, fromDepth)
       if (toDepth === 2) {
         this.id = ''
+        this.$router.go(0)
       }
     }
   },

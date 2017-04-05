@@ -56,7 +56,8 @@
             width="50"
             label="附件">
             <template scope="scope">
-              <a :href="scope.row.zip_url">下载</a>
+              <span v-if="scope.row.zip_url == '#'" style="color: #ececec; text-decoration: line-through;">下载</span>
+              <a v-else :href="scope.row.zip_url">下载</a>
             </template>
           </el-table-column>
           <el-table-column

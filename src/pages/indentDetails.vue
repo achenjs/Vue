@@ -235,15 +235,15 @@ export default {
           _this.details.price = userService.price
           for (var i in data.items) {
             var timer = data.items[i].gmt_create;
-			      var timer=new Date(timer);
+			      var timer = new Date(timer);
 					  timer.setTime(timer.getTime()+0);
-		        var year=timer.getUTCFullYear(),
-      			month=timer.getUTCMonth()+1,
-      			date=timer.getUTCDate(),
-      			hour=timer.getUTCHours(),
-      			minute=timer.getUTCMinutes(),
-      			second=timer.getUTCSeconds(),
-     			  time=year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second
+		        var year = timer.getUTCFullYear(),
+      			month = timer.getUTCMonth()+1,
+      			date = timer.getUTCDate(),
+      			hour = timer.getUTCHours(),
+      			minute = timer.getUTCMinutes(),
+      			second = timer.getUTCSeconds(),
+     			  time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
       		  data.items[i].gmt_create = year + "-" + month + "-" + date + "  " + hour + ":" + minute + ":" + second
             //  判断是否有头像
             var avatar_url = data.items[i].avatar_url
@@ -253,7 +253,8 @@ export default {
               data.items[i].avatar_url = URL + data.items[i].avatar_url
             }
             //  判断是否有上传附件
-            if (data.items[i].file_name === null || data.items[i].file_name === '') {
+            var file_name = data.items[i].file_name
+            if (file_name === null || file_name === '') {
                 data.items[i].file_name = '#'
             } else {
               $.ajax({
@@ -264,16 +265,16 @@ export default {
               })
             }
           }
-          var timer = userService.gmt_create;
-          var timer=new Date(timer);
-          timer.setTime(timer.getTime()+0);
-          var year=timer.getUTCFullYear(),
-          month=timer.getUTCMonth()+1,
-          date=timer.getUTCDate(),
-          hour=timer.getUTCHours(),
-          minute=timer.getUTCMinutes(),
-          second=timer.getUTCSeconds(),
-          time=year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second
+          var timer = userService.gmt_create
+          var timer = new Date(timer)
+          timer.setTime(timer.getTime()+0)
+          var year = timer.getUTCFullYear(),
+          month = timer.getUTCMonth()+1,
+          date = timer.getUTCDate(),
+          hour = timer.getUTCHours(),
+          minute = timer.getUTCMinutes(),
+          second = timer.getUTCSeconds(),
+          time = year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second
           userService.gmt_create = year + "-" + month + "-" + date
           _this.tableData.push(userService)
           _this.message = data.items
@@ -295,7 +296,6 @@ export default {
     //  回复消息
     messages() {
       const _this = this
-
       $.ajax({
         url: '/admin/api/v1/user_service_items/message',
         type: 'post',

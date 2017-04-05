@@ -35,7 +35,7 @@
             label="附件"
             width="60">
             <template scope="scope">
-              <span v-if="scope.row.url == '#'" style="color: #eeeeee;">下载</span>
+              <span v-if="scope.row.url == '#'" style="color: #ececec; text-decoration: line-through;">下载</span>
               <a v-else :href="scope.row.url">下载</a>
             </template>
           </el-table-column>
