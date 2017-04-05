@@ -324,7 +324,7 @@ import upload from '../assets/js/upload'
       }
     },
     created() {
-      this.bpDetailsId = localStorage.getItem('bpDetailsId')
+      this.bpDetailsId = this.$route.params.id
       this.details()
     },
     methods: {
@@ -343,7 +343,7 @@ import upload from '../assets/js/upload'
               error: function(err) {
                 if (err.status == '401') {
                   _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/admin/signin')
+                  _this.$router.push('/signin')
                 }
               }
             })
@@ -363,7 +363,7 @@ import upload from '../assets/js/upload'
               error: function(err) {
                 if (err.status == '401') {
                   _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/admin/signin')
+                  _this.$router.push('/signin')
                 }
               }
             })
@@ -400,12 +400,12 @@ import upload from '../assets/js/upload'
                 message: result.message,
                 type: 'success'
               })
-              _this.$router.push('/admin/bp_list')
+              _this.$router.push('/bp_list')
             },
             error: function(err) {
               if (err.status == '401') {
                 _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+                _this.$router.push('/signin')
               }
             }
           })
@@ -423,7 +423,7 @@ import upload from '../assets/js/upload'
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
@@ -443,7 +443,7 @@ import upload from '../assets/js/upload'
             error: function(err) {
               if (err.status == '401') {
                 _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+                _this.$router.push('/signin')
               }
             }
           })

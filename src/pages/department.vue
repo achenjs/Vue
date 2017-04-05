@@ -120,7 +120,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
@@ -150,7 +150,7 @@ export default {
             error: function(err) {
               if (err.status == '401') {
                 _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+                _this.$router.push('/signin')
               }
             }
           })
@@ -171,7 +171,7 @@ export default {
             error: function(err) {
               if (err.status == '401') {
                 _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+                _this.$router.push('/signin')
               }
             }
           })

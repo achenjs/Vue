@@ -63,7 +63,7 @@ export default {
   methods: {
     //  进入交付物详情
     details(id) {
-      this.$router.push('/admin/attaDetails')
+      this.$router.push('/attaDetails')
       localStorage.setItem('attaDetailsId', id)
     },
     //  阶段下交付物列表
@@ -83,7 +83,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
@@ -109,7 +109,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           } else {
             _this.$message.error(JSON.parse(err.responseText).result)
           }

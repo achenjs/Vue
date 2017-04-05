@@ -115,11 +115,11 @@ export default {
       error: function(err) {
         if (err.status == '401') {
           _this.$message.error(JSON.parse(err.responseText).message)
-          _this.$router.push('/admin/signin')
+          _this.$router.push('/signin')
         }
       }
     })
-    this.ProjectDetailsId = localStorage.getItem('ProjectDetailsId')
+    this.ProjectDetailsId = this.$route.params.id
     this.projects()
   },
   methods: {
@@ -135,7 +135,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
@@ -179,18 +179,18 @@ export default {
             message: result.message,
             type: 'success'
           })
-          _this.$router.push('/admin/project_list')
+          _this.$router.push('/project_list')
         },
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
     },
     cancel() {
-      this.$router.push('/admin/project_list')
+      this.$router.push('/project_list')
     }
   }
 }

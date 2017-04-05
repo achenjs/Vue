@@ -183,7 +183,7 @@ export default {
     }
   },
   created() {
-    this.form.usiid = this.$route.query.id
+    this.form.usiid = this.$route.params.id
     var _this = this
     //  获取所有服务包类
     // $.ajax({
@@ -248,7 +248,7 @@ export default {
             //  判断是否有头像
             var avatar_url = data.items[i].avatar_url
             if (avatar_url === null || avatar_url === '') {
-              data.items[i].avatar_url = '../../assets/logo.pn'
+              data.items[i].avatar_url = '../../assets/logo.png'
             } else {
               data.items[i].avatar_url = URL + data.items[i].avatar_url
             }
@@ -281,7 +281,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
@@ -295,7 +295,7 @@ export default {
     //  回复消息
     messages() {
       const _this = this
-      
+
       $.ajax({
         url: '/admin/api/v1/user_service_items/message',
         type: 'post',
@@ -346,7 +346,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
