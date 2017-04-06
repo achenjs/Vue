@@ -48,7 +48,10 @@ module.exports = {
               const permissions = userInfo.permissions;
               localStorage.setItem('permissions', permissions);
               setTimeout(function() {
-                  _this.$router.push({path: '/settings', query: 1})
+
+                str_path = _this.$router.options.routes[0].path
+
+                  _this.$router.push({path: str_path, query: 1})
               }, 1000)
             })
             .catch((err) => {
@@ -63,7 +66,9 @@ module.exports = {
       var _this = this
       axios.get('/admin/api/v1/')
         .then((result) => {
-          _this.$router.push('/settings')
+          str_path = _this.$router.options.routes[0].path
+
+          _this.$router.push(str_path)
         })
         .catch((err) => {
           _this.$message.error(err.message)

@@ -29,8 +29,6 @@ import NotFound from '@/pages/notFound.vue'
 Vue.use(Router)
 var permissions = localStorage.getItem('permissions')
 
-console.log(permissions)
-
 var entries = []
 
 if(permissions != null)
@@ -283,7 +281,6 @@ entries.push({
         redirect: {path: '/404'},
         hidden: true
       })
-
 
 var route = {
     mode: 'history',
