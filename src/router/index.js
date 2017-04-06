@@ -118,14 +118,12 @@ if(permissions != null)
       entries.push(child)
   }
 
-
   kids = []
 
   var canEditServiceCategory = permissions.indexOf('ServiceCategoryManagement') > -1
 
   if(canEditServiceCategory)
   {
-    console.log('yyyyyyyyyyyyyyyyy')
     kids.push({path: '/service_category', component: service_category, iconCls: 'icon-page7', name: '服务项类别管理'})
   }
 
@@ -249,6 +247,7 @@ if(permissions != null)
             children: kids
           })
   }
+}
 
 entries.push(      {
         path: '',
@@ -284,7 +283,7 @@ entries.push({
         redirect: {path: '/404'},
         hidden: true
       })
-}
+
 
 var route = {
     mode: 'history',
