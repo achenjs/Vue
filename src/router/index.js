@@ -276,6 +276,13 @@ entries.push({
         hidden: true
       }
   )
+
+entries.push({
+  path: '/home',
+  component: Home,
+  hidden: true
+})
+
 entries.push({
         path: '*',
         redirect: {path: '/404'},

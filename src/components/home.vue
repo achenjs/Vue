@@ -75,7 +75,8 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
   	created() {
 		 	this.updateUser()
 			if (this.$route.query === 1) {
-				this.$router.go(0)
+				var start_path = this.$router.options.routes[0].path
+				this.$router.push(start_path)
 			}
   	},
 		methods: {
