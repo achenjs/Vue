@@ -13,9 +13,9 @@ const router = route.router
 
 axios.defaults.withCredentials = true
 
-router.beforeEach ((to, from, next) => {
-  next()
-})
+// router.beforeEach ((to, from, next) => {
+//   next()
+// })
 
 axios.interceptors.response.use(
   response => {
