@@ -277,7 +277,7 @@ export default {
   created() {
     var _this = this
     this.id = this.$route.params.id
-    
+
     if (this.id == undefined) {
       this.id = ''
     }
@@ -399,7 +399,7 @@ export default {
         success: function(result) {
           var data = result.result
           _this.total = data.total
-          for (var i in data.items) {
+          for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
   					timer.setTime(timer.getTime()+0)
@@ -461,7 +461,7 @@ export default {
         success: function(result) {
           var data = result.result
           _this.total = data.total
-          for (var i in data.items) {
+          for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
   					timer.setTime(timer.getTime()+0)

@@ -110,7 +110,7 @@
         </div>
       </div>
     </transition>
-    <div>
+    <div style="margin-top: 20px;">
       <div class="chatroom">
         <h3>留言板</h3>
         <div class="box" ref="box">
@@ -294,7 +294,11 @@ export default {
               $.ajax({
                 url: '/main/api/v1/files/' + data.items[i].file_name,
                 success: function(result) {
-                  data.items[i].file_name = result
+                  if (result == '') {
+                    data.items[i].file_name = '#'
+                  } else {
+                    data.items[i].file_name = result
+                  }
                 }
               })
             }

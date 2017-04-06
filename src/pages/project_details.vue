@@ -5,48 +5,12 @@
         <el-form-item label="项目名称">
           <el-input placeholder="项目名称" v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="负责人">
-          <el-input placeholder="负责人" v-model="form.contact_name"></el-input>
-        </el-form-item>
         <el-form-item label="所属行业">
           <el-select v-model="form.industry" placeholder="请选择">
             <el-option
             v-for="(key, index) in industries"
             :label="key"
             :value="index"
-            :key="key">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="有利条件">
-          <el-input type="textarea" v-model="form.advantage" placeholder="有利条件" :maxlength="100" :rows="4"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号">
-          <el-input placeholder="手机号" v-model="form.contact_phone"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱">
-          <el-input placeholder="邮箱" v-model="form.contact_email"></el-input>
-        </el-form-item>
-        <el-form-item label="所在阶段">
-          <el-input placeholder="所在阶段" v-model="form.phase_index"></el-input>
-        </el-form-item>
-        <!-- <el-form-item label="完成时间">
-          <el-date-picker
-            format="yyyy-MM-dd"
-            v-model="form.gmt_modified"
-            type="date"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item> -->
-        <el-form-item label="附件">
-          <el-input placeholder="附件" v-model="form.bp_url" :disabled="true"></el-input>
-        </el-form-item>
-        <el-form-item label="审核">
-          <el-select v-model="form.status">
-            <el-option
-            v-for="key in examines"
-            :label="key.label"
-            :value="key.value"
             :key="key">
             </el-option>
           </el-select>
@@ -90,16 +54,8 @@ export default {
       ProjectDetailsId: '',
       form: {
         name: '',
-        contact_name: '',
         industry: '',
-        contact_phone: '',
-        phase_index: '',
-        status: '',
         description: '',
-        contact_email: '',
-        bp_url: '',
-        gmt_modified: '',
-        advantage: ''
       }
     }
   },

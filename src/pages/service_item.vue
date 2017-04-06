@@ -180,9 +180,7 @@ export default {
       //  上传
       uploadFile(ele) {
         var _this = this
-        upload(ele.target, 2, () => {
-          _this.form.zip_url = $("#hiddens").val()
-        })
+        upload(ele.target, 2)
       },
       reset() {
         for(var name in this.$data.form) {
@@ -199,6 +197,7 @@ export default {
       },
       ensure() {
         var _this = this
+        this.form.zip_url = $("#hiddens").val()
         if (this.id === '') {
           //  新增
           $.ajax({
@@ -263,7 +262,11 @@ export default {
                 $.ajax({
                   url: '/main/api/v1/files/' + data.items[i].zip_url,
                   success: function(result) {
-                    data.items[i].zip_url = result
+                    if (result == '') {
+                      data.items[i].zip_url = '#'
+                    } else {
+                      data.items[i].zip_url = result
+                    }
                   }
                 })
               }

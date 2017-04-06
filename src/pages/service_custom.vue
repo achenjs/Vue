@@ -167,7 +167,11 @@ export default {
               $.ajax({
                 url: '/main/api/v1/files/' + data.items[i].file_name,
                 success: function(result) {
-                  data.items[i].file_name = result
+                  if (result == '') {
+                    data.items[i].file_name = '#'
+                  } else {
+                    data.items[i].file_name = result
+                  }
                 }
               })
             }

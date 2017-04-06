@@ -113,7 +113,11 @@ export default {
               $.ajax({
                 url: '/main/api/v1/files/' + data.items[i].url,
                 success: function(result) {
-                  data.items[i].url = result
+                  if (result == '') {
+                    data.items[i].url = '#'
+                  } else {
+                    data.items[i].url = result
+                  }
                 }
               })
             }
