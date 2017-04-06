@@ -68,7 +68,7 @@ module.exports = function uploadFile(f, type, fn){
      }
   } else {
     var url1 = 'https://apl-docs.oss-cn-beijing.aliyuncs.com'
-    if(!/.(doc|docx|ppt|pptx|xls|xlsx|txt|rtf|ppt|bmp|png|jpg|jpeg|zip|prt|stp|dxf|dwg|sch|pcb|dsn|brd)$/.test(k)){
+    if(!/.(doc|docx|ppt|pptx|xls|xlsx|txt|rtf|ppt|bmp|png|jpg|jpeg|zip|prt|stp|dxf|dwg|sch|pcb|dsn|brd|pdf)$/.test(k)){
        $('.xs').text('文件格式有误')
        $('.xs').stop().animate({'top': '10px'}, 300)
        setTimeout(function(){

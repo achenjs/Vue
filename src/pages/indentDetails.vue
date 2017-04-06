@@ -54,19 +54,6 @@
           <el-input placeholder="价格" v-model="details.price"></el-input>
         </div>
       </el-col>
-      <!-- <el-col :span="8">
-        <div style="width: 80%; margin: 0 auto;">
-          <label for="">服务项类别</label>
-          <el-select placeholder="请选择" v-model="details.category_id">
-            <el-option
-            v-for="item in servers"
-            :label="item.name"
-            :value="item.id"
-            :key="item.id">
-            </el-option>
-          </el-select>
-        </div>
-      </el-col> -->
       <el-col :span="8">
         <div style="width: 80%; margin: 0 auto;">
           <label for="">订单状态</label>
@@ -203,6 +190,11 @@ export default {
     this.UserDetail()
   },
   methods: {
+    reset() {
+      for(var name in this.$data.form) {
+        this.$data.form[name] = ''
+      }
+    },
     //  获取系统服务项详情
     UserDetail() {
       const _this = this
@@ -233,12 +225,12 @@ export default {
               break;
           }
           _this.details.price = userService.price
-          for (var i = 0; i < data.items.length; i++) {
+          for(var i=0; i<data.items.length; i++) {
             var timer = data.items[i].gmt_create;
 			      var timer = new Date(timer)
-					  timer.setTime(timer.getTime()+0);
+					  timer.setTime(timer.getTime() + 0)
 		        var year = timer.getUTCFullYear(),
-      			month = timer.getUTCMonth()+1,
+      			month = timer.getUTCMonth() + 1,
       			date = timer.getUTCDate(),
       			hour = timer.getUTCHours(),
       			minute = timer.getUTCMinutes(),
@@ -257,27 +249,31 @@ export default {
             if (file_name === null || file_name === '') {
               data.items[i].file_name = '#'
             } else {
+              var index = i
+              console.log(index)
               $.ajax({
                 url: '/main/api/v1/files/' + data.items[i].file_name,
                 success: function(result) {
-                  data.items[i].file_name = result
+                  data.items[index].file_name = result
                 }
               })
             }
           }
           var timer = userService.gmt_create
-          var timer = new Date(timer)
-          timer.setTime(timer.getTime()+0)
-          var year = timer.getUTCFullYear(),
-          month = timer.getUTCMonth()+1,
-          date = timer.getUTCDate(),
-          hour = timer.getUTCHours(),
-          minute = timer.getUTCMinutes(),
-          second = timer.getUTCSeconds(),
-          time = year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second
+          var timers = new Date(timer)
+          timers.setTime(timers.getTime()+0)
+          var year = timers.getUTCFullYear(),
+          month = timers.getUTCMonth()+1,
+          date = timers.getUTCDate(),
+          hour = timers.getUTCHours(),
+          minute = timers.getUTCMinutes(),
+          second = timers.getUTCSeconds();
+          // time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
           userService.gmt_create = year + "-" + month + "-" + date
           _this.tableData.push(userService)
-          _this.message = data.items
+          setTimeout(function() {
+            _this.message = data.items
+          }, 1000)
         },
         error: function(err) {
           if (err.status == '401') {
@@ -304,6 +300,10 @@ export default {
         success: function(result) {
           _this.UserDetail()
           _this.$refs.box.scrollTop = _this.$refs.box.scrollHeight
+          _this.reset()
+          var file = $('#upLog')
+          file.after(file.clone().val(""))
+          file.remove()
         }
       })
     },

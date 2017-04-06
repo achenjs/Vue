@@ -41,7 +41,7 @@
         label="操作">
         <template scope="scope">
           <el-button v-if="scope.$index != attaLength" :disabled="true" type="text" size="small">- -</el-button>
-          <el-button v-else-if="status == ('已确认' || '已驳回')" type="text"  :disabled="true" size="small">- -</el-button>
+          <el-button v-else-if="status == '已确认' || status == '已驳回' || status == '已忽略'" type="text" :disabled="true" size="small">- -</el-button>
           <el-button v-else @click="midClick(scope.row.id)" type="text" size="small">评审</el-button>
         </template>
       </el-table-column>
@@ -159,7 +159,7 @@ export default {
       } else {
         this.form.status = 'Rejected'
       }
-      this.form.status = 'Confirmed'
+      // this.form.status = 'Confirmed'
       this.$confirm('是否继续?', '提示', {
          confirmButtonText: '确定',
          cancelButtonText: '取消',
@@ -205,7 +205,9 @@ export default {
              type: 'success'
            })
            this.addShow = false
-           this.$router.go(0)
+           // 重新刷新数据
+           this.details(1)
+           this.isStatus()
            this.reset()
          }).catch((err) => {
            this.$message.error(err)
@@ -267,7 +269,9 @@ export default {
              type: 'success'
            })
            this.addShow = false
-           this.$router.go(0)
+           // 重新刷新数据
+           this.details(1)
+           this.isStatus()
            this.reset()
          }).catch((err) => {
            this.$message.error(err)
