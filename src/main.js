@@ -8,7 +8,7 @@ require('es6-promise').polyfill()
 import axios from 'axios'
 import 'element-ui/lib/theme-default/index.css'
 import router from './router'
-
+console.log(router)
 axios.defaults.withCredentials = true
 
 axios.interceptors.response.use(
@@ -19,7 +19,7 @@ axios.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-        router.push('/admin/signin')
+        router.a.push('/admin/signin')
       }
     }
     return Promise.reject(error.response.data)   // 返回接口返回的错误信息

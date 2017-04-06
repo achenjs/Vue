@@ -27,9 +27,16 @@ import bp_details from '@/pages/bp_details.vue'
 import NotFound from '@/pages/notFound.vue'
 
 Vue.use(Router)
-var permissions = localStorage.getItem('permissions')
+
 
 var entries = []
+
+
+function init_route()
+{
+var permissions = localStorage.getItem('permissions')
+
+entries.splice(0, entries.length)
 
 if(permissions != null)
 {
@@ -247,13 +254,6 @@ if(permissions != null)
   }
 }
 
-// entries.push(      {
-//         path: '',
-//         name: '',
-//         redirect: '/signin',
-//         hidden: true
-//       })
-
 entries.push(      {
         path: '/',
         name: '',
@@ -282,10 +282,20 @@ entries.push({
         hidden: true
       })
 
+}
+
 var route = {
     mode: 'history',
     base: '/admin/',
-    routes: entries
+    routes: init_route()
 }
 
-export default new Router(route)
+
+exports.init_route = init_route
+exports.router = new Router(route)
+
+// export default {
+//   a: init_route,
+//   b: new Router(route)
+// }
+// export default new Router(route)

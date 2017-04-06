@@ -1,5 +1,5 @@
 const axios = require('axios')
-
+const index  = require('../../router')
 module.exports = {
   data() {
     return {
@@ -48,6 +48,9 @@ module.exports = {
               const permissions = userInfo.permissions
               localStorage.removeItem('permissions')
               localStorage.setItem('permissions', permissions)
+
+              index.init_route()
+
               _this.$router.push({path: '/', query: 1})
               // _this.$router.go(0)
             })
