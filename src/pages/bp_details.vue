@@ -374,14 +374,13 @@ import upload from '../assets/js/upload'
       //  上传
       uploadFile(ele) {
         var _this = this
-        upload(ele.target, 2, () => {
-          _this.form.bp_url = $("#hiddens").val()
-        })
+        upload(ele.target, 2)
       },
       //  修改BP
       submitBP() {
         var _this = this
         this.form.city = this.city_id
+        _this.form.bp_url = $("#hiddens").val()
         if (this.form.start_from === '') {
           this.form.start_from = ''
         } else {

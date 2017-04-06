@@ -239,9 +239,6 @@ export default {
     //   .catch((err) => {
     //     console.log(err)
     //   })
-    if (this.$route.query == 1) {
-      this.$router.go(0)
-    }
 
     $.ajax({
       url: '/main/api/v1/industries',

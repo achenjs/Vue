@@ -9,23 +9,23 @@ function createXmlHttpRequest(){
 }
 
 function uploadComplete(evt){
-   $('.xs').text('上传成功')
-   $('.xs').stop().animate({'top': '10px'}, 300)
-   setTimeout(function(){
-      $('.xs').stop().animate({'top': '-53px'}, 300)
-   },1500)
-    var obj = JSON.parse(evt.target.responseText).obj
-    if (obj) {
-      $('#hiddens').val(obj)
-      $('#url').val(obj)
-    }
+  var obj = JSON.parse(evt.target.responseText).obj
+  if (obj) {
+    $('#hiddens').val(obj)
+    $('#url').val(obj)
+    $('.xs').text('上传成功')
+    $('.xs').stop().animate({'top': '10px'}, 100)
+    setTimeout(function(){
+       $('.xs').stop().animate({'top': '-53px'}, 200)
+    },1500)
+  }
 }
 
 function uploadFailed(evt) {
    $('.xs').text('上传失败')
-   $('.xs').stop().animate({'top':'10px'}, 300)
+   $('.xs').stop().animate({'top':'10px'}, 100)
    setTimeout(function(){
-     $('.xs').stop().animate({'top':'-50px'}, 300)
+     $('.xs').stop().animate({'top':'-53px'}, 200)
    }, 1500)
 }
 
@@ -38,11 +38,11 @@ module.exports = function uploadFile(f, type, fn){
   if (type === 1) {
     // 上传头像
     var url1 = 'https://apl-static.oss-cn-beijing.aliyuncs.com'
-    if(!/.(png|jpg|jpeg)$/.test(k)){
+    if(!/.(png|jpg|jpeg|gif|ico)$/.test(k)){
        $('.xs').text('文件格式有误')
-       $('.xs').stop().animate({'top': '10px'}, 300)
+       $('.xs').stop().animate({'top': '10px'}, 100)
        setTimeout(function(){
-          $('.xs').stop().animate({'top':'-50px'}, 300)
+          $('.xs').stop().animate({'top':'-53px'}, 200)
        }, 1500)
        return false
      } else {
@@ -60,9 +60,7 @@ module.exports = function uploadFile(f, type, fn){
             xhr.addEventListener("error", uploadFailed, false)
             xhr.open('POST', url1, true)
             xhr.send(fd)
-            setTimeout(function() {
-              fn && fn()
-            }, 3000)
+            fn && fn()
           }
        })
      }
@@ -70,9 +68,9 @@ module.exports = function uploadFile(f, type, fn){
     var url1 = 'https://apl-docs.oss-cn-beijing.aliyuncs.com'
     if(!/.(doc|docx|ppt|pptx|xls|xlsx|txt|rtf|ppt|bmp|png|jpg|jpeg|zip|prt|stp|dxf|dwg|sch|pcb|dsn|brd|pdf)$/.test(k)){
        $('.xs').text('文件格式有误')
-       $('.xs').stop().animate({'top': '10px'}, 300)
+       $('.xs').stop().animate({'top': '10px'}, 100)
        setTimeout(function(){
-          $('.xs').stop().animate({'top':'-50px'}, 300)
+          $('.xs').stop().animate({'top':'-53px'}, 200)
        }, 1500)
        return false
      } else {
@@ -90,9 +88,7 @@ module.exports = function uploadFile(f, type, fn){
             xhr.addEventListener("error", uploadFailed, false)
             xhr.open('POST', url1, true)
             xhr.send(fd)
-            setTimeout(function() {
-              fn && fn()
-            }, 3000)
+            fn && fn()
           }
        })
      }

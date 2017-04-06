@@ -44,13 +44,11 @@ module.exports = {
           })
           axios.get('/admin/api/v1/profile')
             .then((result) => {
-              const userInfo = result.data.result;
-              const permissions = userInfo.permissions;
-              localStorage.setItem('permissions', permissions);
-              setTimeout(function() {
-                str_path = _this.$router.options.routes[0].path
-                _this.$router.push(str_path)
-              }, 1000)
+              const userInfo = result.data.result
+              const permissions = userInfo.permissions
+              localStorage.removeItem('permissions')
+              localStorage.setItem('permissions', permissions)
+              _this.$router.go(0)
             })
             .catch((err) => {
               _this.$message.error(err.message)
@@ -64,8 +62,8 @@ module.exports = {
       var _this = this
       axios.get('/admin/api/v1/')
         .then((result) => {
-          str_path = _this.$router.options.routes[0].path
-
+          var str_path = _this.$router.options.routes[0].path
+          // console.log(_this.$router.options)
           _this.$router.push(str_path)
         })
         .catch((err) => {

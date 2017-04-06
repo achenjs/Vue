@@ -108,7 +108,7 @@
           <a href="javascript:;" class="file" style="vertical-align: middle;">上传附件
             <input type="file" name="" id="upLog" @change="uploadFile($event)">
           </a>
-          <input type="hidden" id="hiddens" v-model="form.file_name">
+          <input type="hidden" id="hiddens">
           <el-input type="textarea" :row="5" placeholder="在此输入回复内容" v-model="form.content"></el-input>
         </div>
       </div>
@@ -190,11 +190,6 @@ export default {
     this.UserDetail()
   },
   methods: {
-    reset() {
-      for(var name in this.$data.form) {
-        this.$data.form[name] = ''
-      }
-    },
     //  获取系统服务项详情
     UserDetail() {
       const _this = this
@@ -225,7 +220,8 @@ export default {
               break;
           }
           _this.details.price = userService.price
-          for(var i=0; i<data.items.length; i++) {
+          for (let i in data.items) {
+          // for(var i=0; i<data.items.length; i++) {
             var timer = data.items[i].gmt_create;
 			      var timer = new Date(timer)
 					  timer.setTime(timer.getTime() + 0)
@@ -245,16 +241,13 @@ export default {
               data.items[i].avatar_url = URL + data.items[i].avatar_url
             }
             //  判断是否有上传附件
-            var file_name = data.items[i].file_name
-            if (file_name === null || file_name === '') {
+            if (data.items[i].file_name === null || data.items[i].file_name === '') {
               data.items[i].file_name = '#'
             } else {
-              var index = i
-              console.log(index)
               $.ajax({
                 url: '/main/api/v1/files/' + data.items[i].file_name,
                 success: function(result) {
-                  data.items[index].file_name = result
+                  data.items[i].file_name = result
                 }
               })
             }
@@ -271,9 +264,8 @@ export default {
           // time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
           userService.gmt_create = year + "-" + month + "-" + date
           _this.tableData.push(userService)
-          setTimeout(function() {
-            _this.message = data.items
-          }, 1000)
+          _this.message = data.items
+          _this.$refs.box.scrollTop = _this.$refs.box.scrollHeight
         },
         error: function(err) {
           if (err.status == '401') {
@@ -285,25 +277,25 @@ export default {
     },
     //  上传
     uploadFile(ele) {
-      upload(ele.target, '', () => {
-        this.form.file_name = $('#hiddens').val()
-      })
+      upload(ele.target, '')
     },
     //  回复消息
     messages() {
       const _this = this
+      this.form.file_name = $('#hiddens').val()
       $.ajax({
         url: '/admin/api/v1/user_service_items/message',
         type: 'post',
         contentType: 'application/json',
         data: JSON.stringify(this.form),
         success: function(result) {
+          _this.$message({
+            message: result.result,
+            type: 'success'
+          })
           _this.UserDetail()
-          _this.$refs.box.scrollTop = _this.$refs.box.scrollHeight
-          _this.reset()
-          var file = $('#upLog')
-          file.after(file.clone().val(""))
-          file.remove()
+          _this.form.content = ''
+          _this.form.file_name = ''
         }
       })
     },
