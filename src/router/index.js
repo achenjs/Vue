@@ -257,7 +257,7 @@ if(permissions != null)
 entries.push(      {
         path: '/',
         name: '',
-        component: Home,
+        redirect: 'signin',
         hidden: true
       })
 
