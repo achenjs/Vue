@@ -101,9 +101,7 @@ export default {
       //  上传
       uploadFile(ele) {
         var _this = this
-        upload(ele.target, 2, () => {
-          _this.form.url = $("#hiddens").val()
-        })
+        upload(ele.target, 2)
       },
       reset() {
         for(var name in this.$data.form) {
@@ -144,6 +142,7 @@ export default {
           })
         } else {
           //  修改
+          _this.form.url = $("#hiddens").val()
           $.ajax({
             url: '/admin/api/v1/attachments/' + this.id,
             type: 'post',
@@ -187,7 +186,11 @@ export default {
                 $.ajax({
                   url: '/main/api/v1/files/' + data.items[i].url,
                   success: function(result) {
-                    data.items[i].url = result
+                    if (result == '') {
+                      data.items[i].url = '#'
+                    } else {
+                      data.items[i].url = result
+                    }
                   }
                 })
               }
