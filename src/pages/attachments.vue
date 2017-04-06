@@ -180,7 +180,7 @@ export default {
             var data = result.result
             _this.loading = false
             _this.total = data.total
-            for (var i in data.items) {
+            for (let i in data.items) {
               if (data.items[i].url === '' || data.items[i].url === null) {
                   data.items[i].url = '#'
               } else {

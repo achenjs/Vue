@@ -9,11 +9,13 @@ import axios from 'axios'
 import 'element-ui/lib/theme-default/index.css'
 import route from './router'
 
-console.log(route)
-
 const router = route.router
 
 axios.defaults.withCredentials = true
+
+router.beforeEach ((to, from, next) => {
+  next()
+})
 
 axios.interceptors.response.use(
   response => {

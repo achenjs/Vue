@@ -52,7 +52,6 @@ module.exports = {
               index.default.init_route()
 
               var start_path = _this.$router.options.routes[0].path
-
               _this.$router.push(start_path)
             })
             .catch((err) => {
@@ -68,7 +67,6 @@ module.exports = {
       axios.get('/admin/api/v1/')
         .then((result) => {
           var start_path = _this.$router.options.routes[0].path
-
           _this.$router.push(start_path)
         })
         .catch((err) => {

@@ -34,20 +34,29 @@
       </el-table-column>
       <el-table-column
         align="center"
+        prop="price"
+        label="订单金额(硬豆)"
+        width="110"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        align="center"
         prop="status"
         label="订单状态"
         width="70"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
+        fixed="right"
         align="center"
-        prop="price"
-        label="订单金额(硬豆)"
-        width="110"
-        show-overflow-tooltip>
+        label="操作"
+        width="60">
+        <template scope="scope">
+          <el-button @click="midClick(scope)" type="text" size="small">编辑</el-button>
+        </template>
       </el-table-column>
     </el-table>
-    <el-row style="margin-top: 30px;">
+    <!-- <el-row style="margin-top: 30px;">
       <el-col :span="8">
         <div style="width: 80%;">
           <label for="">价格(硬豆)</label>
@@ -67,14 +76,40 @@
           </el-select>
         </div>
       </el-col>
-    </el-row>
-    <el-row>
+    </el-row> -->
+    <!-- <el-row>
       <el-col :span="8" :offset="8">
         <div style="width: 80%; margin: 20px auto;">
           <el-button type="primary" style="width: 200px;" @click="midService">提交</el-button>
         </div>
       </el-col>
-    </el-row>
+    </el-row> -->
+    <transition name="fade">
+      <div class="modal" v-if="addShow">
+        <div class="modal-dialog">
+          <div class="modal-header">
+            <span>修改服务项</span>
+          </div>
+          <div class="modal-content">
+            <label for="">订单金额（硬豆）</label>
+            <el-input placeholder="订单金额（硬豆）" v-model="details.price"></el-input>
+            <label for="">订单状态</label>
+            <el-select placeholder="请选择" v-model="details.status">
+              <el-option
+              v-for="item in conditions"
+              :label="item.label"
+              :value="item.value"
+              :key="item.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="modal-footer">
+            <el-button type="primary" @click="midService">确认</el-button>
+            <el-button type="primary" @click="cancel">取消</el-button>
+          </div>
+        </div>
+      </div>
+    </transition>
     <div>
       <div class="chatroom">
         <h3>留言板</h3>
@@ -133,6 +168,7 @@ export default {
         status: '',
         price: '',
       },
+      addShow: false,
       conditions: [
         {
           value: 'Paid',
@@ -190,9 +226,20 @@ export default {
     this.UserDetail()
   },
   methods: {
+    midClick(scope) {
+      this.addShow = true
+      var price = scope.row.price
+      var status = scope.row.status
+      this.details.price = price
+      this.details.status = status
+    },
+    cancel() {
+      this.addShow = false
+    },
     //  获取系统服务项详情
     UserDetail() {
       const _this = this
+      this.tableData = []
       $.ajax({
         url: '/admin/api/v1/user_service_item/messages/' + this.form.usiid,
         success: function(result) {
@@ -334,6 +381,7 @@ export default {
             message: result.message,
             type: 'success'
           })
+          _this.UserDetail()
         },
         error: function(err) {
           if (err.status == '401') {
