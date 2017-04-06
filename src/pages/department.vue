@@ -146,6 +146,7 @@ export default {
                 message: result.message,
                 type: 'success'
               })
+              _this.query(_this.page)
             },
             error: function(err) {
               if (err.status == '401') {

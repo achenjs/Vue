@@ -48,10 +48,8 @@ module.exports = {
               const permissions = userInfo.permissions;
               localStorage.setItem('permissions', permissions);
               setTimeout(function() {
-
                 str_path = _this.$router.options.routes[0].path
-
-                  _this.$router.push({path: str_path, query: 1})
+                _this.$router.push(str_path)
               }, 1000)
             })
             .catch((err) => {
