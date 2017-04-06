@@ -48,7 +48,8 @@ module.exports = {
               const permissions = userInfo.permissions
               localStorage.removeItem('permissions')
               localStorage.setItem('permissions', permissions)
-              _this.$router.go(0)
+              _this.$router.push({path: '/', query: 1})
+              // _this.$router.go(0)
             })
             .catch((err) => {
               _this.$message.error(err.message)
@@ -64,7 +65,7 @@ module.exports = {
         .then((result) => {
           var str_path = _this.$router.options.routes[0].path
           // console.log(_this.$router.options)
-          _this.$router.push(str_path)
+          _this.$router.push('/')
         })
         .catch((err) => {
           _this.$message.error(err.message)

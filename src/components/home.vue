@@ -74,6 +74,9 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 		},
   	created() {
 		 	this.updateUser()
+			if (this.$route.query === 1) {
+				this.$router.go(0)
+			}
   	},
 		methods: {
 			//	获取用户信息
