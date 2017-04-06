@@ -8,7 +8,7 @@
 					<div class="avatar">
 						<input type="file" name="" value="" @change="uploadFile($event)" id="up" class="uploadInput">
 						<input type="hidden" name="" value="" id="url">
-						<img v-if="User.avatar_url === ''" src="../assets/images/2.gif" width="100%" height="100%" alt="图片">
+						<img v-if="User.avatar_url == '#'" src="../assets/images/2.gif" width="100%" height="100%" alt="图片">
 						<img v-else :src="User.avatar_url" alt="图片" width="100%" height="100%">
 					</div>
 					<div class="name">
@@ -89,7 +89,11 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 						_this.User.email = data.email
 						_this.User.name = data.name
 						_this.User.role_name = data.role_name
-						_this.User.avatar_url = data.avatar_url === '' ? '' :  URL + data.avatar_url
+						if (data.avatar_url === null || data.avatar_url === '') {
+							_this.User.avatar_url = '#'
+						} else {
+							_this.User.avatar_url = URL + data.avatar_url
+						}
 					}
 				})
 			},

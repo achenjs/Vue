@@ -1,7 +1,7 @@
 <template>
   <div class="signin">
     <el-form label-position="left" label-width="0px" class="demo-ruleForm login-container">
-      <h3 class="title">洪泰孵化器后台管理系统</h3>
+      <h3 class="title">洪泰智造工场后台管理系统</h3>
       <el-form-item>
         <el-input type="text" v-model="form.username" auto-complete="on" placeholder="账号"></el-input>
       </el-form-item>

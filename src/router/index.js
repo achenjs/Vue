@@ -32,7 +32,7 @@ Vue.use(Router)
 var entries = []
 
 
-function init_route()
+var init_route = function ()
 {
 var permissions = localStorage.getItem('permissions')
 
@@ -61,7 +61,7 @@ if(permissions != null)
   if(canShowStartupList || canCreateStartup)
   {
         var child = {
-        path: '/',
+        path: '/admin_list',
         name: '用户管理',
         iconCls: 'icon-user',
         component: Home,
@@ -75,7 +75,7 @@ if(permissions != null)
   if(permissions.indexOf('BPManagement') > -1)
   {
     var child =  {
-        path: '/',
+        path: '/bp_list',
         name: 'BP管理',
         iconCls: 'icon-BP',
         component: Home,
@@ -113,7 +113,7 @@ if(permissions != null)
   if(canShowProjectList || canManageSystemPhase || canManageSystemAttachments)
   {
     var child = {
-        path: '/',
+        path: '/project_list',
         name: '项目管理',
         iconCls: 'icon-project',
         component: Home,
@@ -142,7 +142,7 @@ if(permissions != null)
   if(canEditServiceCategory || canEditServiceItem)
   {
     entries.push({
-          path: '/',
+          path: '/service_category',
           name: '服务项管理',
           iconCls: 'icon-server',
           component: Home,
@@ -153,7 +153,7 @@ if(permissions != null)
   if(permissions.indexOf('CustomServiceItemManagement') > -1)
   {
     var child = {
-        path: '/',
+        path: '/service_custom',
         name: '定制化需求管理',
         iconCls: 'icon-custom',
         component: Home,
@@ -168,7 +168,7 @@ if(permissions != null)
   if(permissions.indexOf('UserAttachmentManagement') > -1)
   {
     var child =  {
-        path: '/',
+        path: '/deliverable_list',
         name: '交付物审核管理',
         // name: '用户需求评审',
         iconCls: 'icon-examine',
@@ -187,7 +187,7 @@ if(permissions != null)
   if(permissions.indexOf('OrdersManagement') > -1)
   {
     var child = {
-        path: '/',
+        path: '/indent_list',
         name: '订单管理',
         iconCls: 'icon-serverList',
         component: Home,
@@ -204,7 +204,7 @@ if(permissions != null)
   if(permissions.indexOf('BillManagement') > -1)
   {
     var child = {
-        path: '/',
+        path: '/bill_list',
         name: '交易管理',
         iconCls: 'icon-serverList',
         component: Home,
@@ -245,7 +245,7 @@ if(permissions != null)
   if(canEditAdmin || canEditDepartment || canEditRole || canEditProfile)
   {
     entries.push({
-            path: '/',
+            path: '/managers',
             name: '系统管理',
             iconCls: 'icon-system',
             component: Home,
@@ -283,16 +283,19 @@ entries.push({
       })
 
 }
+init_route()
 
 var route = {
     mode: 'history',
     base: '/admin/',
-    routes: init_route()
+    routes: entries
 }
 
+const router = new Router(route)
 
-exports.init_route = init_route
-exports.router = new Router(route)
+export default {init_route,router}
+// exports.init_route = init_route
+// exports.router = new Router(route)
 
 // export default {
 //   a: init_route,

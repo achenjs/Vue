@@ -1,5 +1,5 @@
 const axios = require('axios')
-const index  = require('../../router')
+const index = require('../../router/index.js')
 module.exports = {
   data() {
     return {
@@ -49,10 +49,11 @@ module.exports = {
               localStorage.removeItem('permissions')
               localStorage.setItem('permissions', permissions)
 
-              index.init_route()
+              index.default.init_route()
 
-              _this.$router.push({path: '/', query: 1})
-              // _this.$router.go(0)
+              var start_path = _this.$router.options.routes[0].path
+
+              _this.$router.push(start_path)
             })
             .catch((err) => {
               _this.$message.error(err.message)
@@ -66,9 +67,9 @@ module.exports = {
       var _this = this
       axios.get('/admin/api/v1/')
         .then((result) => {
-          var str_path = _this.$router.options.routes[0].path
-          // console.log(_this.$router.options)
-          _this.$router.push('/')
+          var start_path = _this.$router.options.routes[0].path
+
+          _this.$router.push(start_path)
         })
         .catch((err) => {
           _this.$message.error(err.message)
