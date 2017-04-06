@@ -3,6 +3,7 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 var webpack = require('webpack')
+var babelPolyfill = require('babel-polyfill')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -10,7 +11,8 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: './src/main.js',
+    babelPolyfill: 'babel-polyfill'
   },
   plugins: [
     new webpack.ProvidePlugin({

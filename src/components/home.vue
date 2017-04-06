@@ -165,7 +165,7 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 		overflow-y: auto;
 		aside {
 			width: 230px;
-			min-height: 500px;
+			height: 500px;
 			max-height: 700px;
 			margin-top: 20px;
 			background-color: #ffffff;
