@@ -44,15 +44,11 @@ module.exports = {
           })
           axios.get('/admin/api/v1/profile')
             .then((result) => {
-              const userInfo = result.data.result
-              const role_name = userInfo.role_name
-              localStorage.setItem('role_name', role_name)
+              const userInfo = result.data.result;
+              const permissions = userInfo.permissions;
+              localStorage.setItem('permissions', permissions);
               setTimeout(function() {
-                if (role_name === '硬件总监' || role_name === '硬件专员') {
-                  _this.$router.push({path: '/indent_list', query: 1})
-                } else {
-                  _this.$router.push({path: '/admin_list', query: 1})
-                }
+                  _this.$router.push({path: '/settings', query: 1})
               }, 1000)
             })
             .catch((err) => {
@@ -67,7 +63,7 @@ module.exports = {
       var _this = this
       axios.get('/admin/api/v1/')
         .then((result) => {
-          _this.$router.push('/admin_list')
+          _this.$router.push('/settings')
         })
         .catch((err) => {
           _this.$message.error(err.message)
