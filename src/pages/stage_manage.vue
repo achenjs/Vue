@@ -232,7 +232,6 @@ export default {
       midClick(id) {
         var _this = this
         this.addShow = true
-        console.log(id)
         this.id = id
         $.ajax({
           url: '/admin/api/v1/phases/' + id,

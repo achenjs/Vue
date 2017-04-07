@@ -53,7 +53,8 @@ module.exports = {
 
               // var start_path = _this.$router.options.routes[0].path
               // _this.$router.push(start_path)
-              _this.$router.push({path: '/home', query: 1})
+              // console.log()
+              _this.$router.push({path: '/', query: 1})
             })
             .catch((err) => {
               _this.$message.error(err.message)
@@ -67,7 +68,7 @@ module.exports = {
       var _this = this
       axios.get('/admin/api/v1/')
         .then((result) => {
-          var start_path = _this.$router.options.routes[0].path
+          var start_path = _this.$router.options.routes[0].children[0].path
           _this.$router.push(start_path)
         })
         .catch((err) => {
