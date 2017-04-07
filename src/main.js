@@ -13,9 +13,13 @@ const router = route.router
 
 axios.defaults.withCredentials = true
 
-// router.beforeEach ((to, from, next) => {
-//   next()
-// })
+router.beforeEach ((to, from, next) => {
+  if (to.path == '/404') {
+    var start_path = router.options.routes[0].path
+    router.push(start_path)
+  }
+  next()
+})
 
 axios.interceptors.response.use(
   response => {

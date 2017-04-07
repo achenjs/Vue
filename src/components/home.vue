@@ -73,11 +73,11 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 			}
 		},
   	created() {
-		 	this.updateUser()
 			if (this.$route.query === 1) {
 				var start_path = this.$router.options.routes[0].path
 				this.$router.push(start_path)
 			}
+		 	this.updateUser()
   	},
 		methods: {
 			//	获取用户信息
@@ -166,7 +166,7 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 		overflow-y: auto;
 		aside {
 			width: 230px;
-			height: 500px;
+			height: 600px;
 			max-height: 700px;
 			margin-top: 20px;
 			background-color: #ffffff;
