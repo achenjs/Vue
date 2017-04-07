@@ -74,13 +74,13 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 		},
 		beforeCreate() {
 			if (this.$router.options.routes[0].children) {
-				// var currentRoute = this.$router.currentRoute.path
-				// var start_path = this.$router.options.routes[0].children[0].path
-				// if (currentRoute != start_path) {
-				//
-				// } else {
-				// 	this.$router.push(start_path)
-				// }
+				var currentRoute = this.$router.currentRoute.path
+				var start_path = this.$router.options.routes[0].children[0].path
+				if (currentRoute != start_path) {
+
+				} else {
+					this.$router.push(start_path)
+				}
 			} else {
 				this.$router.push('/signin')
 			}

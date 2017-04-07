@@ -16,14 +16,6 @@
         </el-col>
         <el-col :span="8">
           <div style="width: 80%;">
-            <label for="">负责人</label>
-            <el-input placeholder="负责人" v-model="form.contact_name"></el-input>
-          </div>
-        </el-col>
-      </div>
-      <div class="admin_line admin_line_2 clearfix">
-         <el-col :span="8">
-          <div style="width: 80%;">
             <label for="">所属行业</label>
             <el-select v-model="form.industry" placeholder="请选择">
               <el-option
@@ -35,6 +27,8 @@
             </el-select>
           </div>
         </el-col>
+      </div>
+      <div class="admin_line admin_line_2 clearfix">
         <el-col :span="8">
           <div style="width: 80%;">
             <label for="">所在阶段</label>
@@ -48,14 +42,6 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :span="8">
-          <div style="width: 80%;">
-            <label for="">联系手机</label>
-            <el-input placeholder="联系手机" v-model="form.contact_phone"></el-input>
-          </div>
-        </el-col>
-      </div>
-      <div class="admin_line admin_line_3 clearfix">
         <el-col :span="15">
           <label for="">创建时间</label>
           <el-date-picker
@@ -95,25 +81,10 @@
           label="项目名称">
         </el-table-column>
         <el-table-column
-          show-overflow-tooltip
-          align="center"
-          prop="contact_name"
-          width="60"
-          label="负责人">
-        </el-table-column>
-        <el-table-column
-          show-overflow-tooltip
-          align="center"
-          prop="contact_phone"
-          width="100"
-          label="手机号">
-        </el-table-column>
-        <el-table-column
           :show-overflow-tooltip="true"
           align="center"
-          prop="gmt_create"
-          width="80"
-          label="创建时间">
+          prop="description"
+          label="项目描述">
         </el-table-column>
         <el-table-column
           :show-overflow-tooltip="true"
@@ -129,16 +100,11 @@
           label="所在阶段">
         </el-table-column>
         <el-table-column
-          align="center"
-          prop="status"
-          width="60"
-          label="状态">
-        </el-table-column>
-        <el-table-column
           :show-overflow-tooltip="true"
           align="center"
-          prop="description"
-          label="项目描述">
+          prop="gmt_create"
+          width="80"
+          label="创建时间">
         </el-table-column>
         <el-table-column
           align="center"
@@ -164,10 +130,8 @@ export default {
       form: {
         id: '',
         name: '',
-        contact_name: '',
         industry: '',
         phase_index: '',
-        contact_phone: '',
         starttime: '',
         endtime: ''
       },
@@ -250,7 +214,7 @@ export default {
       }
       var _this = this
       $.ajax({
-        url: '/admin/api/v1/projects?id='+ this.form.id +'&name='+ this.form.name +'&contact_name='+ this.form.contact_name +'&industry='+ this.form.industry +'&phase_index='+ this.form.phase_index +'&contact_phone='+ this.form.contact_phone +'&starttime='+ this.form.starttime +'&endtime='+ this.form.endtime +'&page=' + page,
+        url: '/admin/api/v1/projects?id='+ this.form.id +'&name='+ this.form.name +'&industry='+ this.form.industry +'&phase_index='+ this.form.phase_index + '&starttime='+ this.form.starttime +'&endtime='+ this.form.endtime +'&page=' + page,
         beforeSend: function() {
           _this.loading = true
         },

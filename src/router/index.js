@@ -268,6 +268,13 @@ entries.push({
       }
   )
 
+// entries.push({
+//   path: '',
+//   name: '',
+//   component: Home,
+//   hidden: true
+// })
+
 entries.push({
         path: '/404',
         name: '未找到该页面',

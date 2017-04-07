@@ -307,8 +307,17 @@ export default {
             			 date = timer.getUTCDate(),
             			 hour = timer.getUTCHours(),
             			 minute = timer.getUTCMinutes(),
-            			 second = timer.getUTCSeconds(),
-           			   time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
+            			 second = timer.getUTCSeconds();
+                   if (hour < 10) {
+                     hour = '0' + hour
+                   }
+                   if (minute < 10) {
+                     minute = '0' + minute
+                   }
+                   if (second < 10) {
+                     second = '0' + second
+                   }
+           		var	 time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
               data.items[i].gmt_create = time
               if (data.items[i].active == true) {
                 data.items[i].active = '启用'
