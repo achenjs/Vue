@@ -16,6 +16,16 @@ module.exports = {
     this.captcha()
     //  判断是否已登录
     this.isLogin()
+    // 判断用户浏览器
+    var explorerInfo = this.getExplorerInfo()
+    var type = explorerInfo.type
+    if (type == 'IE') {
+      this.$notify({
+        title: '警告',
+        message: '建议您采用最新版chrome浏览器体验性更好',
+        type: 'warning'
+      })
+    }
   },
   mounted() {
     var _this = this
@@ -29,7 +39,7 @@ module.exports = {
     //  验证码
     captcha() {
       var _this = this
-      axios.get('/main/api/v1/captcha')
+      axios.get('/main/api/v1/captcha?time=' + new Date())
         .then((result) => {
           _this.imgUrl = result.data
         })
@@ -74,6 +84,34 @@ module.exports = {
         .catch((err) => {
           _this.$message.error(err.message)
         })
-    }
+    },
+    getExplorerInfo() {
+       var explorer = window.navigator.userAgent.toLowerCase()
+       //ie
+       if (explorer.indexOf("msie") >= 0) {
+          var ver=explorer.match(/msie ([\d.]+)/)[1];
+          return {type:"IE",version:ver};
+       }
+       //firefox
+       else if (explorer.indexOf("firefox") >= 0) {
+          var ver=explorer.match(/firefox\/([\d.]+)/)[1];
+          return {type:"Firefox",version:ver};
+       }
+       //Chrome
+       else if(explorer.indexOf("chrome") >= 0){
+          var ver=explorer.match(/chrome\/([\d.]+)/)[1];
+          return {type:"Chrome",version:ver};
+       }
+       //Opera
+       else if(explorer.indexOf("opera") >= 0){
+         var ver=explorer.match(/opera.([\d.]+)/)[1];
+         return {type:"Opera",version:ver};
+       }
+       //Safari
+       else if(explorer.indexOf("Safari") >= 0){
+         var ver=explorer.match(/version\/([\d.]+)/)[1];
+         return {type:"Safari",version:ver};
+       }
+     }
   }
 }

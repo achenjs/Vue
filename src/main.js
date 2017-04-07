@@ -15,10 +15,14 @@ axios.defaults.withCredentials = true
 
 router.beforeEach ((to, from, next) => {
   if (to.path == '/404') {
-    var start_path = router.options.routes[0].children[0].path
-    next({
-      path: start_path
-    })
+    if (router.options.routes[0].children) {
+      var start_path = router.options.routes[0].children[0].path
+      next({
+        path: start_path
+      })
+    } else {
+      next()
+    }
   }
   next()
 })
