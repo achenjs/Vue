@@ -253,13 +253,6 @@ if(permissions != null)
   }
 }
 
-entries.push(      {
-        path: '/',
-        name: '',
-        component: Home,
-        hidden: true
-      })
-
 entries.push({
         path: '/signin',
         name: '',
@@ -267,6 +260,13 @@ entries.push({
         hidden: true
       }
   )
+
+entries.push(      {
+        path: '/',
+        name: '',
+        component: Home,
+        hidden: true
+      })
 
 // entries.push({
 //   path: '',

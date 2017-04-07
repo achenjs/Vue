@@ -74,37 +74,23 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 			}
 		},
 		beforeCreate() {
-			// console.log(this.$router.options.routes[0].children)
-			// if (this.$router.options.routes[0].children) {
-			// 	var currentRoute = this.$router.currentRoute.path
-			// 	var start_path = this.$router.options.routes[0].children[0].path
-			// 	// console.log(currentRoute)
-			// 	// console.log(start_path)
-			// 	// this.$router.push(start_path)
-			// 	if (currentRoute != start_path && currentRoute != '/') {
-			//
-			// 	} else {
-			// 		this.$router.push(start_path)
-			// 	}
-			// } else {
-			// 	this.$router.push('/signin')
-			// }
 			if (this.$route.query === 1) {
 				this.$router.go(0)
-				// var start_path = this.$router.options.routes[0].children[0].path
-				// this.$router.push(start_path)
-				// console.log(1)
 			}
 		},
   	created() {
-			// if (this.$route.query === 1) {
-				// this.$router.go(0)
-				// var start_path = this.$router.options.routes[0].children[0].path
-				// this.$router.push(start_path)
-				// console.log(1)
-			// }
-			var start_path = this.$router.options.routes[0].children[0].path
-			this.$router.push(start_path)
+			if (this.$router.options.routes[0].children) {
+				var currentRoute = this.$router.currentRoute.path
+				var start_path = this.$router.options.routes[0].children[0].path
+				if (currentRoute != start_path && currentRoute != '/') {
+
+				} else {
+					this.$router.push(start_path)
+				}
+			} else {
+				this.$router.push('/signin')
+			}
+
 		 	this.updateUser()
 			this.autoHeight()
   	},
@@ -131,7 +117,6 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 					}
 				})
 			},
-
 			//  上传
       uploadFile(ele) {
         var _this = this
