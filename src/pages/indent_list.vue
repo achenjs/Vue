@@ -37,7 +37,7 @@
        </el-col>
        <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">服务包类</label>
+          <label for="">服务项类别</label>
           <el-select placeholder="请选择" v-model="form.category_id">
             <el-option
             v-for="item in servers"
@@ -253,7 +253,7 @@ export default {
         }
       ],
       currenPage: 1,
-      servers: [],
+      servers: [{name: '全部类别',id: ''}],
       form: {
         starttime: '',
         category_id: '',
@@ -286,7 +286,10 @@ export default {
       url: '/admin/api/v1/service_categories?page=1',
       success: function(result) {
         var data = result.result
-        _this.servers = data.items
+        for (let i in data.items) {
+          _this.servers.push(data.items[i])
+        }
+        // _this.servers = data.items
       },
       error: function(err) {
         if (err.status == '401') {

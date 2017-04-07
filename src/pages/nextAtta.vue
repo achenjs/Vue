@@ -16,7 +16,7 @@
         <el-table-column
           align="center"
           prop="attachment_name"
-          label="交互物名称"
+          label="交付物名称"
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column

@@ -1,6 +1,6 @@
 <template>
 	<el-row class="container">
-		<div class="xs"></div>
+		<!-- <div class="xs"></div> -->
 		<v-header :User='User'></v-header>
 		<el-col :span="24" class="main" ref="main">
 			<aside class="leftmenu" :style="{height: menuHeight}">
@@ -184,6 +184,7 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 		overflow-y: auto;
 		aside {
 			width: 230px;
+			height: 600px;
 			max-height: 700px;
 			margin-top: 20px;
 			background-color: #ffffff;

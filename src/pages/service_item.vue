@@ -83,7 +83,7 @@
           <div class="modal-dialog">
             <div class="modal-header">
               <span v-if="id == ''">新增服务项</span>
-              <span v-else>修改服务项</span>
+              <span v-else>编辑服务项</span>
             </div>
             <div class="modal-content">
               <label for="">服务项名称</label>

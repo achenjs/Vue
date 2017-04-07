@@ -220,7 +220,9 @@ export default {
         'Female': '女'
       },
       id: '',
-      industries: {},
+      industries: {
+        '': '全部行业'
+      },
       tableData: [],
       total: 1,
       loading: false,
@@ -229,23 +231,12 @@ export default {
   },
   created() {
     var _this = this
-    // 所属行业
-    // axios.get('/main/api/v1/industries')
-    //   .then((result) => {
-    //     const data = result.data
-    //     _this.industries = data.industries
-    //     _this.industries[''] = '全部行业'
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
 
     $.ajax({
       url: '/main/api/v1/industries',
       success: function(result) {
         var data = result.result
-        _this.industries = data.industries
-        _this.industries[''] = '全部行业'
+        Object.assign(_this.industries, data.industries)
       },
       error: function(err) {
         if (err.status == '401') {

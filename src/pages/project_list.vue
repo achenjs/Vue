@@ -137,8 +137,10 @@ export default {
       },
       stateValue: '',
       risksValue: '',
-      industries: [],
-      phases: [],
+      industries: {
+        '': '全部行业'
+      },
+      phases: [{id: '', name: '全部阶段'}],
       risks: [],
       tableData: [],
       loading: false,
@@ -166,8 +168,7 @@ export default {
       url: '/main/api/v1/industries',
       success: function(result) {
         var data = result.result
-        _this.industries = data.industries
-        _this.industries[''] = '全部行业'
+        Object.assign(_this.industries, data.industries)
       },
       error: function(err) {
         if (err.status == '401') {
@@ -181,8 +182,9 @@ export default {
       url: '/admin/api/v1/phases?page=1',
       success: function(result) {
         var data = result.result
-        _this.phases = data.items
-        _this.phases.push({id: '', name: '全部阶段'})
+        for (let i in data.items) {
+          _this.phases.push(data.items[i])
+        }
       },
       error: function(err) {
         if (err.status == '401') {
