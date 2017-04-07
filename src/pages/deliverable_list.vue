@@ -86,7 +86,7 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
-        timeout: 5000,
+        timeout: 10000,
         success: function(result) {
           _this.loading = false
           var data = result.result

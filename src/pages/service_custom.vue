@@ -41,6 +41,12 @@
        </el-table-column>
        <el-table-column
          align="center"
+         prop="status"
+         label="状态"
+         width="60">
+       </el-table-column>
+       <el-table-column
+         align="center"
          width="60"
          label="附件">
          <template scope="scope">
@@ -155,7 +161,7 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
-        timeout: 5000,
+        timeout: 10000,
         success: function(result) {
           let data = result.result
           _this.loading = false

@@ -87,7 +87,7 @@ export default {
       //  获取所有服务项
       $.ajax({
         url: '/admin/api/v1/service_categories?page=1',
-        timeout: 5000,
+        timeout: 10000,
         beforeSend: function() {
           _this.loading = true
         },

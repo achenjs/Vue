@@ -395,7 +395,7 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
-        timeout: 5000,
+        timeout: 10000,
         success: function(result) {
           var data = result.result
           _this.total = data.total
@@ -466,7 +466,7 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
-        timeout: 5000,
+        timeout: 10000,
         success: function(result) {
           var data = result.result
           _this.total = data.total

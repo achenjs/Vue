@@ -161,7 +161,8 @@ export default {
       if (this.status === '请求忽略') {
         this.form.status = 'Ignored'
       } else {
-        this.form.status = 'Rejected'
+        // this.form.status = 'Rejected'
+        this.form.status = 'Confirmed'
       }
       // this.form.status = 'Confirmed'
       this.$confirm('是否继续?', '提示', {
@@ -212,6 +213,7 @@ export default {
            // 重新刷新数据
            this.details(1)
            this.isStatus()
+           this.$router.go(-1)
            this.reset()
          }).catch((err) => {
            this.$message.error(err)
@@ -276,6 +278,7 @@ export default {
            // 重新刷新数据
            this.details(1)
            this.isStatus()
+           this.$router.go(-1)
            this.reset()
          }).catch((err) => {
            this.$message.error(err)

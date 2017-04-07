@@ -51,7 +51,7 @@
             label="输出"
             show-overflow-tooltip>
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             width="50"
             label="附件">
@@ -59,7 +59,7 @@
               <span v-if="scope.row.zip_url == '#'" style="color: #ececec; text-decoration: line-through;">下载</span>
               <a v-else :href="scope.row.zip_url">下载</a>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             align="center"
             prop="price"
@@ -82,13 +82,14 @@
         <div class="modal" v-if="addShow">
           <div class="modal-dialog">
             <div class="modal-header">
-              <span>新增服务项</span>
+              <span v-if="id == ''">新增服务项</span>
+              <span v-else>修改服务项</span>
             </div>
             <div class="modal-content">
               <label for="">服务项名称</label>
               <el-input placeholder="服务项名称" v-model="form.name"></el-input>
               <label for="">服务项描述</label>
-              <el-input placeholder="服务项描述" v-model="form.desc"></el-input>
+              <el-input type="textarea" :rows="3" placeholder="服务项描述" v-model="form.desc"></el-input>
               <label for="">类别</label>
               <el-select placeholder="请选择" v-model="form.category_id">
                 <el-option
@@ -98,14 +99,14 @@
                 :key="item.id">
                 </el-option>
               </el-select>
-              <a href="javascript:;" class="file" style="margin: 10px 0;">上传附件
+              <!-- <a href="javascript:;" class="file" style="margin: 10px 0;">上传附件
                 <input type="file" name="" id="upLog" @change="uploadFile($event)">
-              </a>
+              </a> -->
               <input type="hidden" id="hiddens" v-model="form.zip_url">
               <label for="">报价(硬豆)</label>
               <el-input placeholder="报价" v-model="form.price"></el-input>
               <label for="">输入</label>
-              <el-input placeholder="输入" v-model="form.input"></el-input>
+              <el-input type="textarea" :rows="3" placeholder="输入" v-model="form.input"></el-input>
               <label for="">输出</label>
               <el-input placeholder="输出" v-model="form.output"></el-input>
             </div>

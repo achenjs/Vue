@@ -3,7 +3,7 @@
     <el-form label-position="left" label-width="0px" class="demo-ruleForm login-container">
       <h3 class="title">洪泰智造工场后台管理系统</h3>
       <el-form-item>
-        <el-input type="text" v-model="form.username" auto-complete="on" placeholder="账号"></el-input>
+        <el-input type="text" v-model="form.username" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
