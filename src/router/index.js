@@ -244,56 +244,54 @@ if(permissions != null)
   if(canEditAdmin || canEditDepartment || canEditRole || canEditProfile)
   {
     entries.push({
-            path: '/',
-            name: '系统管理',
-            iconCls: 'icon-system',
-            component: Home,
-            children: kids
-          })
+      path: '/',
+      name: '系统管理',
+      iconCls: 'icon-system',
+      component: Home,
+      children: kids
+    })
   }
 }
 
-entries.push({
-        path: '/signin',
-        name: '',
-        component: signin,
-        hidden: true
-      }
-  )
+  entries.push({
+    path: '/signin',
+    name: '',
+    component: signin,
+    hidden: true
+  })
 
-entries.push(      {
-        path: '/',
-        name: '',
-        component: Home,
-        hidden: true
-      })
+  entries.push({
+    path: '/',
+    name: '',
+    component: Home,
+    hidden: true
+  })
 
-// entries.push({
-//   path: '',
-//   name: '',
-//   component: Home,
-//   hidden: true
-// })
+  // entries.push({
+  //   path: '',
+  //   name: '',
+  //   redirect: 'signin',
+  //   hidden: true
+  // })
 
-entries.push({
-        path: '/404',
-        name: '未找到该页面',
-        component: NotFound,
-        hidden: true
-      }
-  )
+  entries.push({
+    path: '/404',
+    name: '未找到该页面',
+    component: NotFound,
+    hidden: true
+  })
 
-// entries.push({
-//   path: '/home',
-//   component: Home,
-//   hidden: true
-// })
+  // entries.push({
+  //   path: '/home',
+  //   component: Home,
+  //   hidden: true
+  // })
 
-entries.push({
-        path: '*',
-        redirect: {path: '/404'},
-        hidden: true
-      })
+  entries.push({
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  })
 
 }
 init_route()

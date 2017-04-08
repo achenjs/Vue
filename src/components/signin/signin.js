@@ -39,7 +39,7 @@ module.exports = {
     //  验证码
     captcha() {
       var _this = this
-      axios.get('/main/api/v1/captcha?time=' + new Date())
+      axios.get('/main/api/v1/captcha?time=' + new Date().getTime())
         .then((result) => {
           _this.imgUrl = result.data
         })
@@ -78,8 +78,10 @@ module.exports = {
       var _this = this
       axios.get('/admin/api/v1/')
         .then((result) => {
-          var start_path = _this.$router.options.routes[0].children[0].path
-          _this.$router.push(start_path)
+          if (_this.$router.options.routes[0].children) {
+            var start_path = _this.$router.options.routes[0].children[0].path
+            _this.$router.push(start_path)
+          }
         })
         .catch((err) => {
           _this.$message.error(err.message)
