@@ -8,7 +8,7 @@ require('es6-promise').polyfill()
 import axios from 'axios'
 import 'element-ui/lib/theme-default/index.css'
 import route from './router'
-
+const VueCookie = require('vue-cookie')
 const router = route.router
 
 axios.defaults.withCredentials = true
@@ -41,7 +41,7 @@ axios.interceptors.response.use(
     return Promise.reject(error.response.data)   // 返回接口返回的错误信息
   }
 )
-
+Vue.use(VueCookie)
 Vue.use(ElementUI)
 
 /* eslint-disable no-new */
