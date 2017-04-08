@@ -44,14 +44,15 @@
         <div class="modal" v-if="addShow">
           <div class="modal-dialog">
             <div class="modal-header">
-              <span>新增阶段</span>
+              <span v-if="id == ''">新增阶段</span>
+              <span v-else>编辑阶段</span>
             </div>
             <div class="modal-content">
-              <label for="">阶段名称</label>
+              <label for=""><i>*</i>阶段名称</label>
               <el-input placeholder="阶段名称" v-model="form.name"></el-input>
-              <label for="">阶段描述</label>
+              <label for=""><i>*</i>阶段描述</label>
               <el-input placeholder="阶段描述" v-model="form.description"></el-input>
-              <label for="">交付物列表</label>
+              <label for=""><i>*</i>交付物列表</label>
               <el-table
               :data="tableData1"
               ref="table"
@@ -159,44 +160,48 @@ export default {
           arr.push(this.selection[i].id)
         }
         this.form.attachments = arr.join()
-        if (this.id === '') {
-          //  新建
-          $.ajax({
-            url: '/admin/api/v1/phases',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.query(1)
-              _this.addShow = false
-            }
-          })
-        }
-        else {
-          //  修改
-          $.ajax({
-            url: '/admin/api/v1/phases/' + this.id,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.addShow = false
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
+        if (this.form.name == '' || this.form.description == '' || this.form.attachments == '') {
+          this.$message.error('不能为空！')
+        } else {
+          if (this.id === '') {
+            //  新建
+            $.ajax({
+              url: '/admin/api/v1/phases',
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(1)
+                _this.addShow = false
               }
-            }
-          })
+            })
+          }
+          else {
+            //  修改
+            $.ajax({
+              url: '/admin/api/v1/phases/' + this.id,
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.addShow = false
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
+              }
+            })
+          }
         }
       },
       //  查询列表

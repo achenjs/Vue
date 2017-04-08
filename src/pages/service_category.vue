@@ -44,7 +44,8 @@
         <div class="modal" v-if="addShow">
           <div class="modal-dialog">
             <div class="modal-header">
-              <span>新增类别</span>
+              <span v-if="id == ''">新增类别</span>
+              <span v-else>编辑类别</span>
             </div>
             <div class="modal-content">
               <label for="">服务项类别名称</label>

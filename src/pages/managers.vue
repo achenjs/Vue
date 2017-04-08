@@ -95,7 +95,7 @@
                 </el-option>
               </el-select>
               <label for=""><i>*</i>状态</label>
-              <el-select v-model="form.status" placeholder="请选择">
+              <el-select v-model="form.active" placeholder="请选择">
                 <el-option
                 v-for="item in states"
                 :label="item.label"
@@ -121,7 +121,7 @@ export default {
     data() {
       return {
         form: {
-          status: '',
+          active: '',
           role_id: '',
           email: '',
           name: '',
@@ -222,7 +222,7 @@ export default {
       addOpen() {
         this.reset()
         this.id = ''
-        this.form.status = true
+        this.form.active = true
         this.addShow = true
       },
       cancel() {

@@ -47,8 +47,8 @@
         </div>
       </el-col>
     </div>
-    <div class="query" @click="search">
-      <span>查&nbsp;&nbsp;询</span>
+    <div class="query">
+      <span @click="search">查&nbsp;&nbsp;询</span>
     </div>
     <el-table
       :data="tableData"

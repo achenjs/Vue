@@ -54,7 +54,8 @@
         <div class="modal" v-if="addShow">
           <div class="modal-dialog">
             <div class="modal-header">
-              <span>新增交付物</span>
+              <span v-if="id == ''">新增交付物</span>
+              <span v-else>编辑交付物</span>
             </div>
             <div class="modal-content">
               <label for="">交付物名称</label>

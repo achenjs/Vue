@@ -7,6 +7,12 @@
            <el-input placeholder="项目名称" v-model="form.project_name"></el-input>
          </div>
        </el-col>
+       <!-- <el-col :span="8">
+         <div style="width: 80%;">
+           <label for="">服务名称</label>
+           <el-input placeholder="服务名称" v-model="form.service_name"></el-input>
+         </div>
+       </el-col> -->
        <el-col :span="5">
          <div style="width: 80%;">
            <label for="">订单号</label>
@@ -28,6 +34,22 @@
          </el-date-picker>
        </el-col>
      </div>
+     <!-- <div class="deliverable_inline clearfix">
+       <el-col :span="14">
+         <label for="">交易日期</label>
+         <el-date-picker
+           v-model="form.starttime"
+           type="date"
+           placeholder="选择日期">
+         </el-date-picker>
+         <span>至</span>
+         <el-date-picker
+           v-model="form.endtime"
+           type="date"
+           placeholder="选择日期">
+         </el-date-picker>
+       </el-col>
+     </div> -->
      <!-- <div class="buttons">
        <el-button class="query" type="primary" @click="query">查询</el-button>
        <el-button class="export" type="primary">导出</el-button>
@@ -88,7 +110,8 @@ export default {
         project_name: '',
         id: '',
         starttime: '',
-        endtime: ''
+        endtime: '',
+        service_name: ''
       },
       tableData: [],
       total: 1,
@@ -118,7 +141,7 @@ export default {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
       $.ajax({
-        url: '/admin/api/v1/bills?id='+this.form.id+'&project_name='+this.form.project_name+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
+        url: '/admin/api/v1/bills?id='+this.form.id+'&service_name='+this.form.service_name+'&project_name='+this.form.project_name+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
         beforeSend: function() {
           _this.loading = true
         },
