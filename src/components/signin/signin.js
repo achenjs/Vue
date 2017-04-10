@@ -39,10 +39,8 @@ module.exports = {
     //  判断用户是否勾选了保存
     var userInfo = this.$cookie.get('userInfo')
     if (userInfo) {
-      userInfo = userInfo.split(',')
       this.checked = true
-      this.form.username = userInfo[0]
-      this.form.password = userInfo[1]
+      this.form.username = userInfo
     }
   },
   methods: {
@@ -64,7 +62,7 @@ module.exports = {
           })
           //  是否勾选保存用户信息
           if (_this.checked) {
-            _this.$cookie.set('userInfo', _this.form.username+','+_this.form.password, 7)
+            _this.$cookie.set('userInfo', _this.form.username, 7)
           } else {
             _this.$cookie.delete('userInfo')
           }
