@@ -228,21 +228,25 @@ export default {
       },
       conditions: [
         {
-          value: 'Paid',
-          label: '已支付'
+          value: '',
+          label: '全部状态'
         },
+        // {
+        //   value: 'Paid',
+        //   label: '已支付'
+        // },
         {
           value: 'Canceled',
           label: '已取消'
         },
-        {
-          value: 'Submitting',
-          label: '待提交'
-        },
-        {
-          value: 'Submitted',
-          label: '已提交'
-        },
+        // {
+        //   value: 'Submitting',
+        //   label: '待提交'
+        // },
+        // {
+        //   value: 'Submitted',
+        //   label: '已提交'
+        // },
         {
           value: 'Confirmed',
           label: '已确认'

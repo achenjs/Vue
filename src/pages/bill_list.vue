@@ -1,25 +1,25 @@
 <template>
    <div class="bill_list">
      <div class="deliverable_inline clearfix">
-       <el-col :span="5">
+       <el-col :span="4">
          <div style="width: 80%;">
            <label for="">项目名称</label>
            <el-input placeholder="项目名称" v-model="form.project_name"></el-input>
          </div>
        </el-col>
-       <!-- <el-col :span="8">
+       <el-col :span="4">
          <div style="width: 80%;">
            <label for="">服务名称</label>
            <el-input placeholder="服务名称" v-model="form.service_name"></el-input>
          </div>
-       </el-col> -->
-       <el-col :span="5">
+       </el-col>
+       <el-col :span="4">
          <div style="width: 80%;">
            <label for="">订单号</label>
           <el-input placeholder="订单号" v-model="form.id"></el-input>
          </div>
        </el-col>
-       <el-col :span="14">
+       <el-col :span="12">
          <label for="">交易日期</label>
          <el-date-picker
            v-model="form.starttime"
@@ -103,6 +103,7 @@
 
 <script>
 import pages from '../components/pages/pages.vue'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -121,8 +122,16 @@ export default {
   created() {
     this.query(1)
   },
+  computed: {
+
+  },
   methods: {
     query(page) {
+      // console.log(this.$store.dispatch({
+      //   type: 'urlInfo',
+      //   path: '/admin/api/v1/bills',
+      //   parameter: this.form
+      // }))
       var _this = this
       var page
       if (typeof page != 'object') {

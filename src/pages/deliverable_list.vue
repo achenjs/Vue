@@ -63,17 +63,17 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-        const toDepath = to.path.split('/').length
-        const fromDepath = from.path.split('/').length
-        if (toDepath === 2) {
+        const toDepath = to.path
+        if (toDepath === '/deliverable_list') {
           this.id = ''
         }
     }
   },
   created() {
-    this.id = this.$route.params.id
-    if (this.id == undefined) {
+    if (localStorage.getItem('nextAttaId') && localStorage.getItem('attaId') && this.$router.currentRoute.fullPath == '/deliverable_list') {
       this.id = ''
+    } else {
+      this.id = '1'
     }
     this.nextPhases(1)
   },
@@ -133,7 +133,8 @@ export default {
     //  阶段下详情
     midClick(id) {
       this.id = id
-      this.$router.push('/deliverable_list/' + id)
+      localStorage.setItem('nextAttaId', id)
+      this.$router.push('/nextAtta')
     },
   },
   components: {

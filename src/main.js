@@ -8,12 +8,17 @@ require('es6-promise').polyfill()
 import axios from 'axios'
 import 'element-ui/lib/theme-default/index.css'
 import route from './router'
+import store from './vuex/store'
+
 const VueCookie = require('vue-cookie')
 const router = route.router
 
 axios.defaults.withCredentials = true
 
 router.beforeEach ((to, from, next) => {
+  if (to.path != '/attaDetails') {
+    localStorage.removeItem('attaId')
+  }
   if (to.path == '/404') {
     if (router.options.routes[0].children) {
       var start_path = router.options.routes[0].children[0].path
@@ -41,6 +46,7 @@ axios.interceptors.response.use(
     return Promise.reject(error.response.data)   // 返回接口返回的错误信息
   }
 )
+
 Vue.use(VueCookie)
 Vue.use(ElementUI)
 
@@ -48,6 +54,7 @@ Vue.use(ElementUI)
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

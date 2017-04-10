@@ -15,10 +15,17 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="交付物"
+        prop="attachment_name"
+        label="交付物名称"
+        width="100"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="附件"
         width="80">
         <template scope="scope">
-          <a :href="scope.row.url" style="">下载</a>
+          <a :href="scope.row.url" style="" v-if="status != '请求忽略'">下载</a>
         </template>
       </el-table-column>
       <el-table-column
@@ -31,7 +38,7 @@
       <el-table-column
         align="center"
         prop="comment_admin"
-        label="回复"
+        label="评审报告"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -54,7 +61,7 @@
             <i @click="closeModel">关闭</i>
           </div>
           <div class="modal-content">
-            <label for="">回复</label>
+            <label for="">请输入评审报告</label>
             <el-input type="textarea" placeholder="描述" v-model="comment.comment"></el-input>
           </div>
           <div class="modal-footer">
@@ -87,7 +94,7 @@ export default {
     }
   },
   created() {
-    this.attaDetailsId = this.$route.params.id
+    this.attaDetailsId = localStorage.getItem('attaId')
     this.details(1)
     this.isStatus()
   },
@@ -140,6 +147,9 @@ export default {
         url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
         success: function(result) {
           var data = result.result
+          for(let i in _this.tableData) {
+            _this.tableData[i].attachment_name = data.attachment.name
+          }
           _this.status = data.status
         },
         error: function(err) {

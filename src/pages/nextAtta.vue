@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="nextAtta">
+    <div v-if="attaId == ''">
       <el-table
       :data="tableData"
       v-loading="loading"
@@ -33,7 +34,7 @@
           width="60"
           label="操作">
           <template scope="scope">
-            <el-button @click="details(scope.row.id)" type="text" size="small">详情</el-button>
+            <el-button @click="details(scope.row.id, scope.row.attachment_name)" type="text" size="small">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -43,6 +44,8 @@
         <el-button type="primary" @click="cancel">驳回</el-button>
       </div>
     </div>
+    <router-view v-else></router-view>
+  </div>
 </template>
 
 <script>
@@ -54,24 +57,36 @@ export default {
       tableData: [],
       total: 1,
       nextAttaId: '',
-      id: ''
+      attaId: '',
+      id: '',
+      attaName: ''
     }
   },
   created() {
-    this.nextAttaId = this.$route.params.id
+    this.nextAttaId = localStorage.getItem('nextAttaId')
+    this.attaId = localStorage.getItem('attaId')
+    if (this.attaId == undefined) {
+      this.attaId = ''
+    }
     this.nextAtta(1)
   },
   watch: {
     '$route' (to, from) {
-      const toDepath = to.path.split('/').length
-      const fromDepath = from.path.split('/').length
+      const toDepath = to.path
+      const fromDepath = from.path
+      if (toDepath === '/nextAtta') {
+        this.attaId = ''
+      }
     }
   },
   methods: {
     //  进入交付物详情
-    details(id) {
+    details(id, name) {
       this.nextAttaId = id
-      this.$router.push('/attaDetails/' + id)
+      this.attaName = name
+      localStorage.setItem('attaId', id)
+      this.attaId = localStorage.getItem('attaId')
+      this.$router.push('/attaDetails')
     },
     //  阶段下交付物列表
     nextAtta(page) {

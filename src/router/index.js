@@ -28,9 +28,7 @@ import NotFound from '@/pages/notFound.vue'
 
 Vue.use(Router)
 
-
 var entries = []
-
 
 var init_route = function ()
 {
@@ -174,8 +172,9 @@ if(permissions != null)
         component: Home,
         children: [
           {path: '/deliverable_list', component: deliverable_list, iconCls: 'icon-page10', name: '交付物列表', children: [
-            {path: '/deliverable_list/:id', component: nextAtta, name: '交付物评审', hidden: true},
-            {path: '/attaDetails/:id', component: attaDetails, name: '交付物详情', hidden: true}
+            {path: '/nextAtta', component: nextAtta, name: '交付物评审', hidden: true, children: [
+              {path: '/attaDetails', component: attaDetails, name: '交付物详情', hidden: true}
+            ]}
           ]}
         ]
       }
