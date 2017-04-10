@@ -8,27 +8,6 @@ function createXmlHttpRequest(){
   }
 }
 
-function uploadComplete(evt){
-  var obj = JSON.parse(evt.target.responseText).obj
-  if (obj) {
-    $('#hiddens').val(obj)
-    $('#url').val(obj)
-    $('.xs').text('上传成功')
-    $('.xs').stop().animate({'top': '10px'}, 100)
-    setTimeout(function(){
-       $('.xs').stop().animate({'top': '-53px'}, 200)
-    },1500)
-  }
-}
-
-function uploadFailed(evt) {
-   $('.xs').text('上传失败')
-   $('.xs').stop().animate({'top':'10px'}, 100)
-   setTimeout(function(){
-     $('.xs').stop().animate({'top':'-53px'}, 200)
-   }, 1500)
-}
-
 module.exports = function uploadFile(f, type, fn){
   var file = document.getElementById(f.id).files[0]
   var filename = file.name
@@ -55,12 +34,36 @@ module.exports = function uploadFile(f, type, fn){
                fd.append(i,e[i])
             }
             fd.append("file", file)
-            var xhr = createXmlHttpRequest()
-            xhr.addEventListener("load", uploadComplete, false)
-            xhr.addEventListener("error", uploadFailed, false)
-            xhr.open('POST', url1, true)
-            xhr.send(fd)
-            fn && fn()
+
+            $.ajax({
+              url: 'https://apl-static.oss-cn-beijing.aliyuncs.com',
+              data: fd,
+              processData: false,
+              cache: false,
+              async: false,
+              contentType: false,
+              type: 'post',
+              success: function(result) {
+                var obj = result.obj
+                if (obj) {
+                  $('#hiddens').val(obj)
+                  $('#url').val(obj)
+                  $('.xs').text('上传成功')
+                  $('.xs').stop().animate({'top': '10px'}, 100)
+                  setTimeout(function(){
+                     $('.xs').stop().animate({'top': '-53px'}, 200)
+                  },1500)
+                  fn && fn()
+                }
+              },
+              error: function(err) {
+                $('.xs').text('上传失败')
+                $('.xs').stop().animate({'top':'10px'}, 100)
+                setTimeout(function(){
+                  $('.xs').stop().animate({'top':'-53px'}, 200)
+                }, 1500)
+              }
+            })
           }
        })
      }
@@ -83,12 +86,35 @@ module.exports = function uploadFile(f, type, fn){
                fd.append(i,e[i])
             }
             fd.append("file", file)
-            var xhr = createXmlHttpRequest()
-            xhr.addEventListener("load", uploadComplete, false)
-            xhr.addEventListener("error", uploadFailed, false)
-            xhr.open('POST', url1, true)
-            xhr.send(fd)
-            fn && fn()
+            $.ajax({
+              url: 'https://apl-static.oss-cn-beijing.aliyuncs.com',
+              data: fd,
+              processData: false,
+              cache: false,
+              async: false,
+              contentType: false,
+              type: 'post',
+              success: function(result) {
+                var obj = result.obj
+                if (obj) {
+                  $('#hiddens').val(obj)
+                  $('#url').val(obj)
+                  $('.xs').text('上传成功')
+                  $('.xs').stop().animate({'top': '10px'}, 100)
+                  setTimeout(function(){
+                     $('.xs').stop().animate({'top': '-53px'}, 200)
+                  },1500)
+                  fn && fn()
+                }
+              },
+              error: function(err) {
+                $('.xs').text('上传失败')
+                $('.xs').stop().animate({'top':'10px'}, 100)
+                setTimeout(function(){
+                  $('.xs').stop().animate({'top':'-53px'}, 200)
+                }, 1500)
+              }
+            })
           }
        })
      }
