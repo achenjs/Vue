@@ -59,7 +59,7 @@
         </el-col>
       </div>
       <div class="query">
-        <span @click="query">查&nbsp;&nbsp;询</span>
+        <span @click="query(1)">查&nbsp;&nbsp;询</span>
       </div>
       <el-table
       v-loading="loading"
@@ -68,6 +68,7 @@
       border
       style="width: 100%">
         <el-table-column
+          show-overflow-tooltip
           align="center"
           prop="id"
           width="50"
@@ -81,26 +82,27 @@
           label="项目名称">
         </el-table-column>
         <el-table-column
-          :show-overflow-tooltip="true"
+          show-overflow-tooltip
           align="center"
           prop="description"
           label="项目描述">
         </el-table-column>
         <el-table-column
-          :show-overflow-tooltip="true"
+          show-overflow-tooltip
           align="center"
           prop="industry"
           width="120"
           label="所在行业">
         </el-table-column>
         <el-table-column
+          show-overflow-tooltip
           align="center"
-          prop="company_phase"
+          prop="phase_name"
           width="80"
           label="所在阶段">
         </el-table-column>
         <el-table-column
-          :show-overflow-tooltip="true"
+          show-overflow-tooltip
           align="center"
           prop="gmt_create"
           width="80"
@@ -133,7 +135,8 @@ export default {
         industry: '',
         phase_index: '',
         starttime: '',
-        endtime: ''
+        endtime: '',
+        page: 1
       },
       stateValue: '',
       risksValue: '',
@@ -198,12 +201,7 @@ export default {
   },
   methods: {
     query(page) {
-      var page
-      if (typeof page != 'object') {
-        page = page
-      } else {
-        page = 1
-      }
+      this.form.page = page
       if (this.form.starttime === '') {
         this.form.starttime = ''
       } else {
@@ -216,7 +214,7 @@ export default {
       }
       var _this = this
       $.ajax({
-        url: '/admin/api/v1/projects?id='+ this.form.id +'&name='+ this.form.name +'&industry='+ this.form.industry +'&phase_index='+ this.form.phase_index + '&starttime='+ this.form.starttime +'&endtime='+ this.form.endtime +'&page=' + page,
+        url: '/admin/api/v1/projects?id='+ this.form.id +'&name='+ this.form.name +'&industry='+ this.form.industry +'&phase_index='+ this.form.phase_index + '&starttime='+ this.form.starttime +'&endtime='+ this.form.endtime +'&page=' + this.form.page,
         beforeSend: function() {
           _this.loading = true
         },
@@ -225,7 +223,7 @@ export default {
           let data = result.result
           _this.loading = false
           _this.total = data.total
-          for(var i in data.items) {
+          for(let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
   					timer.setTime(timer.getTime()+0)
@@ -237,6 +235,13 @@ export default {
           			 second = timer.getUTCSeconds(),
          			   time = year + "-" + month + "-" + date
             data.items[i].gmt_create = time
+
+            var phase_index = data.items[i].phase_index
+            for(let j in data.items[i].phases) {
+              if (phase_index === data.items[i].phases[j].id) {
+                data.items[i].phase_name = data.items[i].phases[j].phase_name
+              }
+            }
           }
           _this.tableData = data.items
         },

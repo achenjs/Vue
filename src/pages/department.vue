@@ -48,11 +48,11 @@
               <span>新建部门</span>
             </div>
             <div class="modal-content">
-              <label for="">部门名称</label>
+              <label for=""><i>*</i>部门名称</label>
               <el-input placeholder="部门名称" v-model="form.name"></el-input>
               <label for="">部门描述</label>
               <el-input placeholder="部门描述" v-model="form.description"></el-input>
-              <label for="">状态</label>
+              <label for=""><i>*</i>状态</label>
               <el-select v-model="form.status" placeholder="请选择">
                 <el-option
                 v-for="item in states"
@@ -135,47 +135,55 @@ export default {
       ensure() {
         var _this = this
         if (this.id === '') {
-          $.ajax({
-            url: '/admin/api/v1/departments',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.query(_this.page)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
+          if (this.form.name === '' || this.form.status === '') {
+            this.$message.error('必填字段不能为空!')
+          } else {
+            $.ajax({
+              url: '/admin/api/v1/departments',
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(_this.page)
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
               }
-            }
-          })
+            })
+          }
         } else {
-          $.ajax({
-            url: '/admin/api/v1/departments/' + this.id,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.query(_this.page)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
+          if (this.form.name === '' || this.form.status === '') {
+            this.$message.error('必填字段不能为空!')
+          } else {
+            $.ajax({
+              url: '/admin/api/v1/departments/' + this.id,
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(_this.page)
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
               }
-            }
-          })
+            })
+          }
         }
       },
       //  根据id查看详情和修改

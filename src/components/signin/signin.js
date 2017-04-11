@@ -51,6 +51,9 @@ module.exports = {
         .then((result) => {
           _this.imgUrl = result.data
         })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     },
     signin() {
       var _this = this
@@ -75,8 +78,6 @@ module.exports = {
 
               index.default.init_route()
 
-              // var start_path = _this.$router.options.routes[0].path
-              // _this.$router.push(start_path)
               _this.$router.push({path: '/', query: 1})
             })
             .catch((err) => {

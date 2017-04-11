@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data () {
       return {
@@ -97,25 +98,18 @@ export default {
       addUser() {
         var _this = this
         if (this.isNames && this.isEmails && this.isPass) {
-          $.ajax({
-            url: '/admin/api/v1/users',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
+          axios.post('/admin/api/v1/users', this.form)
+            .then((result) => {
+              const data = result.data
               _this.reset()
               _this.$message({
-                message: result.message,
+                message: data.message,
                 type: 'success'
               })
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
-              }
-            }
-          })
+            })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
         } else {
           this.$message({
             message: '请输入完整信息',

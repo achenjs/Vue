@@ -34,28 +34,8 @@
          </el-date-picker>
        </el-col>
      </div>
-     <!-- <div class="deliverable_inline clearfix">
-       <el-col :span="14">
-         <label for="">交易日期</label>
-         <el-date-picker
-           v-model="form.starttime"
-           type="date"
-           placeholder="选择日期">
-         </el-date-picker>
-         <span>至</span>
-         <el-date-picker
-           v-model="form.endtime"
-           type="date"
-           placeholder="选择日期">
-         </el-date-picker>
-       </el-col>
-     </div> -->
-     <!-- <div class="buttons">
-       <el-button class="query" type="primary" @click="query">查询</el-button>
-       <el-button class="export" type="primary">导出</el-button>
-     </div> -->
      <div class="query">
-       <span @click="query">查&nbsp;&nbsp;询</span>
+       <span @click="query(1)">查&nbsp;&nbsp;询</span>
      </div>
      <div class="deliverable_table">
        <el-table
@@ -112,7 +92,8 @@ export default {
         id: '',
         starttime: '',
         endtime: '',
-        service_name: ''
+        service_name: '',
+        page: 1
       },
       tableData: [],
       total: 1,
@@ -127,18 +108,14 @@ export default {
   },
   methods: {
     query(page) {
-      // console.log(this.$store.dispatch({
-      //   type: 'urlInfo',
+      // this.$store.dispatch('increment', {
       //   path: '/admin/api/v1/bills',
       //   parameter: this.form
-      // }))
+      // }).then((result) => {
+      //   console.log(result)
+      // })
       var _this = this
-      var page
-      if (typeof page != 'object') {
-        page = page
-      } else {
-        page = 1
-      }
+      this.form.page = page
       if (this.form.starttime === '') {
         this.form.starttime = ''
       } else {
@@ -150,7 +127,7 @@ export default {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
       $.ajax({
-        url: '/admin/api/v1/bills?id='+this.form.id+'&service_name='+this.form.service_name+'&project_name='+this.form.project_name+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
+        url: '/admin/api/v1/bills?id='+this.form.id+'&service_name='+this.form.service_name+'&project_name='+this.form.project_name+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + this.form.page,
         beforeSend: function() {
           _this.loading = true
         },

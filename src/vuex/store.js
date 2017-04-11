@@ -28,15 +28,14 @@ const mutations = {
           str += '&' + parameter[i] + '=' + parameter[i]
         }
       }
-      str = str.replace('&', '?')
-      this.changeUrl = str
+      state.changeUrl = str.replace('&', '?')
     }
   }
 }
 
 const actions = {
-  urlInfo ({ commit }) {
-    commit('urlInfo')
+  increment (context, obj) {
+    context.commit('urlInfo', obj)
   }
 }
 

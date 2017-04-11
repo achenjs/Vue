@@ -70,7 +70,7 @@ export default {
     }
   },
   created() {
-    if (localStorage.getItem('nextAttaId') && localStorage.getItem('attaId') && this.$router.currentRoute.fullPath == '/deliverable_list') {
+    if (this.$router.currentRoute.fullPath == '/deliverable_list') {
       this.id = ''
     } else {
       this.id = '1'

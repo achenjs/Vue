@@ -161,7 +161,7 @@ export default {
         }
         this.form.attachments = arr.join()
         if (this.form.name == '' || this.form.description == '' || this.form.attachments == '') {
-          this.$message.error('不能为空！')
+          this.$message.error('必填字段不能为空!')
         } else {
           if (this.id === '') {
             //  新建

@@ -231,7 +231,7 @@ export default {
   },
   created() {
     var _this = this
-
+    // 获取全部行业
     $.ajax({
       url: '/main/api/v1/industries',
       success: function(result) {

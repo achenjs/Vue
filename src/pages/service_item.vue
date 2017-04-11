@@ -86,11 +86,11 @@
               <span v-else>编辑服务项</span>
             </div>
             <div class="modal-content">
-              <label for="">服务项名称</label>
+              <label for=""><i>*</i>服务项名称</label>
               <el-input placeholder="服务项名称" v-model="form.name"></el-input>
               <label for="">服务项描述</label>
-              <el-input type="textarea" :rows="3" placeholder="服务项描述" v-model="form.desc"></el-input>
-              <label for="">类别</label>
+              <el-input type="textarea" :rows="2" placeholder="服务项描述" v-model="form.desc"></el-input>
+              <label for=""><i>*</i>类别</label>
               <el-select placeholder="请选择" v-model="form.category_id">
                 <el-option
                 v-for="item in categorys"
@@ -103,12 +103,12 @@
                 <input type="file" name="" id="upLog" @change="uploadFile($event)">
               </a> -->
               <input type="hidden" id="hiddens" v-model="form.zip_url">
-              <label for="">报价(硬豆)</label>
+              <label for=""><i>*</i>报价(硬豆)</label>
               <el-input placeholder="报价" v-model="form.price"></el-input>
               <label for="">输入</label>
-              <el-input type="textarea" :rows="3" placeholder="输入" v-model="form.input"></el-input>
+              <el-input type="textarea" :rows="2" placeholder="输入" v-model="form.input"></el-input>
               <label for="">输出</label>
-              <el-input placeholder="输出" v-model="form.output"></el-input>
+              <el-input type="textarea" :rows="2" placeholder="输出" v-model="form.output"></el-input>
             </div>
             <div class="modal-footer">
               <el-button type="primary" @click="ensure">确认</el-button>
@@ -157,7 +157,7 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
-        timeout: 5000,
+        timeout: 10000,
         success: function(result) {
           _this.loading = false
           var data = result.result
@@ -201,47 +201,55 @@ export default {
         this.form.zip_url = $("#hiddens").val()
         if (this.id === '') {
           //  新增
-          $.ajax({
-            url: '/admin/api/v1/service_items',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
+          if (this.form.name === '' || this.form.price === '' || this.form.category_id === '') {
+            this.$message.error('必填字段不能为空！')
+          } else {
+            $.ajax({
+              url: '/admin/api/v1/service_items',
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
               }
-            }
-          })
+            })
+          }
         } else {
           //  修改
-          $.ajax({
-            url: '/admin/api/v1/service_items/' + this.id,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.query(_this.page)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
+          if (this.form.name === '' || this.form.price === '' || this.form.category_id === '') {
+            this.$message.error('必填字段不能为空！')
+          } else {
+            $.ajax({
+              url: '/admin/api/v1/service_items/' + this.id,
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(_this.page)
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
               }
-            }
-          })
+            })
+          }
         }
       },
       query(page) {

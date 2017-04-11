@@ -142,7 +142,9 @@ export default {
     border-radius: 50px;
     margin-bottom: 40px;
     span {
-      font-size: 18px;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
     }
   }
 }

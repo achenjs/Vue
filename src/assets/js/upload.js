@@ -8,6 +8,8 @@ function createXmlHttpRequest(){
   }
 }
 
+//  限制大小。  图片5M，文件100M
+
 module.exports = function uploadFile(f, type, fn){
   var file = document.getElementById(f.id).files[0]
   var filename = file.name

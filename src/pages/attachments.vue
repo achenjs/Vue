@@ -58,7 +58,7 @@
               <span v-else>编辑交付物</span>
             </div>
             <div class="modal-content">
-              <label for="">交付物名称</label>
+              <label for=""><i>*</i>交付物名称</label>
               <el-input placeholder="交付物名称" v-model="form.name"></el-input>
               <label for="">附件</label>
               <input type="text" name="" value="" id="filename" :disabled="true" v-model="form.url">
@@ -119,51 +119,55 @@ export default {
       },
       ensure() {
         var _this = this
-        if (this.id === '') {
-          //  新增
-          $.ajax({
-            url: '/admin/api/v1/attachments',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.query(1)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
-              }
-            }
-          })
+        if (this.form.name === '') {
+          this.$message.error('必填字段不能为空!')
         } else {
-          //  修改
-          _this.form.url = $("#hiddens").val()
-          $.ajax({
-            url: '/admin/api/v1/attachments/' + this.id,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.query(_this.page)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
+          if (this.id === '') {
+            //  新增
+            $.ajax({
+              url: '/admin/api/v1/attachments',
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(1)
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
               }
-            }
-          })
+            })
+          } else {
+            //  修改
+            _this.form.url = $("#hiddens").val()
+            $.ajax({
+              url: '/admin/api/v1/attachments/' + this.id,
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(_this.page)
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
+              }
+            })
+          }
         }
       },
       //  列表查询
