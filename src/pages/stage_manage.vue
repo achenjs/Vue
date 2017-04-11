@@ -1,8 +1,8 @@
 <template>
    <div class="stage_manage">
-      <el-col :span="4" class="add_item">
+      <!-- <el-col :span="4" class="add_item">
         <span @click="addOpen">新增阶段</span>
-      </el-col>
+      </el-col> -->
       <div class="">
         <el-table
         :data="tableData"

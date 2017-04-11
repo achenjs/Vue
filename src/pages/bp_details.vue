@@ -68,7 +68,7 @@
                 <el-input placeholder="请输入项目来源" v-model="form.source"></el-input>
               </el-form-item>
               <el-form-item label="所属行业">
-                <el-select placeholder="请输入请选择" v-model="form.industry">
+                <el-select placeholder="请选择" v-model="form.industry">
                   <el-option
                   v-for="(key, index) in industries"
                   :label="key"
@@ -156,7 +156,7 @@
                 <el-input placeholder="请输入主要营收来源" v-model="form.main_income"></el-input>
               </el-form-item>
               <el-form-item label="营收状况">
-                <el-input placeholder="请输入营收状况" v-model="form.income_statue"></el-input>
+                <el-input placeholder="请输入营收状况" v-model="form.income_status"></el-input>
               </el-form-item>
               <el-form-item label="目标客户">
                 <el-input placeholder="请输入目标客户" v-model="form.dest_customers"></el-input>
@@ -335,8 +335,8 @@ import upload from '../assets/js/upload'
     },
     created() {
       this.bpDetailsId = this.$route.params.id
-      this.details()
       this.industr()
+      this.details()
     },
     methods: {
       industr() {
@@ -359,7 +359,7 @@ import upload from '../assets/js/upload'
               url: '/admin/api/v1/bps/' + this.bpDetailsId,
               success: function(result) {
                 var data = result.result
-                // _this.form.start_from = data.gmt_create.split('T')[0]
+                // _this.form.start_from = data.gmt_create.split('T')[0
                 Object.assign(_this.form, data)
                 return resolve(data.city)
               },
@@ -401,7 +401,14 @@ import upload from '../assets/js/upload'
       submitBP() {
         var _this = this
         this.form.city = this.city_id
-        _this.form.bp_url = $("#hiddens").val()
+        this.form.bp_url = $("#hiddens").val()
+        if (/^[\u4e00-\u9fa5]+$/.test(this.form.industry)) {
+          for(let i in this.industries) {
+            if(this.industries[i] === this.form.industry) {
+              this.form.industry = i
+            }
+          }
+        }
         if (this.form.start_from === '') {
           this.form.start_from = ''
         } else {
@@ -459,6 +466,7 @@ import upload from '../assets/js/upload'
             success: function(result) {
               var data = result.result
               _this.citys = data
+              _this.city_id = data[0].area_id
             },
             error: function(err) {
               if (err.status == '401') {

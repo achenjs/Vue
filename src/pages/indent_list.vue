@@ -4,13 +4,13 @@
        <div class="deliverable_inline clearfix">
          <el-col :span="8">
           <div style="width: 80%;">
-            <label for="">订单号</label>
-            <el-input placeholder="订单号" v-model="form.id"></el-input>
+            <label for="">服务号</label>
+            <el-input placeholder="服务号" v-model="form.id"></el-input>
           </div>
         </el-col>
          <el-col :span="8">
           <div style="width: 80%;">
-            <label for="">订单状态</label>
+            <label for="">服务状态</label>
             <el-select placeholder="请选择" v-model="form.status">
               <el-option
               v-for="item in conditions"
@@ -94,7 +94,7 @@
            <el-table-column
              align="center"
              prop="id"
-             label="订单号"
+             label="服务号"
              width="60"
              show-overflow-tooltip>
            </el-table-column>
@@ -138,7 +138,7 @@
            <el-table-column
              align="center"
              prop="status"
-             label="订单状态"
+             label="服务状态"
              width="70"
              show-overflow-tooltip>
            </el-table-column>
@@ -161,7 +161,7 @@
            <el-table-column
              align="center"
              prop="price"
-             label="订单金额(硬豆)"
+             label="服务金额(硬豆)"
              width="110"
              show-overflow-tooltip>
            </el-table-column>
@@ -205,7 +205,7 @@
                  :key="item.id">
                  </el-option>
                </el-select>
-               <label for="">订单状态</label>
+               <label for="">服务状态</label>
                <el-select placeholder="请选择" v-model="details.status">
                  <el-option
                  v-for="item in conditions"

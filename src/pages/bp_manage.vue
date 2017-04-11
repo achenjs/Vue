@@ -69,7 +69,7 @@
                 <el-input placeholder="请输入项目来源" v-model="form.source"></el-input>
               </el-form-item>
               <el-form-item label="所属行业">
-                <el-select placeholder="请输入请选择" v-model="form.industry">
+                <el-select placeholder="请选择" v-model="form.industry">
                   <el-option
                   v-for="(key, index) in industries"
                   :label="key"
@@ -157,7 +157,7 @@
                 <el-input placeholder="请输入主要营收来源" v-model="form.main_income"></el-input>
               </el-form-item>
               <el-form-item label="营收状况">
-                <el-input placeholder="请输入营收状况" v-model="form.income_statue"></el-input>
+                <el-input placeholder="请输入营收状况" v-model="form.income_status"></el-input>
               </el-form-item>
               <el-form-item label="目标客户">
                 <el-input placeholder="请输入目标客户" v-model="form.dest_customers"></el-input>
@@ -332,8 +332,8 @@ import upload from '../assets/js/upload'
       }
     },
     created() {
-      this.region()
       this.industr()
+      this.region()
     },
     methods: {
       // 获取全部行业

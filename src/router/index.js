@@ -186,11 +186,11 @@ if(permissions != null)
   {
     var child = {
         path: '/',
-        name: '订单管理',
+        name: '服务单管理',
         iconCls: 'icon-serverList',
         component: Home,
         children: [
-          {path: '/indent_list', component: indent_list, iconCls: 'icon-page11', name: '订单列表', children: [
+          {path: '/indent_list', component: indent_list, iconCls: 'icon-page11', name: '服务单列表', children: [
             {path: '/indent_list/:id', component: indentDetails, name: '服务项详情', hidden: true}
           ]}
         ]

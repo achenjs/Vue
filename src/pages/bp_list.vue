@@ -90,6 +90,7 @@ export default {
         const toDepth = to.path.split('/').length
         if (toDepth === 2) {
           this.id = ''
+          this.search(1)
         }
       }
     },

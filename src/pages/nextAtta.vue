@@ -65,7 +65,6 @@ export default {
   },
   created() {
     this.nextAttaId = localStorage.getItem('nextAttaId')
-    this.attaId = localStorage.getItem('attaId')
     if (this.attaId == undefined) {
       this.attaId = ''
     }
@@ -77,17 +76,17 @@ export default {
       const fromDepath = from.path
       if (toDepath === '/nextAtta') {
         this.attaId = ''
-        this.$router.go(0)
+        this.nextAtta(1)
+      } else {
+        this.attaId = '1'
       }
     }
   },
   methods: {
     //  进入交付物详情
     details(id, name) {
-      this.nextAttaId = id
       this.attaName = name
-      localStorage.setItem('attaId', id)
-      this.attaId = localStorage.getItem('attaId')
+      localStorage.setItem('attaDetailsId', id)
       this.$router.push('/attaDetails')
     },
     //  阶段下交付物列表

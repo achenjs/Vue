@@ -66,7 +66,7 @@ export default {
         const toDepath = to.path
         if (toDepath === '/deliverable_list') {
           this.id = ''
-          this.$router.go(0)
+          this.nextPhases(1)
         }
     }
   },

@@ -95,7 +95,7 @@ export default {
     }
   },
   created() {
-    this.attaDetailsId = localStorage.getItem('attaId')
+    this.attaDetailsId = localStorage.getItem('attaDetailsId')
     this.details(1)
     this.isStatus()
   },

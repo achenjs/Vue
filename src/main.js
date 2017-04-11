@@ -17,7 +17,7 @@ axios.defaults.withCredentials = true
 
 router.beforeEach ((to, from, next) => {
   if (to.path != '/attaDetails') {
-    localStorage.removeItem('attaId')
+    localStorage.removeItem('attaDetailsId')
   }
   if (to.path == '/404') {
     if (router.options.routes[0].children) {
