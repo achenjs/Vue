@@ -38,7 +38,7 @@
          </el-table-column>
          <el-table-column
            align="center"
-           prop="Industry"
+           prop="industry"
            label="所属行业"
            width="120"
            show-overflow-tooltip>

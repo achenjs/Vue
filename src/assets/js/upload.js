@@ -70,7 +70,6 @@ module.exports = function uploadFile(f, type, fn){
        })
      }
   } else {
-    var url1 = 'https://apl-docs.oss-cn-beijing.aliyuncs.com'
     if(!/.(doc|docx|ppt|pptx|xls|xlsx|txt|rtf|ppt|bmp|png|jpg|jpeg|zip|prt|stp|dxf|dwg|sch|pcb|dsn|brd|pdf)$/.test(k)){
        $('.xs').text('文件格式有误')
        $('.xs').stop().animate({'top': '10px'}, 100)
@@ -89,7 +88,7 @@ module.exports = function uploadFile(f, type, fn){
             }
             fd.append("file", file)
             $.ajax({
-              url: 'https://apl-static.oss-cn-beijing.aliyuncs.com',
+              url: 'https://apl-docs.oss-cn-beijing.aliyuncs.com',
               data: fd,
               processData: false,
               cache: false,
