@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
   data() {
@@ -76,6 +77,7 @@ export default {
       const fromDepath = from.path
       if (toDepath === '/nextAtta') {
         this.attaId = ''
+        this.$router.go(0)
       }
     }
   },
@@ -117,26 +119,17 @@ export default {
         ppid: this.nextAttaId,
         status: 'Confirmed'
       }
-      $.ajax({
-        url: '/admin/api/v1/project_phase_review/',
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify(obj),
-        success: function(result) {
+      axios.post('/admin/api/v1/project_phase_review/', obj)
+        .then((result) => {
           _this.$message({
-            message: result.message,
+            message: result.data.message,
             type: 'success'
           })
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          } else {
-            _this.$message.error(JSON.parse(err.responseText).result)
-          }
-        }
-      })
+          _this.$router.push('/deliverable_list')
+        })
+        .catch((err) => {
+          _this.$message.error(err.result)
+        })
     },
     //  驳回
     cancel() {
@@ -145,18 +138,14 @@ export default {
         ppid: this.nextAttaId,
         status: 'Submitting'
       }
-      $.ajax({
-        url: '/admin/api/v1/project_phase_review/',
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify(obj),
-        success: function(result) {
+      axios.post('/admin/api/v1/project_phase_review/', obj)
+        .then((result) => {
           _this.$message({
-            message: result.message,
+            message: result.data.message,
             type: 'success'
           })
-        }
-      })
+          _this.$router.go(-1)
+        })
     }
   },
   components: {

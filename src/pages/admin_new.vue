@@ -111,10 +111,7 @@ export default {
               _this.$message.error(err.message)
             })
         } else {
-          this.$message({
-            message: '请输入完整信息',
-            type: 'warning'
-          })
+          this.$message.error('必填字段不能为空！')
         }
       }
     }

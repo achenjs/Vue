@@ -48,7 +48,7 @@
       </el-col>
     </div>
     <div class="query">
-      <span @click="search">查&nbsp;&nbsp;询</span>
+      <span @click="search(1)">查&nbsp;&nbsp;询</span>
     </div>
     <el-table
       :data="tableData"
@@ -202,7 +202,8 @@ export default {
         email: '',
         company_industry: '',
         company_name: '',
-        type: ''
+        type: '',
+        query: 1
       },
       form: {
         name: '',
@@ -230,41 +231,34 @@ export default {
     }
   },
   created() {
-    var _this = this
-    // 获取全部行业
-    $.ajax({
-      url: '/main/api/v1/industries',
-      success: function(result) {
-        var data = result.result
-        Object.assign(_this.industries, data.industries)
-      },
-      error: function(err) {
-        if (err.status == '401') {
-          _this.$message.error(JSON.parse(err.responseText).message)
-          _this.$router.push('/signin')
-        }
-      }
-    })
+    this.industr()
     //  会员列表
     this.search(1)
   },
   methods: {
+    industr() {
+      var _this = this
+      // 获取全部行业
+      axios.get('/main/api/v1/industries')
+        .then((result) => {
+          const data = result.data.result
+          Object.assign(_this.industries, data.industries)
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
+    },
     reset() {
-      for(var name in this.$data.form) {
+      for(let name in this.$data.form) {
         this.$data.form[name] = ''
       }
     },
     search(page) {
       var _this = this
-      var page
-      if (typeof page != 'object') {
-        page = page
-      } else {
-        page = 1
-      }
+      this.query.page = page
       //  会员列表
       $.ajax({
-        url: '/admin/api/v1/users?id='+this.query.id+'&type='+this.query.type+'&name='+this.query.name+'&email='+this.query.email+'&phone='+this.query.phone+'&company_name='+this.query.company_name+'&company_industry='+this.query.company_industry+'&page='+page,
+        url: '/admin/api/v1/users?id='+this.query.id+'&type='+this.query.type+'&name='+this.query.name+'&email='+this.query.email+'&phone='+this.query.phone+'&company_name='+this.query.company_name+'&company_industry='+this.query.company_industry+'&page='+this.query.page,
         beforeSend: function() {
           _this.loading = true
         },
@@ -307,19 +301,14 @@ export default {
       var _this = this
       this.addShow = true
       this.id = id
-      $.ajax({
-        url: '/admin/api/v1/users/' + id,
-        success: function(result) {
-          let data = result.result
+      axios.get('/admin/api/v1/users/' + id)
+        .then((result) => {
+          const data = result.data.result
           Object.assign(_this.form, data)
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     },
     ensure() {
       var _this = this
@@ -333,30 +322,22 @@ export default {
           }
         }
         var gender = this.form.gender
-        for(var i in this.genders) {
+        for(let i in this.genders) {
           if(this.genders[i] == gender) {
             this.form.gender = i
           }
         }
-        $.ajax({
-          url: '/admin/api/v1/users/' + this.id,
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
+        axios.post('/admin/api/v1/users/' + this.id, this.form)
+          .then((result) => {
             _this.addShow = false
             _this.$message({
-              message: result.message,
+              message: result.data.message,
               type: 'success'
             })
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       }
     },
     cancel() {

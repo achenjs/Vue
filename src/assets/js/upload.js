@@ -1,10 +1,8 @@
-var _this = this
-
 function createXmlHttpRequest(){
   if (window.ActiveXObject) { //如果是IE浏览器
     return new ActiveXObject("Microsoft.XMLHTTP")
   } else if (window.XMLHttpRequest) { //非IE浏览器
-    return new XMLHttpRequest();
+    return new XMLHttpRequest()
   }
 }
 
@@ -14,8 +12,8 @@ module.exports = function uploadFile(f, type, fn){
   var file = document.getElementById(f.id).files[0]
   var filename = file.name
   $('#filename').val(filename)
+
   var k = file.name.substr(file.name.lastIndexOf('.'))
-  //.doc.docx.ppt.pptx.xls.xlsx.txt.rtf.ppt.bmp.png.jpg.jpeg.zip.prt.stp.dxf.dwg.sch.pcb.dsn.brd
   if (type === 1) {
     // 上传头像
     var url1 = 'https://apl-static.oss-cn-beijing.aliyuncs.com'

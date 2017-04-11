@@ -255,6 +255,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import upload from '../assets/js/upload'
   export default {
     data() {
@@ -333,25 +334,23 @@ import upload from '../assets/js/upload'
       }
     },
     created() {
-      var _this = this
       this.bpDetailsId = this.$route.params.id
       this.details()
-      // 获取全部行业
-      $.ajax({
-        url: '/main/api/v1/industries',
-        success: function(result) {
-          var data = result.result
-          Object.assign(_this.industries, data.industries)
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+      this.industr()
     },
     methods: {
+      industr() {
+        var _this = this
+        // 获取全部行业
+        axios.get('/main/api/v1/industries')
+          .then((result) => {
+            const data = result.data.result
+            Object.assign(_this.industries, data.industries)
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
+      },
       //  详情
       details() {
         var _this = this
@@ -360,7 +359,7 @@ import upload from '../assets/js/upload'
               url: '/admin/api/v1/bps/' + this.bpDetailsId,
               success: function(result) {
                 var data = result.result
-                _this.form.start_from = data.gmt_create.split('T')[0]
+                // _this.form.start_from = data.gmt_create.split('T')[0]
                 Object.assign(_this.form, data)
                 return resolve(data.city)
               },

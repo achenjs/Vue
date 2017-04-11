@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 import upload from '../assets/js/upload'
 export default {
@@ -124,49 +125,33 @@ export default {
         } else {
           if (this.id === '') {
             //  新增
-            $.ajax({
-              url: '/admin/api/v1/attachments',
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
+            axios.post('/admin/api/v1/attachments', this.form)
+              .then((result) => {
                 _this.addShow = false
                 _this.$message({
-                  message: result.message,
+                  message: result.data.message,
                   type: 'success'
                 })
                 _this.query(1)
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+              })
+              .catch((err) => {
+                _this.$message.error(err.message)
+              })
           } else {
             //  修改
             _this.form.url = $("#hiddens").val()
-            $.ajax({
-              url: '/admin/api/v1/attachments/' + this.id,
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
+            axios.post('/admin/api/v1/attachments/' + this.id, this.form)
+              .then((result) => {
                 _this.addShow = false
                 _this.$message({
-                  message: result.message,
+                  message: result.data.message,
                   type: 'success'
                 })
                 _this.query(_this.page)
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+              })
+              .catch((err) => {
+                _this.$message.error(err.message)
+              })
           }
         }
       },
@@ -226,7 +211,6 @@ export default {
           success: function(result) {
             var data = result.result
             _this.form = data
-            _this.query(1)
           },
           error: function(err) {
             if (err.status == '401') {

@@ -38,7 +38,15 @@
        <el-col :span="8">
         <div style="width: 80%;">
           <label for="">服务项类别</label>
-          <el-select placeholder="请选择" v-model="form.category_id">
+          <el-select placeholder="请选择" v-if="isCustom" v-model="form.service_category_id">
+            <el-option
+            v-for="item in servers"
+            :label="item.name"
+            :value="item.id"
+            :key="item.id">
+            </el-option>
+          </el-select>
+          <el-select placeholder="请选择" v-else v-model="form.category_id">
             <el-option
             v-for="item in servers"
             :label="item.name"
@@ -129,17 +137,26 @@
            </el-table-column>
            <el-table-column
              align="center"
+             prop="status"
+             label="订单状态"
+             width="70"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             align="center"
              prop="gmt_create"
              width="140"
              label="下单时间"
              show-overflow-tooltip>
            </el-table-column>
            <el-table-column
+             v-if="isCustom"
              align="center"
-             prop="status"
-             label="订单状态"
-             width="70"
-             show-overflow-tooltip>
+             label="附件"
+             width="40">
+             <template scope="scope">
+               <a :href="scope.row.file_name" v-if="scope.row.file_name != '#'">下载</a>
+             </template>
            </el-table-column>
            <el-table-column
              align="center"
@@ -212,6 +229,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
   data () {
@@ -260,13 +278,14 @@ export default {
       servers: [{name: '全部类别',id: ''}],
       form: {
         starttime: '',
-        category_id: '',
+        service_category_id: '',
         description: '',
         endtime: '',
         id: '',
         status: '',
         title: '',
-        project_name: ''
+        project_name: '',
+        category_id: ''
       },
       tableData: [],
       loading: false,
@@ -398,7 +417,7 @@ export default {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
       $.ajax({
-        url: '/admin/api/v1/user_service_items?id='+this.form.id+'&project_name='+this.form.project_name+'&category_id='+this.form.category_id+'&title='+this.form.title+'&status='+this.form.status+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
+        url: '/admin/api/v1/user_service_items?id='+this.form.id+'&project_name='+this.form.project_name+'&service_category_id='+this.form.service_category_id+'&title='+this.form.title+'&status='+this.form.status+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
         beforeSend: function() {
           _this.loading = true
         },
@@ -427,6 +446,20 @@ export default {
                  }
        			var  time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
             data.items[i].gmt_create = time
+
+            if (data.items[i].file_name === null || data.items[i].file_name === '') {
+                data.items[i].file_name = '#'
+            } else {
+              axios.get('/main/api/v1/files/' + data.items[i].file_name)
+                .then((result) => {
+                  const Url = result.data
+                  if (data == '') {
+                    data.items[i].file_name = '#'
+                  } else {
+                    data.items[i].file_name = Url
+                  }
+                })
+            }
           }
           _this.tableData = data.items
           setTimeout(function() {

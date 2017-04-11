@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
     data() {
@@ -99,20 +100,15 @@ export default {
       //  BP列表
       search(page) {
         var _this = this
-        $.ajax({
-          url: '/admin/api/v1/bps?page=' + page,
-          success: function(result) {
-            let data = result.result
+        axios.get('/admin/api/v1/bps?page=' + page)
+          .then((result) => {
+            const data = result.data.result
             _this.total = data.total
             _this.tableData = data.items
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       },
       //  详情修改
       queryClick(id) {
