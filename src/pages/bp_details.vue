@@ -22,6 +22,9 @@
               <el-form-item label="预期估值(万元)">
                 <el-input placeholder="请输入预期估值(万元)" v-model="form.valuation"></el-input>
               </el-form-item>
+              <el-form-item label="当前融资情况">
+                <el-input type="textarea" :rows="3" placeholder="请输入当前融资情况" v-model="form.current_financing_status"></el-input>
+              </el-form-item>
               <el-form-item label="联系人">
                 <el-input placeholder="请输入联系人" v-model="form.contact"></el-input>
               </el-form-item>
@@ -41,17 +44,33 @@
                   placeholder="请输入成立时间">
                 </el-date-picker>
               </el-form-item>
-              <el-form-item label="所属城市">
-                <el-select placeholder="请输入请选择省份" @change="city(region_name)" v-model="region_name">
+              <el-form-item label="所在地区">
+                <el-select placeholder="请选择国家" v-model="country">
+                  <el-option
+                  v-for="item in countrys"
+                  :label="item.name"
+                  :value="item.value"
+                  :key="item.value">
+                  </el-option>
+                </el-select>
+                <el-select placeholder="请选择省份" @change="city(region_name)" v-model="region_name">
                   <el-option
                   v-for="item in regions"
                   :label="item.name"
                   :value="item.area_id"
                   :key="item.area_id"></el-option>
                 </el-select>
-                <el-select placeholder="请输入请选择城市" v-model="city_id">
+                <el-select placeholder="请选择城市" @change="area(city_name)" v-model="city_name">
                   <el-option
                   v-for="item in citys"
+                  :label="item.name"
+                  :value="item.area_id"
+                  :key="item.area_id">
+                  </el-option>
+                </el-select>
+                <el-select placeholder="请选择区(县)" v-model="city_id">
+                  <el-option
+                  v-for="item in areas"
                   :label="item.name"
                   :value="item.area_id"
                   :key="item.area_id">
@@ -219,29 +238,29 @@
         <div class="Modular">
           <el-col :span="24">
             <el-form :label-position="right" label-width="120px">
-              <el-form-item label="需求">
-                <el-input placeholder="请输入需求" v-model="form.score_needs"></el-input>
+              <el-form-item label="需求评分">
+                <el-input-number :min="0" :max="10" v-model="form.score_needs"></el-input-number>
               </el-form-item>
-              <el-form-item label="行业">
-                <el-input placeholder="请输入行业" v-model="form.score_industry"></el-input>
+              <el-form-item label="行业评分">
+                <el-input-number :min="0" :max="10" v-model="form.score_industry"></el-input-number>
               </el-form-item>
-              <el-form-item label="产品">
-                <el-input placeholder="请输入产品" v-model="form.score_product"></el-input>
+              <el-form-item label="产品评分">
+                <el-input-number :min="0" :max="10" v-model="form.score_product"></el-input-number>
               </el-form-item>
-              <el-form-item label="团队">
-                <el-input placeholder="请输入团队" v-model="form.score_team"></el-input>
+              <el-form-item label="团队评分">
+                <el-input-number :min="0" :max="10" v-model="form.score_team"></el-input-number>
               </el-form-item>
-              <el-form-item label="资源">
-                <el-input placeholder="请输入资源" v-model="form.score_resource"></el-input>
+              <el-form-item label="资源评分">
+                <el-input-number :min="0" :max="10" v-model="form.score_resource"></el-input-number>
               </el-form-item>
-              <el-form-item label="商业模式">
-                <el-input placeholder="请输入商业模式" v-model="form.score_mode"></el-input>
+              <el-form-item label="商业模式评分">
+                <el-input-number :min="0" :max="10" v-model="form.score_mode"></el-input-number>
               </el-form-item>
-              <el-form-item label="估值">
-                <el-input placeholder="请输入估值" v-model="form.score_evaluation"></el-input>
+              <el-form-item label="估值评分">
+                <el-input-number :min="0" :max="10" v-model="form.score_evaluation"></el-input-number>
               </el-form-item>
-              <el-form-item label="风险">
-                <el-input placeholder="请输入风险" v-model="form.score_risk"></el-input>
+              <el-form-item label="风险评分">
+                <el-input-number :min="0" :max="10" v-model="form.score_risk"></el-input-number>
               </el-form-item>
             </el-form>
           </el-col>
@@ -286,6 +305,7 @@ import upload from '../assets/js/upload'
           "future_aim": "",
           "future_plan": "",
           "income_status": "",
+          "current_financing_status": "",
           "industry": "",
           "industry_resource": "",
           "investors": "",
@@ -322,12 +342,20 @@ import upload from '../assets/js/upload'
           "timestamp": "",
           "valuation": ""
         },
+        countrys: [
+          {name: '中国', value: 'china'}
+        ],
+        country: 'china',
         fileData: {},
         bpDetailsId: '',
         region_name: '',
+        city_name: '',
+        city_id: '',
+        isChangCity: '',
+        isChangArea: '',
         regions: [],
         citys: [],
-        city_id: '',
+        areas: [],
         industries: {
           '': '全部行业'
         }
@@ -377,12 +405,14 @@ import upload from '../assets/js/upload'
               success: function(result) {
                 var data = result.result
                 //  省
-                _this.region_name = data[0].name
+                _this.region_name = data[0].area_id
+                _this.isChangCity = data[0].area_id
                 //  市
+                _this.city_name = data[1].area_id
+                _this.isChangArea = data[1].area_id
                 _this.region()
-                _this.city(data[0].area_id)
-                _this.form.city = data[1].area_id
-                _this.city_id = data[1].area_id
+                //  区/县
+                _this.city_id = data[2].area_id
               },
               error: function(err) {
                 if (err.status == '401') {
@@ -410,34 +440,50 @@ import upload from '../assets/js/upload'
             }
           }
         }
+        var fraction = this.form.score_team + this.form.score_risk + this.form.score_mode + this.form.score_industry
+        + this.form.score_needs + this.form.score_product + this.form.score_resource + this.form.score_evaluation
+        if (fraction != 10) {
+          this.$message.error('评分总数不正常！')
+          return false
+        }
+        var financing_sum = this.form.financing_sum
+        var valuation = this.form.valuation
+        if (parseFloat(financing_sum) || parseFloat(financing_sum) === 0) {
+          this.form.financing_sum = parseFloat(financing_sum)
+        } else {
+          this.$message.error('输入的预期融资额格式不对，应该为数字！')
+          return false
+        }
+        if (parseFloat(valuation) || parseFloat(valuation) === 0) {
+          this.form.valuation = parseFloat(valuation)
+        } else {
+          this.$message.error('输入的预期估值格式不对，应该为数字！')
+          return false
+        }
         if (this.form.start_from === '') {
           this.form.start_from = ''
         } else {
           this.form.start_from = Date.parse(new Date(this.form.start_from))
         }
-        if (this.form.bp_url === "0") {
-          this.$message.error('没有获取到上传url')
-        } else {
-          $.ajax({
-            url: '/admin/api/v1/bps/' + this.bpDetailsId,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.$router.push('/bp_list')
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
-              }
+        $.ajax({
+          url: '/admin/api/v1/bps/' + this.bpDetailsId,
+          type: 'post',
+          contentType: 'application/json',
+          data: JSON.stringify(this.form),
+          success: function(result) {
+            _this.$message({
+              message: result.message,
+              type: 'success'
+            })
+            _this.$router.push('/bp_list')
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/signin')
             }
-          })
-        }
+          }
+        })
       },
       //  获取省级
       region() {
@@ -467,7 +513,9 @@ import upload from '../assets/js/upload'
             success: function(result) {
               var data = result.result
               _this.citys = data
-              _this.city_id = data[0].area_id
+              if (_this.region_name != _this.isChangCity) {
+                _this.city_name = data[0].area_id
+              }
             },
             error: function(err) {
               if (err.status == '401') {
@@ -478,6 +526,21 @@ import upload from '../assets/js/upload'
           })
         }
       },
+      // 获取区
+      area(id) {
+        var _this = this
+        axios.get('/main/api/v1/region/' + id +'?page=1')
+          .then((result) => {
+            const data = result.data.result
+            _this.areas = data
+            if (_this.isChangArea != _this.city_name) {
+              _this.city_id = data[0].area_id
+            }
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
+      }
     }
   }
 </script>

@@ -78,7 +78,7 @@ module.exports = {
 
               index.default.init_route()
 
-              _this.$router.push({path: '/', query: 1})
+              _this.$router.push({path: '/', query: {id: 1}})
             })
             .catch((err) => {
               _this.$message.error(err.message)

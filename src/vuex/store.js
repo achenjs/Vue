@@ -15,17 +15,16 @@ const getters = {
 
 const mutations = {
   urlInfo (state, obj) {
-    console.log(obj)
     if (obj) {
-      let path = obj.path
-      let parameter = obj.parameter
-      let len = Object.keys(parameter).length
+      var path = obj.path
+      var parameter = obj.parameter
+      var len = Object.keys(parameter).length
       var str = ''
       for (let i in parameter) {
-        if (parameter[i] === '') {
+        if (parameter[i] === '' || parameter[i] === undefined) {
           delete parameter[i]
         } else {
-          str += '&' + parameter[i] + '=' + parameter[i]
+          str += '&' + i + '=' + parameter[i]
         }
       }
       state.changeUrl = str.replace('&', '?')

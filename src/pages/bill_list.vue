@@ -107,7 +107,15 @@ export default {
 
   },
   methods: {
+    IninParams() {
+      for (let i in this.$data.form) {
+        if (!this.$data.form[i]) {
+          this.$data.form[i] = undefined
+        }
+      }
+    },
     query(page) {
+      // this.IninParams()
       // this.$store.dispatch('increment', {
       //   path: '/admin/api/v1/bills',
       //   parameter: this.form
