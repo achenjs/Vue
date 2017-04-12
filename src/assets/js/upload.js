@@ -30,7 +30,7 @@ module.exports = function uploadFile(f, type, fn){
         $.ajax({
           url:'/main/api/v1/sts_info',
           success:function(e){
-            e.key=e.key + k
+            e.key = e.key + k
             e["x:filename"] = filename
             for(var i in e){
                fd.append(i,e[i])
@@ -79,10 +79,12 @@ module.exports = function uploadFile(f, type, fn){
        return false
      } else {
         var fd = new FormData()
+
         $.ajax({
           url:'/main/api/v1/sts_info',
           success:function(e){
-            e.key=e.key + k
+            e.key = e.key + k
+            e["x:filename"] = filename
             for(var i in e){
                fd.append(i,e[i])
             }
