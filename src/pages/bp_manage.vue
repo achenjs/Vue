@@ -326,9 +326,7 @@ import upload from '../assets/js/upload'
         fileData: {},
         regions: [],
         citys: [],
-        industries: {
-          '': '全部行业'
-        }
+        industries: {}
       }
     },
     created() {
@@ -355,7 +353,7 @@ import upload from '../assets/js/upload'
       },
       //  上传
       uploadFile(ele) {
-        upload(ele.target)
+        upload(ele.target, '')
       },
       //  创建BP
       submitBP() {
@@ -366,25 +364,29 @@ import upload from '../assets/js/upload'
         } else {
           this.form.start_from = Date.parse(new Date(this.form.start_from))
         }
-        $.ajax({
-          url: '/admin/api/v1/bps',
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
-            _this.$message({
-              message: result.message,
-              type: 'success'
-            })
-            _this.$router.push('/bp_list')
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
+        if (this.form.city === '' || this.form.industry === '') {
+          this.$message.error('必填字段不能为空!')
+        } else {
+          $.ajax({
+            url: '/admin/api/v1/bps',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(this.form),
+            success: function(result) {
+              _this.$message({
+                message: result.message,
+                type: 'success'
+              })
+              _this.$router.push('/bp_list')
+            },
+            error: function(err) {
+              if (err.status == '401') {
+                _this.$message.error(JSON.parse(err.responseText).message)
+                _this.$router.push('/signin')
+              }
             }
-          }
-        })
+          })
+        }
       },
       //  获取省级
       region() {

@@ -208,7 +208,7 @@
                <label for="">服务状态</label>
                <el-select placeholder="请选择" v-model="details.status">
                  <el-option
-                 v-for="item in conditions"
+                 v-for="item in condition_details"
                  :label="item.label"
                  :value="item.value"
                  :key="item.value">
@@ -244,27 +244,41 @@ export default {
       CustomDetails: {
         title: '',
       },
+      condition_details: [
+        {
+          value: 'Canceled',
+          label: '已取消'
+        },
+        {
+          value: 'Confirmed',
+          label: '已确认'
+        },
+        {
+          value: 'Finished',
+          label: '已完成'
+        }
+      ],
       conditions: [
         {
           value: '',
           label: '全部状态'
         },
-        // {
-        //   value: 'Paid',
-        //   label: '已支付'
-        // },
+        {
+          value: 'Paid',
+          label: '已支付'
+        },
         {
           value: 'Canceled',
           label: '已取消'
         },
-        // {
-        //   value: 'Submitting',
-        //   label: '待提交'
-        // },
-        // {
-        //   value: 'Submitted',
-        //   label: '已提交'
-        // },
+        {
+          value: 'Submitting',
+          label: '待提交'
+        },
+        {
+          value: 'Submitted',
+          label: '已提交'
+        },
         {
           value: 'Confirmed',
           label: '已确认'

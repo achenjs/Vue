@@ -103,7 +103,7 @@ export default {
       //  上传
       uploadFile(ele) {
         var _this = this
-        upload(ele.target, 2)
+        upload(ele.target, '')
       },
       reset() {
         for(var name in this.$data.form) {

@@ -17,7 +17,7 @@
         align="center"
         prop="attachment_name"
         label="交付物名称"
-        width="100"
+        width="140"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -25,7 +25,9 @@
         label="附件"
         width="80">
         <template scope="scope">
-          <a :href="scope.row.url" style="" v-if="status != '请求忽略'">下载</a>
+          <a v-if="status == '请求忽略'"></a>
+          <a v-else-if="scope.row.url === '#'"></a>
+          <a v-else :href="scope.row.url">下载</a>
         </template>
       </el-table-column>
       <el-table-column
@@ -194,7 +196,9 @@ export default {
              type: 'success'
            })
            this.addShow = false
-           this.$router.go(-1)
+           setTimeout(function() {
+             this.$router.push('/nextAtta')
+           }, 500)
            this.reset()
          }).catch((err) => {
            this.$message.error(err)
@@ -240,7 +244,9 @@ export default {
              type: 'success'
            })
            this.addShow = false
-           this.$router.go(-1)
+           setTimeout(function() {
+             this.$router.push('/nextAtta')
+           }, 500)
            this.reset()
          }).catch((err) => {
            this.$message.error(err)

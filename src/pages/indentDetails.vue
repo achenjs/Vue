@@ -56,34 +56,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <el-row style="margin-top: 30px;">
-      <el-col :span="8">
-        <div style="width: 80%;">
-          <label for="">价格(硬豆)</label>
-          <el-input placeholder="价格" v-model="details.price"></el-input>
-        </div>
-      </el-col>
-      <el-col :span="8">
-        <div style="width: 80%; margin: 0 auto;">
-          <label for="">订单状态</label>
-          <el-select placeholder="请选择" v-model="details.status">
-            <el-option
-            v-for="item in conditions"
-            :label="item.label"
-            :value="item.value"
-            :key="item.value">
-            </el-option>
-          </el-select>
-        </div>
-      </el-col>
-    </el-row> -->
-    <!-- <el-row>
-      <el-col :span="8" :offset="8">
-        <div style="width: 80%; margin: 20px auto;">
-          <el-button type="primary" style="width: 200px;" @click="midService">提交</el-button>
-        </div>
-      </el-col>
-    </el-row> -->
     <transition name="fade">
       <div class="modal" v-if="addShow">
         <div class="modal-dialog">
@@ -171,20 +143,8 @@ export default {
       addShow: false,
       conditions: [
         {
-          value: 'Paid',
-          label: '已支付'
-        },
-        {
           value: 'Canceled',
           label: '已取消'
-        },
-        {
-          value: 'Submitting',
-          label: '待提交'
-        },
-        {
-          value: 'Submitted',
-          label: '已提交'
         },
         {
           value: 'Confirmed',
@@ -208,20 +168,6 @@ export default {
   created() {
     this.form.usiid = this.$route.params.id
     var _this = this
-    //  获取所有服务包类
-    // $.ajax({
-    //   url: '/admin/api/v1/service_categories?page=1',
-    //   success: function(result) {
-    //     var data = result.result
-    //     _this.servers = data.items
-    //   },
-    //   error: function(err) {
-    //     if (err.status == '401') {
-    //       _this.$message.error(JSON.parse(err.responseText).message)
-    //       _this.$router.push('/admin/signin')
-    //     }
-    //   }
-    // })
     //  详情
     this.UserDetail()
   },
@@ -250,15 +196,6 @@ export default {
             case '已取消':
               _this.details.status = 'Canceled'
               break;
-            case '已支付':
-              _this.details.status = 'Paid'
-              break;
-            case '待提交':
-              _this.details.status = 'Submitting'
-              break;
-            case '已提交':
-              _this.details.status = 'Submitted'
-              break;
             case '已确认':
               _this.details.status = 'Confirmed'
               break;
@@ -268,7 +205,6 @@ export default {
           }
           _this.details.price = userService.price
           for (let i in data.items) {
-          // for(var i=0; i<data.items.length; i++) {
             var timer = data.items[i].gmt_create;
 			      var timer = new Date(timer)
 					  timer.setTime(timer.getTime() + 0)

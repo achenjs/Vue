@@ -359,7 +359,8 @@ import upload from '../assets/js/upload'
               url: '/admin/api/v1/bps/' + this.bpDetailsId,
               success: function(result) {
                 var data = result.result
-                // _this.form.start_from = data.gmt_create.split('T')[0
+                data.start_from = Number(data.start_from)
+                _this.form.start_from = new Date(data.start_from)
                 Object.assign(_this.form, data)
                 return resolve(data.city)
               },
@@ -395,7 +396,7 @@ import upload from '../assets/js/upload'
       //  上传
       uploadFile(ele) {
         var _this = this
-        upload(ele.target, 2)
+        upload(ele.target, '')
       },
       //  修改BP
       submitBP() {

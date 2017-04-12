@@ -10,6 +10,7 @@ function createXmlHttpRequest(){
 
 module.exports = function uploadFile(f, type, fn){
   var file = document.getElementById(f.id).files[0]
+  console.log(file)
   var filename = file.name
   $('#filename').val(filename)
 
@@ -30,6 +31,7 @@ module.exports = function uploadFile(f, type, fn){
           url:'/main/api/v1/sts_info',
           success:function(e){
             e.key=e.key + k
+            e["x:filename"] = filename
             for(var i in e){
                fd.append(i,e[i])
             }

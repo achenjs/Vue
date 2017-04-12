@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="nextAtta">
-    <div v-if="attaId == ''">
+    <div v-if="isShow">
       <el-table
       :data="tableData"
       v-loading="loading"
@@ -58,15 +58,17 @@ export default {
       tableData: [],
       total: 1,
       nextAttaId: '',
-      attaId: '',
+      isShow: true,
       id: '',
       attaName: ''
     }
   },
   created() {
     this.nextAttaId = localStorage.getItem('nextAttaId')
-    if (this.attaId == undefined) {
-      this.attaId = ''
+    if (localStorage.getItem('attaDetailsId')) {
+      this.isShow = false
+    } else {
+      this.isShow = true
     }
     this.nextAtta(1)
   },
@@ -75,10 +77,8 @@ export default {
       const toDepath = to.path
       const fromDepath = from.path
       if (toDepath === '/nextAtta') {
-        this.attaId = ''
+        this.isShow = true
         this.nextAtta(1)
-      } else {
-        this.attaId = '1'
       }
     }
   },
@@ -86,30 +86,29 @@ export default {
     //  进入交付物详情
     details(id, name) {
       this.attaName = name
+      this.isShow = false
       localStorage.setItem('attaDetailsId', id)
       this.$router.push('/attaDetails')
     },
     //  阶段下交付物列表
     nextAtta(page) {
       const _this = this
-      $.ajax({
+      axios({
         url: '/admin/api/v1/user_attachments?ppid=' + this.nextAttaId + '&page=' + page,
-        beforeSend: function() {
+        transformResponse: [(data) => {
           _this.loading = true
-        },
-        success: function(result) {
-          var data = result.result
+          return data
+        }]
+      })
+        .then((result) => {
+          const data = JSON.parse(result.data).result
           _this.loading = false
           _this.total = data.total
           _this.tableData = data.items
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.result)
+        })
     },
     //  同意进入下一阶段
     ensure() {
@@ -143,7 +142,7 @@ export default {
             message: result.data.message,
             type: 'success'
           })
-          _this.$router.go(-1)
+          _this.$router.push('/department_list')
         })
     }
   },
