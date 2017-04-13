@@ -1,47 +1,19 @@
 <template>
    <div class="service_custom">
      <el-row>
-       <el-col :span="8">
+       <el-col :span="5">
          <div style="width: 80%;">
            <label for="">编号</label>
            <el-input placeholder="编号" v-model="query.id"></el-input>
          </div>
        </el-col>
-       <el-col :span="8">
+       <el-col :span="5">
          <div style="width: 80%;">
            <label for="">关键字</label>
            <el-input placeholder="关键字" v-model="query.keyword"></el-input>
          </div>
        </el-col>
-       <el-col :span="8">
-         <div style="width: 80%;">
-           <label for="">类别</label>
-           <el-select v-model="query.category_id" placeholder="请选择类别">
-             <el-option
-             v-for="item in Categorys"
-             :label="item.name"
-             :value="item.id"
-             :key="item.name">
-             </el-option>
-           </el-select>
-         </div>
-       </el-col>
-     </el-row>
-     <el-row style="margin-top: 10px; margin-bottom: 20px;">
-       <el-col :span="8">
-         <div style="width: 80%;">
-           <label for="">状态</label>
-           <el-select v-model="query.status" placeholder="请选择类别">
-             <el-option
-             v-for="item in conditions"
-             :label="item.label"
-             :value="item.value"
-             :key="item.label">
-             </el-option>
-           </el-select>
-         </div>
-       </el-col>
-       <el-col :span="16">
+       <el-col :span="14">
          <label for="">交易日期</label>
          <el-date-picker
            v-model="query.starttime"
@@ -54,6 +26,34 @@
            type="date"
            placeholder="选择日期">
          </el-date-picker>
+       </el-col>
+     </el-row>
+     <el-row style="margin-top: 10px; margin-bottom: 20px;">
+       <el-col :span="5">
+         <div style="width: 80%;">
+           <label for="">类别</label>
+           <el-select v-model="query.category_id" placeholder="请选择类别">
+             <el-option
+             v-for="item in Categorys"
+             :label="item.name"
+             :value="item.id"
+             :key="item.name">
+             </el-option>
+           </el-select>
+         </div>
+       </el-col>
+       <el-col :span="5">
+         <div style="width: 80%;">
+           <label for="">状态</label>
+           <el-select v-model="query.status" placeholder="请选择类别">
+             <el-option
+             v-for="item in conditions"
+             :label="item.label"
+             :value="item.value"
+             :key="item.label">
+             </el-option>
+           </el-select>
+         </div>
        </el-col>
      </el-row>
      <div class="query">
@@ -217,18 +217,6 @@ export default {
     }
   },
   methods: {
-    IninParams() {
-      for (let i in this.$data.query) {
-        if (!this.$data.query[i]) {
-          this.$data.query[i] = undefined
-        }
-      }
-      // this.$store.commit('urlInfo', { parameter: this.$data.query })
-      // this.$store.dispatch('increment', {
-      //   // path: '/admin/api/v1/custom_service_items',
-      //   parameter: this.$data.query
-      // })
-    },
     reset() {
       for(var name in this.$data.form) {
         this.$data.form[name] = ''
@@ -239,13 +227,10 @@ export default {
       var _this = this
       $.ajax({
         url: '/admin/api/v1/service_categories?page=1',
-        // beforeSend: function() {
-        //   _this.loading = true
-        // },
         success: function(result) {
           _this.loading = false
           var data = result.result
-          // _this.total = data.total
+          _this.total = data.total
           _this.Categorys = data.items
           _this.Categorys.unshift({name: '全部类别', id: ''})
         },
@@ -267,8 +252,19 @@ export default {
     search(page) {
       var _this = this
       this.query.page = page
-      // this.IninParams()
-      // var changeUrl = this.$store.getters.changeUrl
+      this.$store.dispatch('increment', {
+        path: '/admin/api/v1/custom_service_items',
+        parameter: {
+          id: this.query.id,
+          starttime: this.query.starttime,
+          endtime: this.query.endtime,
+          status: this.query.status,
+          keyword: this.query.keyword,
+          category_id: this.query.category_id,
+          page: 1
+        }
+      })
+      var changeUrl = this.$store.getters.changeUrl
       if (this.query.starttime === '') {
         this.query.starttime = ''
       } else {
@@ -280,7 +276,7 @@ export default {
         this.query.endtime = Date.parse(new Date(this.query.endtime))
       }
       $.ajax({
-        url: '/admin/api/v1/custom_service_items?page=' + this.query.page + '&status=' + this.query.status + '&starttime=' + this.query.starttime + '&endtime=' + this.query.endtime + '&keyword=' + this.query.keyword + '&id=' + this.query.id + '&category_id=' + this.query.category_id,
+        url: changeUrl,
         beforeSend: function() {
           _this.loading = true
         },

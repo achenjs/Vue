@@ -1,7 +1,7 @@
 <template>
    <div class="service_item">
      <el-row>
-       <el-col :span="8">
+       <el-col :span="5">
          <div style="width: 80%;">
            <label for="">服务项名称</label>
            <el-input placeholder="服务项名称" v-model="query.name"></el-input>
