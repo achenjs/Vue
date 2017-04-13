@@ -113,17 +113,12 @@ export default {
       },
       //  详情修改
       queryClick(id) {
-<<<<<<< HEAD
-        this.$router.push('/admin/bp_details')
-        localStorage.setItem('bpDetailsId', id)
-=======
         if (typeof id === 'object') {
           this.$message.error('没有获取到id值')
         } else {
           this.id = id
           this.$router.push('/bp_list/' + id)
         }
->>>>>>> master
       }
     },
     components: {

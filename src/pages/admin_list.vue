@@ -236,13 +236,6 @@ export default {
     this.search(1)
   },
   methods: {
-    // IninParams() {
-    //   for (let i in this.$data.query) {
-    //     if (!this.$data.query[i]) {
-    //       this.$data.query[i] = undefined
-    //     }
-    //   }
-    // },
     industr() {
       var _this = this
       // 获取全部行业
@@ -263,16 +256,23 @@ export default {
     search(page) {
       var _this = this
       this.query.page = page
-      // this.IninParams()
-      // this.$store.dispatch('increment', {
-      //   path: '/admin/api/v1/users',
-      //   parameter: this.query
-      // })
-      // var changeUrl = this.$store.getters.changeUrl
+      this.$store.dispatch('increment', {
+        path: '/admin/api/v1/users',
+        parameter: {
+          id: this.query.id,
+          name: this.query.name,
+          phone: this.query.phone,
+          email: this.query.email,
+          company_industry: this.query.company_industry,
+          company_name: this.query.company_name,
+          type: this.query.type,
+          page: this.query.page
+        }
+      })
+      var changeUrl = this.$store.getters.changeUrl
       //  会员列表
       axios({
-        url: '/admin/api/v1/users?page=' + this.query.page + '&id=' + this.query.id + '&name=' + this.query.name + '&phone=' + this.query.phone + '&email=' + this.query.email + '&company_industry=' + this.query.company_industry
-        + '&company_name=' + this.query.company_name + '&type=' + this.query.type,
+        url: '/admin/api/v1/users' + changeUrl,
         transformResponse: [(data) => {
           _this.loading = true
           return data
