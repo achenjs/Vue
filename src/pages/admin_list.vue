@@ -47,8 +47,8 @@
         </div>
       </el-col>
     </div>
-    <div class="query" @click="search">
-      <span>查&nbsp;&nbsp;询</span>
+    <div class="query">
+      <span @click="search(1)">查&nbsp;&nbsp;询</span>
     </div>
     <el-table
       :data="tableData"
@@ -202,7 +202,8 @@ export default {
         email: '',
         company_industry: '',
         company_name: '',
-        type: ''
+        type: '',
+        page: 1
       },
       form: {
         name: '',
@@ -220,7 +221,9 @@ export default {
         'Female': '女'
       },
       id: '',
-      industries: {},
+      industries: {
+        '': '全部行业'
+      },
       tableData: [],
       total: 1,
       loading: false,
@@ -228,63 +231,58 @@ export default {
     }
   },
   created() {
-    var _this = this
-    // 所属行业
-    // axios.get('/main/api/v1/industries')
-    //   .then((result) => {
-    //     const data = result.data
-    //     _this.industries = data.industries
-    //     _this.industries[''] = '全部行业'
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    if (this.$route.query == 1) {
-      this.$router.go(0)
-    }
-
-    $.ajax({
-      url: '/main/api/v1/industries',
-      success: function(result) {
-        var data = result.result
-        _this.industries = data.industries
-        _this.industries[''] = '全部行业'
-      },
-      error: function(err) {
-        if (err.status == '401') {
-          _this.$message.error(JSON.parse(err.responseText).message)
-          _this.$router.push('/admin/signin')
-        }
-      }
-    })
+    this.industr()
     //  会员列表
     this.search(1)
   },
   methods: {
+    // IninParams() {
+    //   for (let i in this.$data.query) {
+    //     if (!this.$data.query[i]) {
+    //       this.$data.query[i] = undefined
+    //     }
+    //   }
+    // },
+    industr() {
+      var _this = this
+      // 获取全部行业
+      axios.get('/main/api/v1/industries')
+        .then((result) => {
+          const data = result.data.result
+          Object.assign(_this.industries, data.industries)
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
+    },
     reset() {
-      for(var name in this.$data.form) {
+      for(let name in this.$data.form) {
         this.$data.form[name] = ''
       }
     },
     search(page) {
       var _this = this
-      var page
-      if (typeof page != 'object') {
-        page = page
-      } else {
-        page = 1
-      }
+      this.query.page = page
+      // this.IninParams()
+      // this.$store.dispatch('increment', {
+      //   path: '/admin/api/v1/users',
+      //   parameter: this.query
+      // })
+      // var changeUrl = this.$store.getters.changeUrl
       //  会员列表
-      $.ajax({
-        url: '/admin/api/v1/users?id='+this.query.id+'&type='+this.query.type+'&name='+this.query.name+'&email='+this.query.email+'&phone='+this.query.phone+'&company_name='+this.query.company_name+'&company_industry='+this.query.company_industry+'&page='+page,
-        beforeSend: function() {
+      axios({
+        url: '/admin/api/v1/users?page=' + this.query.page + '&id=' + this.query.id + '&name=' + this.query.name + '&phone=' + this.query.phone + '&email=' + this.query.email + '&company_industry=' + this.query.company_industry
+        + '&company_name=' + this.query.company_name + '&type=' + this.query.type,
+        transformResponse: [(data) => {
           _this.loading = true
-        },
-        timeout: 5000,
-        success: function(result) {
-          var data = result.result
+          return data
+        }],
+        timeout: 10000
+      })
+        .then((result) => {
+          const data = JSON.parse(result.data).result
           _this.loading = false
-          for (var i in data.items) {
+          for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
   					timer.setTime(timer.getTime()+0)
@@ -299,39 +297,29 @@ export default {
           }
           _this.total = data.total
           _this.tableData = data.items
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-          if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            _this.loading = false
+            _this.$message.error('请求超时!')
+          } else {
+            _this.$message.error(err.message)
           }
-        }
-      })
+        })
     },
     //  编辑信息
     midClick(id) {
       var _this = this
       this.addShow = true
       this.id = id
-      $.ajax({
-        url: '/admin/api/v1/users/' + id,
-        success: function(result) {
-          let data = result.result
+      axios.get('/admin/api/v1/users/' + id)
+        .then((result) => {
+          const data = result.data.result
           Object.assign(_this.form, data)
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
-          }
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     },
     ensure() {
       var _this = this
@@ -345,30 +333,22 @@ export default {
           }
         }
         var gender = this.form.gender
-        for(var i in this.genders) {
+        for(let i in this.genders) {
           if(this.genders[i] == gender) {
             this.form.gender = i
           }
         }
-        $.ajax({
-          url: '/admin/api/v1/users/' + this.id,
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
+        axios.post('/admin/api/v1/users/' + this.id, this.form)
+          .then((result) => {
             _this.addShow = false
             _this.$message({
-              message: result.message,
+              message: result.data.message,
               type: 'success'
             })
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
-            }
-          }
-        })
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       }
     },
     cancel() {

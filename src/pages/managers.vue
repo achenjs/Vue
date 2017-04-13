@@ -95,7 +95,7 @@
                 </el-option>
               </el-select>
               <label for=""><i>*</i>状态</label>
-              <el-select v-model="form.status" placeholder="请选择">
+              <el-select v-model="form.active" placeholder="请选择">
                 <el-option
                 v-for="item in states"
                 :label="item.label"
@@ -121,7 +121,7 @@ export default {
     data() {
       return {
         form: {
-          status: '',
+          active: '',
           role_id: '',
           email: '',
           name: '',
@@ -162,7 +162,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
@@ -176,7 +176,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
@@ -222,7 +222,7 @@ export default {
       addOpen() {
         this.reset()
         this.id = ''
-        this.form.status = true
+        this.form.active = true
         this.addShow = true
       },
       cancel() {
@@ -255,7 +255,7 @@ export default {
               error: function(err) {
                 if (err.status == '401') {
                   _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/admin/signin')
+                  _this.$router.push('/signin')
                 }
               }
             })
@@ -279,7 +279,7 @@ export default {
             error: function(err) {
               if (err.status == '401') {
                 _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+                _this.$router.push('/signin')
               }
             }
           })
@@ -293,7 +293,7 @@ export default {
           beforeSend: function() {
             _this.loading = true
           },
-          timeout: 5000,
+          timeout: 10000,
           success: function(result) {
             let data = result.result
             _this.loading = false
@@ -307,8 +307,17 @@ export default {
             			 date = timer.getUTCDate(),
             			 hour = timer.getUTCHours(),
             			 minute = timer.getUTCMinutes(),
-            			 second = timer.getUTCSeconds(),
-           			   time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
+            			 second = timer.getUTCSeconds();
+                   if (hour < 10) {
+                     hour = '0' + hour
+                   }
+                   if (minute < 10) {
+                     minute = '0' + minute
+                   }
+                   if (second < 10) {
+                     second = '0' + second
+                   }
+           		var	 time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
               data.items[i].gmt_create = time
               if (data.items[i].active == true) {
                 data.items[i].active = '启用'
@@ -327,7 +336,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
@@ -357,7 +366,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })

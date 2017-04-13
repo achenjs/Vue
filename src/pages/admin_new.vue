@@ -20,7 +20,15 @@
       <el-col :span="8" :offset="8">
         <div style="width: 100%;">
           <label for=""><i>*</i>密码</label>
-          <el-input placeholder="请输入您的密码" type="password" v-model="form.password" @blur="isPas($event)"></el-input>
+          <el-input placeholder="请输入密码" type="password" v-model="form.password" @blur="isPas($event)"></el-input>
+        </div>
+      </el-col>
+    </div>
+    <div class="admin_line clearfix">
+      <el-col :span="8" :offset="8">
+        <div style="width: 100%;">
+          <label for=""><i>*</i>初始硬豆</label>
+          <el-input placeholder="请输入初始硬豆" v-model="form.total_money" @blur="isPas($event)"></el-input>
         </div>
       </el-col>
     </div>
@@ -41,6 +49,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data () {
       return {
@@ -48,6 +57,7 @@ export default {
           name: '',
           email: '',
           phone: '',
+          total_money: '',
           password: ''
         },
         isNames: false,
@@ -97,30 +107,30 @@ export default {
       addUser() {
         var _this = this
         if (this.isNames && this.isEmails && this.isPass) {
-          $.ajax({
-            url: '/admin/api/v1/users',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
+          if (this.form.total_money == '') {
+            this.$message.error('初始硬豆必填!')
+            return false
+          }
+          if (parseFloat(this.form.total_money) || parseFloat(this.form.total_money) === 0) {
+            this.form.total_money = parseFloat(this.form.total_money)
+          } else {
+            this.$message.error('初始硬豆值应该为数字类型!')
+            return false
+          }
+          axios.post('/admin/api/v1/users', this.form)
+            .then((result) => {
+              const data = result.data
               _this.reset()
               _this.$message({
-                message: result.message,
+                message: data.message,
                 type: 'success'
               })
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
-              }
-            }
-          })
+            })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
         } else {
-          this.$message({
-            message: '请输入完整信息',
-            type: 'warning'
-          })
+          this.$message.error('必填字段不能为空！')
         }
       }
     }

@@ -139,7 +139,7 @@ export default {
             error: function(err) {
               if (err.status == '401') {
                 _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+                _this.$router.push('/signin')
               }
             }
           })
@@ -160,7 +160,7 @@ export default {
             error: function(err) {
               if (err.status == '401') {
                 _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+                _this.$router.push('/signin')
               }
             }
           })
@@ -177,7 +177,7 @@ export default {
           beforeSend: function() {
             _this.loading = true
           },
-          timeout: 5000,
+          timeout: 10000,
           success: function(result) {
             _this.loading = false
             var data = result.result
@@ -200,7 +200,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
@@ -219,7 +219,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })

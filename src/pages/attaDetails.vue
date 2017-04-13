@@ -15,10 +15,19 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="交付物"
+        prop="attachment_name"
+        label="交付物名称"
+        width="140"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="附件"
         width="80">
         <template scope="scope">
-          <a :href="scope.row.url" style="">下载</a>
+          <a v-if="status == '请求忽略'"></a>
+          <a v-else-if="scope.row.url === '#'"></a>
+          <a v-else :href="scope.row.url">下载</a>
         </template>
       </el-table-column>
       <el-table-column
@@ -31,7 +40,7 @@
       <el-table-column
         align="center"
         prop="comment_admin"
-        label="回复"
+        label="评审报告"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -41,7 +50,7 @@
         label="操作">
         <template scope="scope">
           <el-button v-if="scope.$index != attaLength" :disabled="true" type="text" size="small">- -</el-button>
-          <el-button v-else-if="status == ('已确认' || '已驳回')" type="text"  :disabled="true" size="small">- -</el-button>
+          <el-button v-else-if="status == '已确认' || status == '已驳回' || status == '已忽略'" type="text" :disabled="true" size="small">- -</el-button>
           <el-button v-else @click="midClick(scope.row.id)" type="text" size="small">评审</el-button>
         </template>
       </el-table-column>
@@ -54,7 +63,7 @@
             <i @click="closeModel">关闭</i>
           </div>
           <div class="modal-content">
-            <label for="">回复</label>
+            <label for="">请输入评审报告</label>
             <el-input type="textarea" placeholder="描述" v-model="comment.comment"></el-input>
           </div>
           <div class="modal-footer">
@@ -68,6 +77,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -102,49 +112,45 @@ export default {
     },
     details(page) {
       var _this = this
-      $.ajax({
-        url: '/admin/api/v1/attachment_details?uaid=' + this.attaDetailsId + '&page=' + page,
-        success: function(result) {
-          var data = result.result
+      axios.get('/admin/api/v1/attachment_details?uaid=' + this.attaDetailsId + '&page=' + page)
+        .then((result) => {
+          const data = result.data.result
           for (let i in data.items) {
             if (data.items[i].url === null || data.items[i].url === '') {
                 data.items[i].url = '#'
             } else {
-              $.ajax({
-                url: '/main/api/v1/files/' + data.items[i].url,
-                success: function(result) {
-                  data.items[i].url = result
-                }
-              })
+              axios.get('/main/api/v1/files/' + data.items[i].url)
+                .then((result) => {
+                  const Url = result.data
+                  if (data == '') {
+                    data.items[i].url = '#'
+                  } else {
+                    data.items[i].url = Url
+                  }
+                })
             }
           }
           _this.tableData = data.items
           _this.attaLength = data.items.length - 1
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
-          }
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     },
     //  判断提交状态
     isStatus() {
       var _this = this
-      $.ajax({
-        url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
-        success: function(result) {
-          var data = result.result
-          _this.status = data.status
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+      axios.get('/admin/api/v1/user_attachments/' + this.attaDetailsId)
+        .then((result) => {
+          const data = result.data.result
+          for(let i in _this.tableData) {
+            _this.tableData[i].attachment_name = data.attachment.name
           }
-        }
-      })
+          _this.status = data.status
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     },
     //  审核
     midClick(id) {
@@ -157,47 +163,32 @@ export default {
       if (this.status === '请求忽略') {
         this.form.status = 'Ignored'
       } else {
-        this.form.status = 'Rejected'
+        // this.form.status = 'Rejected'
+        this.form.status = 'Confirmed'
       }
-      this.form.status = 'Confirmed'
+      // this.form.status = 'Confirmed'
       this.$confirm('是否继续?', '提示', {
          confirmButtonText: '确定',
          cancelButtonText: '取消',
          type: 'warning'
        }).then(() => {
          var statusReq = new Promise((resolve, reject) => {
-           $.ajax({
-             url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
-             type: 'post',
-             contentType: 'application/json',
-             data: JSON.stringify(this.form),
-             success: function(result) {
-               return resolve()
-             },
-             error: function(err) {
-               if (err.status == '401') {
-                 _this.$message.error(JSON.parse(err.responseText).message)
-                 _this.$router.push('/admin/signin')
-               }
-             }
-           })
+           axios.post('/admin/api/v1/user_attachments/' + this.attaDetailsId, this.form)
+            .then((result) => {
+              return resolve()
+            })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
          })
          var commentReq = new Promise((resolve, reject) => {
-           $.ajax({
-             url: '/admin/api/v1/attachment_details/' + this.padid,
-             type: 'post',
-             contentType: 'application/json',
-             data: JSON.stringify(this.comment),
-             success: function(result) {
-               return resolve()
-             },
-             error: function(err) {
-               if (err.status == '401') {
-                 _this.$message.error(JSON.parse(err.responseText).message)
-                 _this.$router.push('/admin/signin')
-               }
-             }
-           })
+           axios.post('/admin/api/v1/attachment_details/' + this.padid, this.comment)
+            .then((result) => {
+              return resolve()
+            })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
          })
          Promise.all([statusReq, commentReq]).then(([status, comment]) => {
            this.$message({
@@ -205,7 +196,9 @@ export default {
              type: 'success'
            })
            this.addShow = false
-           this.$router.go(0)
+           setTimeout(function() {
+             this.$router.push('/nextAtta')
+           }, 500)
            this.reset()
          }).catch((err) => {
            this.$message.error(err)
@@ -228,38 +221,22 @@ export default {
          type: 'warning'
        }).then(() => {
          var statusReq = new Promise((resolve, reject) => {
-           $.ajax({
-             url: '/admin/api/v1/user_attachments/' + this.attaDetailsId,
-             type: 'post',
-             contentType: 'application/json',
-             data: JSON.stringify(this.form),
-             success: function(result) {
-               return resolve()
-             },
-             error: function(err) {
-               if (err.status == '401') {
-                 _this.$message.error(JSON.parse(err.responseText).message)
-                 _this.$router.push('/admin/signin')
-               }
-             }
-           })
+           axios.post('/admin/api/v1/user_attachments/' + this.attaDetailsId, this.form)
+            .then((result) => {
+              return resolve()
+            })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
          })
          var commentReq = new Promise((resolve, reject) => {
-           $.ajax({
-             url: '/admin/api/v1/attachment_details/' + this.padid,
-             type: 'post',
-             contentType: 'application/json',
-             data: JSON.stringify(this.comment),
-             success: function(result) {
-               return resolve()
-             },
-             error: function(err) {
-               if (err.status == '401') {
-                 _this.$message.error(JSON.parse(err.responseText).message)
-                 _this.$router.push('/admin/signin')
-               }
-             }
-           })
+           axios.post('/admin/api/v1/attachment_details/' + this.padid, this.comment)
+            .then((result) => {
+              return resolve()
+            })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
          })
          Promise.all([statusReq, commentReq]).then(() => {
            this.$message({
@@ -267,7 +244,9 @@ export default {
              type: 'success'
            })
            this.addShow = false
-           this.$router.go(0)
+           setTimeout(function() {
+             this.$router.push('/nextAtta')
+           }, 500)
            this.reset()
          }).catch((err) => {
            this.$message.error(err)

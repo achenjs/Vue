@@ -24,7 +24,7 @@
       text-align: center;
       color: #505458;
       font-weight: 700;
-      font-size: 20px;
+      font-size: 20px !important;
     }
     .remember {
       margin: 0px 0px 35px 0px;
@@ -32,6 +32,7 @@
     #getImg{
       height: 27px;
       display: inline-block;
+      cursor: pointer;
       width: 70%;
     }
     #getImg label{

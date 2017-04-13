@@ -44,13 +44,14 @@
         <div class="modal" v-if="addShow">
           <div class="modal-dialog">
             <div class="modal-header">
-              <span>新增类别</span>
+              <span v-if="id == ''">新增类别</span>
+              <span v-else>编辑类别</span>
             </div>
             <div class="modal-content">
-              <label for="">服务项类别名称</label>
+              <label for=""><i>*</i>服务项类别名称</label>
               <el-input placeholder="服务项类别名称" v-model="form.name"></el-input>
               <label for="">服务项类别描述</label>
-              <el-input placeholder="服务项类别描述" v-model="form.description"></el-input>
+              <el-input type="textarea" :rows="4" placeholder="服务项类别描述" v-model="form.description"></el-input>
             </div>
             <div class="modal-footer">
               <el-button type="primary" @click="ensure">确认</el-button>
@@ -87,7 +88,7 @@ export default {
       //  获取所有服务项
       $.ajax({
         url: '/admin/api/v1/service_categories?page=1',
-        timeout: 5000,
+        timeout: 10000,
         beforeSend: function() {
           _this.loading = true
         },
@@ -106,7 +107,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
@@ -127,46 +128,54 @@ export default {
       ensure() {
         var _this = this
         if (this.id === '') {
-          $.ajax({
-            url: '/admin/api/v1/service_categories',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+          if (this.form.name === '') {
+            this.$message.error('服务项类别名称不能为空!')
+          } else {
+            $.ajax({
+              url: '/admin/api/v1/service_categories',
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
               }
-            }
-          })
+            })
+          }
         } else {
-          $.ajax({
-            url: '/admin/api/v1/service_categories/' + this.id,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.query(_this.page)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+          if (this.form.name === '') {
+            this.$message.error('服务项类别名称不能为空!')
+          } else {
+            $.ajax({
+              url: '/admin/api/v1/service_categories/' + this.id,
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(_this.page)
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
               }
-            }
-          })
+            })
+          }
         }
       },
       query(page) {
@@ -186,7 +195,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
@@ -205,7 +214,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })

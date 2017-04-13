@@ -1,49 +1,52 @@
 <template lang="html">
   <div class="phases_details">
-    <el-table
-    :data="tableData"
-    v-loading="loading"
-    border
-    element-loading-text="拼命加载中"
-    style="width: 100%">
-      <el-table-column
-        align="center"
-        prop="id"
-        label="编号"
-        width="50"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="project_name"
-        label="项目名称"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="phase_name"
-        label="阶段名称"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        prop="status"
-        label="状态"
-        width="60"
-        show-overflow-tooltip>
-      </el-table-column>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        fixed="right"
-        width="60"
-        label="操作">
-        <template scope="scope">
-          <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <v-pages :total="total" v-on:currentChange="nextPhases"></v-pages>
+    <div v-if="id === ''">
+      <el-table
+      :data="tableData"
+      v-loading="loading"
+      border
+      element-loading-text="拼命加载中"
+      style="width: 100%">
+        <el-table-column
+          align="center"
+          prop="id"
+          label="编号"
+          width="50"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="project_name"
+          label="项目名称"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="phase_name"
+          label="阶段名称"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="status"
+          label="状态"
+          width="60"
+          show-overflow-tooltip>
+        </el-table-column>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          fixed="right"
+          width="60"
+          label="操作">
+          <template scope="scope">
+            <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <v-pages :total="total" v-on:currentChange="nextPhases"></v-pages>
+    </div>
+    <router-view v-else></router-view>
   </div>
 </template>
 
@@ -54,13 +57,25 @@ export default {
     return {
       loading: false,
       tableData: [],
-      form: {
-
-      },
-      total: 1
+      total: 1,
+      id: ''
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+        const toDepath = to.path
+        if (toDepath === '/deliverable_list') {
+          this.id = ''
+          this.nextPhases(1)
+        }
     }
   },
   created() {
+    if (this.$router.currentRoute.fullPath == '/deliverable_list') {
+      this.id = ''
+    } else {
+      this.id = '1'
+    }
     this.nextPhases(1)
   },
   methods: {
@@ -72,16 +87,13 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
-        timeout: 5000,
+        timeout: 10000,
         success: function(result) {
           _this.loading = false
           var data = result.result
           for (var i in data.items) {
             var status = data.items[i].status
             switch (status) {
-              case 'Paid':
-                data.items[i].status = '已支付'
-                break;
               case 'Canceled':
                 data.items[i].status = '已取消'
                 break;
@@ -111,15 +123,16 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
     },
     //  阶段下详情
     midClick(id) {
-      this.$router.push('/admin/nextAtta')
+      this.id = id
       localStorage.setItem('nextAttaId', id)
+      this.$router.push('/nextAtta')
     },
   },
   components: {

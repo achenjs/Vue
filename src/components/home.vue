@@ -1,14 +1,14 @@
 <template>
 	<el-row class="container">
-		<div class="xs"></div>
+		<!-- <div class="xs"></div> -->
 		<v-header :User='User'></v-header>
-		<el-col :span="24" class="main">
-			<aside>
+		<el-col :span="24" class="main" ref="main">
+			<aside class="leftmenu" :style="{height: menuHeight}">
 				<div class="Introduction">
 					<div class="avatar">
 						<input type="file" name="" value="" @change="uploadFile($event)" id="up" class="uploadInput">
 						<input type="hidden" name="" value="" id="url">
-						<img v-if="User.avatar_url === ''" src="../assets/images/2.gif" width="100%" height="100%" alt="图片">
+						<img v-if="User.avatar_url == '#'" src="../assets/images/2.gif" width="100%" height="100%" alt="图片">
 						<img v-else :src="User.avatar_url" alt="图片" width="100%" height="100%">
 					</div>
 					<div class="name">
@@ -70,12 +70,35 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 					role_name: '',
 					avatar_url: ''
     		},
+				menuHeight: ''
+			}
+		},
+		beforeCreate() {
+			if (this.$route.query.id === 1) {
+				this.$router.go(0)
 			}
 		},
   	created() {
+			if (this.$router.options.routes[0].children) {
+				var currentRoute = this.$router.currentRoute.path
+				var start_path = this.$router.options.routes[0].children[0].path
+				if (currentRoute != start_path && currentRoute != '/') {
+
+				} else {
+					this.$router.push(start_path)
+				}
+			} else {
+				this.$router.push('/signin')
+			}
+
 		 	this.updateUser()
+			this.autoHeight()
   	},
 		methods: {
+			autoHeight() {
+				const height = $('.main').height()
+				this.menuHeight = height - 20 + 'px'
+			},
 			//	获取用户信息
 			updateUser() {
 				var _this = this
@@ -86,11 +109,14 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 						_this.User.email = data.email
 						_this.User.name = data.name
 						_this.User.role_name = data.role_name
-						_this.User.avatar_url = data.avatar_url === '' ? '' :  URL + data.avatar_url
+						if (data.avatar_url === null || data.avatar_url === '') {
+							_this.User.avatar_url = '#'
+						} else {
+							_this.User.avatar_url = URL + data.avatar_url
+						}
 					}
 				})
 			},
-
 			//  上传
       uploadFile(ele) {
         var _this = this
@@ -158,11 +184,12 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 		overflow-y: auto;
 		aside {
 			width: 230px;
-			height: 700px;
+			height: 600px;
+			max-height: 700px;
 			margin-top: 20px;
 			background-color: #ffffff;
 			position: fixed;
-			overflow-y: auto;
+			overflow-y: scroll;
 			left: 0;
 			top: 60px;
 			.Introduction {

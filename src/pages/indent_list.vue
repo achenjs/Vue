@@ -1,214 +1,235 @@
 <template>
    <div class="indent_list">
+     <div v-if="id === ''">
+       <div class="deliverable_inline clearfix">
+         <el-col :span="8">
+          <div style="width: 80%;">
+            <label for="">服务号</label>
+            <el-input placeholder="服务号" v-model="form.id"></el-input>
+          </div>
+        </el-col>
+         <el-col :span="8">
+          <div style="width: 80%;">
+            <label for="">服务状态</label>
+            <el-select placeholder="请选择" v-model="form.status">
+              <el-option
+              v-for="item in conditions"
+              :label="item.label"
+              :value="item.value"
+              :key="item.value">
+              </el-option>
+            </el-select>
+          </div>
+        </el-col>
+        <el-col :span="8">
+         <div style="width: 80%;">
+           <label for="">项目名称</label>
+          <el-input placeholder="项目名称" v-model="form.project_name"></el-input>
+         </div>
+       </el-col>
+     </div>
      <div class="deliverable_inline clearfix">
        <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">订单号</label>
-          <el-input placeholder="订单号" v-model="form.id"></el-input>
+          <label for="">服务项</label>
+         <el-input placeholder="服务项" v-model="form.title"></el-input>
         </div>
-      </el-col>
+       </el-col>
        <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">订单状态</label>
-          <el-select placeholder="请选择" v-model="form.status">
+          <label for="">服务项类别</label>
+          <el-select placeholder="请选择" v-if="isCustom" v-model="form.service_category_id">
             <el-option
-            v-for="item in conditions"
-            :label="item.label"
-            :value="item.value"
-            :key="item.value">
+            v-for="item in servers"
+            :label="item.name"
+            :value="item.id"
+            :key="item.id">
+            </el-option>
+          </el-select>
+          <el-select placeholder="请选择" v-else v-model="form.category_id">
+            <el-option
+            v-for="item in servers"
+            :label="item.name"
+            :value="item.id"
+            :key="item.id">
             </el-option>
           </el-select>
         </div>
       </el-col>
-      <el-col :span="8">
-       <div style="width: 80%;">
-         <label for="">项目名称</label>
-        <el-input placeholder="项目名称" v-model="form.project_name"></el-input>
+      </div>
+      <div class="deliverable_inline clearfix">
+         <el-col :span="15">
+           <label for="">交付时间</label>
+           <el-date-picker
+             v-model="form.starttime"
+             type="date"
+             placeholder="选择日期">
+           </el-date-picker>
+           <span>至</span>
+           <el-date-picker
+             v-model="form.endtime"
+             type="date"
+             placeholder="选择日期">
+           </el-date-picker>
+         </el-col>
        </div>
-     </el-col>
-   </div>
-   <div class="deliverable_inline clearfix">
-     <el-col :span="8">
-      <div style="width: 80%;">
-        <label for="">服务项</label>
-       <el-input placeholder="服务项" v-model="form.title"></el-input>
-      </div>
-     </el-col>
-     <el-col :span="8">
-      <div style="width: 80%;">
-        <label for="">服务包类</label>
-        <el-select placeholder="请选择" v-model="form.category_id">
-          <el-option
-          v-for="item in servers"
-          :label="item.name"
-          :value="item.id"
-          :key="item.id">
-          </el-option>
-        </el-select>
-      </div>
-    </el-col>
-    </div>
-    <div class="deliverable_inline clearfix">
-       <el-col :span="15">
-         <label for="">交付时间</label>
-         <el-date-picker
-           v-model="form.starttime"
-           type="date"
-           placeholder="选择日期">
-         </el-date-picker>
-         <span>至</span>
-         <el-date-picker
-           v-model="form.endtime"
-           type="date"
-           placeholder="选择日期">
-         </el-date-picker>
-       </el-col>
-     </div>
-     <!-- <div class="buttons">
-       <el-button class="query" type="primary" @click="search">查询</el-button>
-       <el-button class="export" type="primary">导出</el-button>
-     </div> -->
-     <div class="query">
-       <span @click="search">查&nbsp;&nbsp;询</span>
-     </div>
-     <div class="tabIsCustom">
-       <button class="tab-button" :class="{active: !isActive}" @click="tabQuery">系统服务项</button>
-       <button class="tab-button" :class="{active: isActive}" @click="tabCustom">自定义服务项</button>
-     </div>
-     <div class="deliverable_table">
-       <el-table
-         :data="tableData"
-         v-loading="loading"
-         border
-         element-loading-text="拼命加载中"
-         style="width: 100%">
-         <el-table-column
-           align="center"
-           prop="id"
-           label="订单号"
-           width="60"
-           show-overflow-tooltip>
-         </el-table-column>
-         <el-table-column
-           align="center"
-           prop="project_name"
-           label="项目名称"
-           width="80"
-           show-overflow-tooltip>
-         </el-table-column>
-         <el-table-column
-           v-if="isCustom"
-           align="center"
-           prop="service_category_name"
-           label="服务项类别"
-           width="120"
-           show-overflow-tooltip>
-         </el-table-column>
-         <el-table-column
-           v-else
-           align="center"
-           prop="category_name"
-           label="服务项类别"
-           width="120"
-           show-overflow-tooltip>
-         </el-table-column>
-         <el-table-column
-           v-if="isCustom"
-           align="center"
-           prop="service_name"
-           label="服务项"
-           show-overflow-tooltip>
-         </el-table-column>
-         <el-table-column
-           v-else
-           align="center"
-           prop="description"
-           label="服务项"
-           show-overflow-tooltip>
-         </el-table-column>
-         <el-table-column
-           align="center"
-           prop="gmt_create"
-           width="140"
-           label="下单时间"
-           show-overflow-tooltip>
-         </el-table-column>
-         <el-table-column
-           align="center"
-           prop="status"
-           label="订单状态"
-           width="70"
-           show-overflow-tooltip>
-         </el-table-column>
-         <el-table-column
-           align="center"
-           prop="price"
-           label="订单金额(硬豆)"
-           width="110"
-           show-overflow-tooltip>
-         </el-table-column>
-         <el-table-column
-           align="center"
-           fixed="right"
-           width="60"
-           label="操作"
-           show-overflow-tooltip>
-           <template scope="scope">
-             <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
-           </template>
-         </el-table-column>
-       </el-table>
-     </div>
-     <transition name="fade">
-       <div class="modal" v-if="addShow">
-         <div class="modal-dialog">
-           <div class="modal-header">
-             <span>服务项详情</span>
-           </div>
-           <div class="modal-content">
-             <label for="" v-if="isCustom">价格(硬豆)</label>
-             <el-input placeholder="价格" v-if="isCustom" v-model="UserDetails.price"></el-input>
-             <label for="" v-if="!isCustom">服务项</label>
-             <el-input placeholder="服务项" :disabled="true" v-if="!isCustom" v-model="CustomDetails.title"></el-input>
-             <label for="">服务包类</label>
-             <el-select placeholder="请选择" v-if="isCustom" v-model="details.category_id">
-               <el-option
-               v-for="item in servers"
-               :label="item.name"
-               :value="item.id"
-               :key="item.id">
-               </el-option>
-             </el-select>
-             <el-select placeholder="请选择" v-if="!isCustom" :disabled="true" v-model="details.category_id">
-               <el-option
-               v-for="item in servers"
-               :label="item.name"
-               :value="item.id"
-               :key="item.id">
-               </el-option>
-             </el-select>
-             <label for="">订单状态</label>
-             <el-select placeholder="请选择" v-model="details.status">
-               <el-option
-               v-for="item in conditions"
-               :label="item.label"
-               :value="item.value"
-               :key="item.value">
-               </el-option>
-             </el-select>
-           </div>
-           <div class="modal-footer">
-             <el-button type="primary" @click="ensure">确认</el-button>
-             <el-button type="primary" @click="cancel">取消</el-button>
+       <!-- <div class="buttons">
+         <el-button class="query" type="primary" @click="search">查询</el-button>
+         <el-button class="export" type="primary">导出</el-button>
+       </div> -->
+       <div class="query">
+         <span @click="search">查&nbsp;&nbsp;询</span>
+       </div>
+       <div class="tabIsCustom">
+         <button class="tab-button" :class="{active: !isActive}" @click="tabQuery">系统服务项</button>
+         <button class="tab-button" :class="{active: isActive}" @click="tabCustom">自定义服务项</button>
+       </div>
+       <div class="deliverable_table">
+         <el-table
+           :data="tableData"
+           v-loading="loading"
+           border
+           element-loading-text="拼命加载中"
+           style="width: 100%">
+           <el-table-column
+             align="center"
+             prop="id"
+             label="服务号"
+             width="60"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             align="center"
+             prop="project_name"
+             label="项目名称"
+             width="80"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             v-if="isCustom"
+             align="center"
+             prop="service_category_name"
+             label="服务项类别"
+             width="120"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             v-else
+             align="center"
+             prop="category_name"
+             label="服务项类别"
+             width="120"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             v-if="isCustom"
+             align="center"
+             prop="service_name"
+             label="服务项"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             v-else
+             align="center"
+             prop="description"
+             label="服务项"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             align="center"
+             prop="status"
+             label="服务状态"
+             width="70"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             align="center"
+             prop="gmt_create"
+             width="140"
+             label="下单时间"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             v-if="isCustom"
+             align="center"
+             label="附件"
+             width="40">
+             <template scope="scope">
+               <a :href="scope.row.file_name" v-if="scope.row.file_name != '#'">下载</a>
+             </template>
+           </el-table-column>
+           <el-table-column
+             align="center"
+             prop="price"
+             label="服务金额(硬豆)"
+             width="110"
+             show-overflow-tooltip>
+           </el-table-column>
+           <el-table-column
+             align="center"
+             fixed="right"
+             width="60"
+             label="操作"
+             show-overflow-tooltip>
+             <template scope="scope">
+               <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
+             </template>
+           </el-table-column>
+         </el-table>
+       </div>
+       <transition name="fade">
+         <div class="modal" v-if="addShow">
+           <div class="modal-dialog">
+             <div class="modal-header">
+               <span>服务项详情</span>
+             </div>
+             <div class="modal-content">
+               <label for="" v-if="isCustom">价格(硬豆)</label>
+               <el-input placeholder="价格" v-if="isCustom" v-model="UserDetails.price"></el-input>
+               <label for="" v-if="!isCustom">服务项</label>
+               <el-input placeholder="服务项" :disabled="true" v-if="!isCustom" v-model="CustomDetails.title"></el-input>
+               <label for="">服务包类</label>
+               <el-select placeholder="请选择" v-if="isCustom" v-model="details.category_id">
+                 <el-option
+                 v-for="item in servers"
+                 :label="item.name"
+                 :value="item.id"
+                 :key="item.id">
+                 </el-option>
+               </el-select>
+               <el-select placeholder="请选择" v-if="!isCustom" :disabled="true" v-model="details.category_id">
+                 <el-option
+                 v-for="item in servers"
+                 :label="item.name"
+                 :value="item.id"
+                 :key="item.id">
+                 </el-option>
+               </el-select>
+               <label for="">服务状态</label>
+               <el-select placeholder="请选择" v-model="details.status">
+                 <el-option
+                 v-for="item in condition_details"
+                 :label="item.label"
+                 :value="item.value"
+                 :key="item.value">
+                 </el-option>
+               </el-select>
+             </div>
+             <div class="modal-footer">
+               <el-button type="primary" @click="ensure">确认</el-button>
+               <el-button type="primary" @click="cancel">取消</el-button>
+             </div>
            </div>
          </div>
-       </div>
-     </transition>
-     <v-pages :total="total" :currenPage="currenPage" v-on:currentChange="isSelected"></v-pages>
+       </transition>
+       <v-pages :total="total" :currenPage="currenPage" v-on:currentChange="isSelected"></v-pages>
+     </div>
+     <router-view></router-view>
    </div>
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
   data () {
@@ -223,10 +244,24 @@ export default {
       CustomDetails: {
         title: '',
       },
+      condition_details: [
+        {
+          value: 'Canceled',
+          label: '已取消'
+        },
+        {
+          value: 'Confirmed',
+          label: '已确认'
+        },
+        {
+          value: 'Finished',
+          label: '已完成'
+        }
+      ],
       conditions: [
         {
-          value: 'Paid',
-          label: '已支付'
+          value: '',
+          label: '全部状态'
         },
         {
           value: 'Canceled',
@@ -250,16 +285,17 @@ export default {
         }
       ],
       currenPage: 1,
-      servers: [],
+      servers: [{name: '全部类别',id: ''}],
       form: {
         starttime: '',
-        category_id: '',
+        service_category_id: '',
         description: '',
         endtime: '',
         id: '',
         status: '',
         title: '',
-        project_name: ''
+        project_name: '',
+        category_id: ''
       },
       tableData: [],
       loading: false,
@@ -267,31 +303,45 @@ export default {
       isCustom: true,
       addShow: false,
       id: '',
-      isActive: false
+      isActive: false,
+      customId: ''
     }
   },
   created() {
     var _this = this
-
-    if (this.$route.query == 1) {
-      this.$router.go(0)
-    }
-    //  获取所有服务包类
-    $.ajax({
-      url: '/admin/api/v1/service_categories?page=1',
-      success: function(result) {
-        var data = result.result
-        _this.servers = data.items
-      },
-      error: function(err) {
-        if (err.status == '401') {
-          _this.$message.error(JSON.parse(err.responseText).message)
-          _this.$router.push('/admin/signin')
+    this.id = this.$route.params.id
+    if (this.id == undefined) {
+      this.id = ''
+      //  获取所有服务包类
+      $.ajax({
+        url: '/admin/api/v1/service_categories?page=1',
+        success: function(result) {
+          var data = result.result
+          for (let i in data.items) {
+            _this.servers.push(data.items[i])
+          }
+          // _this.servers = data.items
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/signin')
+          }
         }
+      })
+      //  系统服务项
+      this.query(1)
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      const toDepth = to.path.split('/').length
+      const fromDepth = from.path.split('/').length
+      if (toDepth === 2) {
+        this.id = ''
+        this.query(1)
       }
-    })
-    //  系统服务项
-    this.query(1)
+    }
   },
   methods: {
     //  tab切换
@@ -313,17 +363,17 @@ export default {
     },
     //  编辑
     edit(id) {
-      this.id = id
-      this.addShow = true
-      this.reset()
       if(this.isCustom) {
-        this.$router.push({path: '/admin/indentDetails', query: {id: id}})
+        this.id = id
+        this.$router.push('/indent_list/' + id)
       } else {
+        this.customId = id
         this.CustomDetail(id)
       }
     },
     //  自定义服务项详情
     CustomDetail(id) {
+      this.addShow = true
       var _this = this
       $.ajax({
         url: '/admin/api/v1/custom_service_items/' + id,
@@ -336,7 +386,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
@@ -376,15 +426,15 @@ export default {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
       $.ajax({
-        url: '/admin/api/v1/user_service_items?id='+this.form.id+'&project_name='+this.form.project_name+'&category_id='+this.form.category_id+'&title='+this.form.title+'&status='+this.form.status+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
+        url: '/admin/api/v1/user_service_items?id='+this.form.id+'&project_name='+this.form.project_name+'&service_category_id='+this.form.service_category_id+'&title='+this.form.title+'&status='+this.form.status+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
         beforeSend: function() {
           _this.loading = true
         },
-        timeout: 5000,
+        timeout: 10000,
         success: function(result) {
           var data = result.result
           _this.total = data.total
-          for (var i in data.items) {
+          for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
   					timer.setTime(timer.getTime()+0)
@@ -393,9 +443,32 @@ export default {
           			 date = timer.getUTCDate(),
           			 hour = timer.getUTCHours(),
           			 minute = timer.getUTCMinutes(),
-          			 second = timer.getUTCSeconds(),
-         			   time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
+          			 second = timer.getUTCSeconds();
+                 if (hour < 10) {
+                   hour = '0' + hour
+                 }
+                 if (minute < 10) {
+                   minute = '0' + minute
+                 }
+                 if (second < 10) {
+                   second = '0' + second
+                 }
+       			var  time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
             data.items[i].gmt_create = time
+
+            if (data.items[i].file_name === null || data.items[i].file_name === '') {
+                data.items[i].file_name = '#'
+            } else {
+              axios.get('/main/api/v1/files/' + data.items[i].file_name)
+                .then((result) => {
+                  const Url = result.data
+                  if (data == '') {
+                    data.items[i].file_name = '#'
+                  } else {
+                    data.items[i].file_name = Url
+                  }
+                })
+            }
           }
           _this.tableData = data.items
           setTimeout(function() {
@@ -411,7 +484,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
@@ -442,11 +515,11 @@ export default {
         beforeSend: function() {
           _this.loading = true
         },
-        timeout: 5000,
+        timeout: 10000,
         success: function(result) {
           var data = result.result
           _this.total = data.total
-          for (var i in data.items) {
+          for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
   					timer.setTime(timer.getTime()+0)
@@ -455,8 +528,17 @@ export default {
           			 date = timer.getUTCDate(),
           			 hour = timer.getUTCHours(),
           			 minute = timer.getUTCMinutes(),
-          			 second = timer.getUTCSeconds(),
-         			   time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
+          			 second = timer.getUTCSeconds();
+                 if (hour < 10) {
+                   hour = '0' + hour
+                 }
+                 if (minute < 10) {
+                   minute = '0' + minute
+                 }
+                 if (second < 10) {
+                   second = '0' + second
+                 }
+         		var	 time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
             data.items[i].gmt_create = time
           }
           _this.tableData = data.items
@@ -473,7 +555,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })
@@ -491,9 +573,6 @@ export default {
       switch (status) {
         case '已取消':
           this.details.status = 'Canceled'
-          break;
-        case '已支付':
-          this.details.status = 'Paid'
           break;
         case '待提交':
           this.details.status = 'Submitting'
@@ -513,7 +592,7 @@ export default {
       }
       var _this = this
       $.ajax({
-        url: '/admin/api/v1/custom_service_items/' + this.id,
+        url: '/admin/api/v1/custom_service_items/' + this.customId,
         type: 'post',
         contentType: 'application/json',
         data: JSON.stringify(obj),
@@ -527,7 +606,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })

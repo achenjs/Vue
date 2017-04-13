@@ -46,11 +46,11 @@
               <span>角色信息</span>
             </div>
             <div class="modal-content">
-              <label for="">角色名称</label>
+              <label for=""><i>*</i>角色名称</label>
               <el-input placeholder="角色名称" v-model="form.name"></el-input>
               <label for="">角色描述</label>
               <el-input placeholder="角色描述" v-model="form.description"></el-input>
-              <label for="">状态</label>
+              <label for=""><i>*</i>状态</label>
               <el-select placeholder="请选择" v-model="form.status">
                 <el-option
                 v-for="item in roles"
@@ -59,7 +59,7 @@
                 :key="item.value">
                 </el-option>
               </el-select>
-              <label for="" v-if="searchGet">权限</label>
+              <label for="" v-if="searchGet"><i>*</i>权限</label>
               <el-table
                 v-if="searchGet"
                 :data="tableData3"
@@ -153,7 +153,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
@@ -183,48 +183,56 @@ export default {
         this.form.permissions = arr.join()
         if (this.id === '') {
           //  新建
-          $.ajax({
-            url: '/admin/api/v1/roles',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.query(1)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+          if (this.form.name === '' || this.form.status === '' || this.form.permissions === '') {
+            this.$message.error('必填字段不能为空！')
+          } else {
+            $.ajax({
+              url: '/admin/api/v1/roles',
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(1)
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
               }
-            }
-          })
+            })
+          }
         } else {
           //  修改
-          $.ajax({
-            url: '/admin/api/v1/roles/' + this.id,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.query(_this.page)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+          if (this.form.name === '' || this.form.status === '' || this.form.permissions === '') {
+            this.$message.error('必填字段不能为空！')
+          } else {
+            $.ajax({
+              url: '/admin/api/v1/roles/' + this.id,
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.addShow = false
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(_this.page)
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
               }
-            }
-          })
+            })
+          }
         }
       },
       query(page) {
@@ -240,7 +248,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
@@ -267,7 +275,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })

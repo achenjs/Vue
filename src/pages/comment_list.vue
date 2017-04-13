@@ -80,7 +80,7 @@ export default {
           beforeSend: function() {
             _this.loading = true
           },
-          timeout: 5000,
+          timeout: 10000,
           success: function(result) {
             var data = result.result
             _this.loading = false
@@ -96,7 +96,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })

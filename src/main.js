@@ -7,9 +7,30 @@ import ElementUI from 'element-ui'
 require('es6-promise').polyfill()
 import axios from 'axios'
 import 'element-ui/lib/theme-default/index.css'
-import router from './router'
+import route from './router'
+import store from './vuex/store'
+
+const VueCookie = require('vue-cookie')
+const router = route.router
 
 axios.defaults.withCredentials = true
+
+router.beforeEach ((to, from, next) => {
+  if (to.path != '/attaDetails') {
+    localStorage.removeItem('attaDetailsId')
+  }
+  if (to.path == '/404') {
+    if (router.options.routes[0].children) {
+      var start_path = router.options.routes[0].children[0].path
+      next({
+        path: start_path
+      })
+    } else {
+      next()
+    }
+  }
+  next()
+})
 
 axios.interceptors.response.use(
   response => {
@@ -19,19 +40,23 @@ axios.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-        router.push('/admin/signin')
+        router.push('/signin')
       }
+    } else {
+      return Promise.reject(error.message)
     }
     return Promise.reject(error.response.data)   // 返回接口返回的错误信息
   }
 )
 
+Vue.use(VueCookie)
 Vue.use(ElementUI)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

@@ -1,19 +1,25 @@
 <template>
    <div class="bill_list">
      <div class="deliverable_inline clearfix">
-       <el-col :span="5">
+       <el-col :span="4">
          <div style="width: 80%;">
            <label for="">项目名称</label>
            <el-input placeholder="项目名称" v-model="form.project_name"></el-input>
          </div>
        </el-col>
-       <el-col :span="5">
+       <el-col :span="4">
+         <div style="width: 80%;">
+           <label for="">服务名称</label>
+           <el-input placeholder="服务名称" v-model="form.service_name"></el-input>
+         </div>
+       </el-col>
+       <el-col :span="4">
          <div style="width: 80%;">
            <label for="">订单号</label>
           <el-input placeholder="订单号" v-model="form.id"></el-input>
          </div>
        </el-col>
-       <el-col :span="14">
+       <el-col :span="12">
          <label for="">交易日期</label>
          <el-date-picker
            v-model="form.starttime"
@@ -28,12 +34,8 @@
          </el-date-picker>
        </el-col>
      </div>
-     <!-- <div class="buttons">
-       <el-button class="query" type="primary" @click="query">查询</el-button>
-       <el-button class="export" type="primary">导出</el-button>
-     </div> -->
      <div class="query">
-       <span @click="query">查&nbsp;&nbsp;询</span>
+       <span @click="query(1)">查&nbsp;&nbsp;询</span>
      </div>
      <div class="deliverable_table">
        <el-table
@@ -81,6 +83,7 @@
 
 <script>
 import pages from '../components/pages/pages.vue'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -88,7 +91,9 @@ export default {
         project_name: '',
         id: '',
         starttime: '',
-        endtime: ''
+        endtime: '',
+        service_name: '',
+        page: 1
       },
       tableData: [],
       total: 1,
@@ -98,15 +103,13 @@ export default {
   created() {
     this.query(1)
   },
+  computed: {
+
+  },
   methods: {
     query(page) {
       var _this = this
-      var page
-      if (typeof page != 'object') {
-        page = page
-      } else {
-        page = 1
-      }
+      this.form.page = page
       if (this.form.starttime === '') {
         this.form.starttime = ''
       } else {
@@ -118,11 +121,11 @@ export default {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
       $.ajax({
-        url: '/admin/api/v1/bills?id='+this.form.id+'&project_name='+this.form.project_name+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
+        url: '/admin/api/v1/bills?page=' + this.form.page + '&project_name=' + this.form.project_name + '&id=' + this.form.id + '&service_name=' + this.form.service_name + '&starttime=' + this.form.starttime + '&endtime=' + this.form.endtime,
         beforeSend: function() {
           _this.loading = true
         },
-        timeout: 5000,
+        timeout: 10000,
         success: function(result) {
           _this.loading = false
           var data = result.result
@@ -151,7 +154,7 @@ export default {
         error: function(err) {
           if (err.status == '401') {
             _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+            _this.$router.push('/signin')
           }
         }
       })

@@ -1,8 +1,8 @@
 <template>
    <div class="stage_manage">
-      <el-col :span="4" class="add_item">
+      <!-- <el-col :span="4" class="add_item">
         <span @click="addOpen">新增阶段</span>
-      </el-col>
+      </el-col> -->
       <div class="">
         <el-table
         :data="tableData"
@@ -35,7 +35,7 @@
             width="60"
             label="操作">
             <template scope="scope">
-              <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+              <el-button @click="midClick(scope.row.id)" :key="scope.row.id" type="text" size="small">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -44,21 +44,25 @@
         <div class="modal" v-if="addShow">
           <div class="modal-dialog">
             <div class="modal-header">
-              <span>新增阶段</span>
+              <span v-if="id == ''">新增阶段</span>
+              <span v-else>编辑阶段</span>
             </div>
             <div class="modal-content">
-              <label for="">阶段名称</label>
+              <label for=""><i>*</i>阶段名称</label>
               <el-input placeholder="阶段名称" v-model="form.name"></el-input>
-              <label for="">阶段描述</label>
+              <label for=""><i>*</i>阶段描述</label>
               <el-input placeholder="阶段描述" v-model="form.description"></el-input>
-              <label for="">交付物列表</label>
+              <label for=""><i>*</i>交付物列表</label>
               <el-table
               :data="tableData1"
               ref="table"
               row-key="id"
-              height="300"
+              height="200"
               border
-              @change="changed"
+              @select="handleSelect"
+              @select-all="handleSelectAll"
+              @selection-change="changed"
+              clearSelection="clearSelection"
               style="width: 100%">
                 <el-table-column
                 :reserve-selection="true"
@@ -118,6 +122,7 @@ export default {
         id: '',
         selection: '',
         arrChecked: [],
+        arrId: []
       }
     },
     created() {
@@ -127,67 +132,76 @@ export default {
       this.queryAttachment(1)
     },
     methods: {
+      handleSelect() {
+
+      },
+      handleSelectAll() {
+
+      },
       changed(selection, row) {
         this.selection = selection
       },
-      reset() {
+      reset(){
         for(var name in this.$data.form) {
           this.$data.form[name] = ''
         }
       },
-      addOpen() {
+      addOpen(){
         this.reset()
         this.addShow = true
       },
-      cancel() {
+      cancel(){
         this.addShow = false
       },
-      ensure() {
+      ensure(){
         var _this = this
         var arr = []
-        for (var i=0; i<this.selection.length; i++) {
+        for (var i=0; i < this.selection.length; i++) {
           arr.push(this.selection[i].id)
         }
-        // var set = new Set(this.arrChecked.sort())
-        // this.arrChecked = [...set]
         this.form.attachments = arr.join()
-        if (this.id === '') {
-          //  新建
-          $.ajax({
-            url: '/admin/api/v1/phases',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.addShow = false
-            }
-          })
-        }
-        else {
-          //  修改
-          $.ajax({
-            url: '/admin/api/v1/phases/' + this.id,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-              _this.addShow = false
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
+        if (this.form.name == '' || this.form.description == '' || this.form.attachments == '') {
+          this.$message.error('必填字段不能为空!')
+        } else {
+          if (this.id === '') {
+            //  新建
+            $.ajax({
+              url: '/admin/api/v1/phases',
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.query(1)
+                _this.addShow = false
               }
-            }
-          })
+            })
+          }
+          else {
+            //  修改
+            $.ajax({
+              url: '/admin/api/v1/phases/' + this.id,
+              type: 'post',
+              contentType: 'application/json',
+              data: JSON.stringify(this.form),
+              success: function(result) {
+                _this.$message({
+                  message: result.message,
+                  type: 'success'
+                })
+                _this.addShow = false
+              },
+              error: function(err) {
+                if (err.status == '401') {
+                  _this.$message.error(JSON.parse(err.responseText).message)
+                  _this.$router.push('/signin')
+                }
+              }
+            })
+          }
         }
       },
       //  查询列表
@@ -198,7 +212,7 @@ export default {
           beforeSend: function() {
             _this.loading = true
           },
-          timeout: 5000,
+          timeout: 10000,
           success: function(result) {
             var data = result.result
             _this.loading = false
@@ -214,12 +228,12 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
       },
-      //  根据id查看详情和修改
+      //  根据id查看详情
       midClick(id) {
         var _this = this
         this.addShow = true
@@ -231,14 +245,15 @@ export default {
             _this.form.name = data.name
             _this.form.description = data.description
             var arrId = data.atts
-            for(var i=0; i<arrId.length; i++) {
+            _this.arrId = arrId
+            for(var i = 0; i < arrId.length; i++) {
               _this.$refs.table.toggleRowSelection(_this.tableData1.find(d => d.id === arrId[i].id))
             }
           },
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
@@ -259,10 +274,17 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
+      }
+    },
+    watch: {
+      tableData1: function() {
+        for(var i = 0; i < this.arrId.length; i++) {
+          this.$refs.table.toggleRowSelection(this.tableData1.find(d => d.id === this.arrId[i].id))
+        }
       }
     },
     components: {

@@ -35,7 +35,8 @@
             label="附件"
             width="60">
             <template scope="scope">
-              <a :href="scope.row.url" style="">下载</a>
+              <span v-if="scope.row.url == '#'"></span>
+              <a v-else :href="scope.row.url">下载</a>
             </template>
           </el-table-column>
           <el-table-column
@@ -53,10 +54,11 @@
         <div class="modal" v-if="addShow">
           <div class="modal-dialog">
             <div class="modal-header">
-              <span>新增交付物</span>
+              <span v-if="id == ''">新增交付物</span>
+              <span v-else>编辑交付物</span>
             </div>
             <div class="modal-content">
-              <label for="">交付物名称</label>
+              <label for=""><i>*</i>交付物名称</label>
               <el-input placeholder="交付物名称" v-model="form.name"></el-input>
               <label for="">附件</label>
               <input type="text" name="" value="" id="filename" :disabled="true" v-model="form.url">
@@ -79,6 +81,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 import upload from '../assets/js/upload'
 export default {
@@ -100,9 +103,7 @@ export default {
       //  上传
       uploadFile(ele) {
         var _this = this
-        upload(ele.target, 2, () => {
-          _this.form.url = $("#hiddens").val()
-        })
+        upload(ele.target, '')
       },
       reset() {
         for(var name in this.$data.form) {
@@ -119,92 +120,81 @@ export default {
       },
       ensure() {
         var _this = this
-        if (this.id === '') {
-          //  新增
-          $.ajax({
-            url: '/admin/api/v1/attachments',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
-              })
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
-              }
-            }
-          })
+        if (this.form.name === '') {
+          this.$message.error('必填字段不能为空!')
         } else {
-          //  修改
-          $.ajax({
-            url: '/admin/api/v1/attachments/' + this.id,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.addShow = false
-              _this.$message({
-                message: result.message,
-                type: 'success'
+          if (this.id === '') {
+            //  新增
+            axios.post('/admin/api/v1/attachments', this.form)
+              .then((result) => {
+                _this.addShow = false
+                _this.$message({
+                  message: result.data.message,
+                  type: 'success'
+                })
+                _this.query(1)
               })
-              _this.query(_this.page)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/admin/signin')
-              }
-            }
-          })
+              .catch((err) => {
+                _this.$message.error(err.message)
+              })
+          } else {
+            //  修改
+            _this.form.url = $("#hiddens").val()
+            axios.post('/admin/api/v1/attachments/' + this.id, this.form)
+              .then((result) => {
+                _this.addShow = false
+                _this.$message({
+                  message: result.data.message,
+                  type: 'success'
+                })
+                _this.query(_this.page)
+              })
+              .catch((err) => {
+                _this.$message.error(err.message)
+              })
+          }
         }
       },
       //  列表查询
       query(page) {
         var _this = this
         this.page = page
-        $.ajax({
-          url: '/admin/api/v1/attachments?page=' + page,
-          beforeSend: function() {
+        axios({
+          url: '/admin/api/v1/attachments?page=' + this.page,
+          transformResponse: [(data) => {
             _this.loading = true
-          },
-          timeout: 5000,
-          success: function(result) {
-            var data = result.result
+            return data
+          }],
+          timeout: 10000
+        })
+          .then((result) => {
+            const data = JSON.parse(result.data).result
             _this.loading = false
             _this.total = data.total
             for (let i in data.items) {
               if (data.items[i].url === '' || data.items[i].url === null) {
                   data.items[i].url = '#'
               } else {
-                $.ajax({
-                  url: '/main/api/v1/files/' + data.items[i].url,
-                  success: function(result) {
-                    data.items[i].url = result
-                  }
-                })
+                axios.get('/main/api/v1/files/' + data.items[i].url)
+                  .then((result) => {
+                    if (result.data == '') {
+                      data.items[i].url = '#'
+                    } else {
+                      data.items[i].url = result.data
+                    }
+                  })
               }
             }
             _this.tableData = data.items
-          },
-          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-                _this.loading = false
-      　　　　　  _this.$message.error('请求超时！请稍后重试')
-      　　　　}
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+          })
+          .catch((err) => {
+            if (err.indexOf('timeout') >= 0) {
+              _this.loading = false
+              _this.$message.error('请求超时!')
+            } else {
+              _this.$message.error(err.message)
             }
-          }
-        })
+          })
       },
       //  根据id查看详情和修改
       midClick(id) {
@@ -220,7 +210,7 @@ export default {
           error: function(err) {
             if (err.status == '401') {
               _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/admin/signin')
+              _this.$router.push('/signin')
             }
           }
         })
