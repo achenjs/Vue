@@ -41,7 +41,7 @@
            </el-select>
          </div>
        </el-col>
-       <el-col :span="12">
+       <el-col :span="16">
          <label for="">交易日期</label>
          <el-date-picker
            v-model="query.starttime"
@@ -218,7 +218,6 @@ export default {
   },
   methods: {
     IninParams() {
-      console.log(this.$data.query)
       for (let i in this.$data.query) {
         if (!this.$data.query[i]) {
           this.$data.query[i] = undefined
@@ -281,7 +280,7 @@ export default {
         this.query.endtime = Date.parse(new Date(this.query.endtime))
       }
       $.ajax({
-        url: '/admin/api/v1/custom_service_items?page=' + this.query.page + '&status=' + this.query.status + '&starttime=' + this.query.starttime + '&endtime=' + this.query.endtime + '&keyword=' + this.query.keyword + '&id=' + this.query.id,
+        url: '/admin/api/v1/custom_service_items?page=' + this.query.page + '&status=' + this.query.status + '&starttime=' + this.query.starttime + '&endtime=' + this.query.endtime + '&keyword=' + this.query.keyword + '&id=' + this.query.id + '&category_id=' + this.query.category_id,
         beforeSend: function() {
           _this.loading = true
         },

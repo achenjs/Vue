@@ -12,7 +12,7 @@ export default {
           str += '&' + i + '=' + parameter[i]
         }
       }
-      state.changeUrl = str.replace('&', '?')
+      state.changeUrl = path + str.replace('&', '?')
     }
   }
 }

@@ -1,5 +1,29 @@
 <template>
    <div class="service_item">
+     <el-row>
+       <el-col :span="8">
+         <div style="width: 80%;">
+           <label for="">服务项名称</label>
+           <el-input placeholder="服务项名称" v-model="query.name"></el-input>
+         </div>
+       </el-col>
+       <el-col :span="8">
+         <div style="width: 80%;">
+           <label for="">服务项类别</label>
+           <el-select v-model="query.category_id" placeholder="请选择服务项类别">
+             <el-option
+             v-for="item in categorys"
+             :label="item.name"
+             :value="item.id"
+             :key="item.name">
+             </el-option>
+           </el-select>
+         </div>
+       </el-col>
+     </el-row>
+     <div class="query">
+       <span @click="search(1)">查&nbsp;&nbsp;询</span>
+     </div>
      <div class="xs"></div>
       <el-col :span="4" class="add_item">
         <span @click="addOpen">新增服务项</span>
@@ -51,15 +75,6 @@
             label="输出"
             show-overflow-tooltip>
           </el-table-column>
-          <!-- <el-table-column
-            align="center"
-            width="50"
-            label="附件">
-            <template scope="scope">
-              <span v-if="scope.row.zip_url == '#'" style="color: #ececec; text-decoration: line-through;">下载</span>
-              <a v-else :href="scope.row.zip_url">下载</a>
-            </template>
-          </el-table-column> -->
           <el-table-column
             align="center"
             prop="price"
@@ -99,9 +114,6 @@
                 :key="item.id">
                 </el-option>
               </el-select>
-              <!-- <a href="javascript:;" class="file" style="margin: 10px 0;">上传附件
-                <input type="file" name="" id="upLog" @change="uploadFile($event)">
-              </a> -->
               <input type="hidden" id="hiddens" v-model="form.zip_url">
               <label for=""><i>*</i>报价(硬豆)</label>
               <el-input placeholder="报价" v-model="form.price"></el-input>
@@ -117,7 +129,7 @@
           </div>
         </div>
       </transition>
-      <v-pages :total="total" v-on:currentChange="query"></v-pages>
+      <v-pages :total="total" v-on:currentChange="search"></v-pages>
    </div>
 </template>
 
@@ -141,43 +153,49 @@ export default {
           input: '',
           zip_url: ''
         },
+        query: {
+          page: 1,
+          name: '',
+          category_id: ''
+        },
         loading: false,
         total: 1,
-        page: '',
         id: ''
       }
     },
     created() {
-      var _this = this
-      this.query(1)
-
-      //  服务类别
-      $.ajax({
-        url: '/admin/api/v1/service_categories?page=1',
-        beforeSend: function() {
-          _this.loading = true
-        },
-        timeout: 10000,
-        success: function(result) {
-          _this.loading = false
-          var data = result.result
-          _this.categorys = data.items
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+      this.search(1)
+      this.categoryInfo()
     },
     methods: {
+      //  服务类别
+      categoryInfo() {
+        var _this = this
+        $.ajax({
+          url: '/admin/api/v1/service_categories?page=1',
+          beforeSend: function() {
+            _this.loading = true
+          },
+          timeout: 10000,
+          success: function(result) {
+            _this.loading = false
+            var data = result.result
+            _this.categorys = data.items
+          },
+          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
+      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
+                _this.loading = false
+      　　　　　  _this.$message.error('请求超时！请稍后重试')
+      　　　　}
+          },
+          error: function(err) {
+            if (err.status == '401') {
+              _this.$message.error(JSON.parse(err.responseText).message)
+              _this.$router.push('/signin')
+            }
+          }
+        })
+      },
       //  上传
       uploadFile(ele) {
         var _this = this
@@ -252,11 +270,20 @@ export default {
           }
         }
       },
-      query(page) {
+      search(page) {
         var _this = this
-        this.page = page
+        this.query.page = page
+        this.$store.dispatch('increment', {
+          path: '/admin/api/v1/service_items',
+          parameter: {
+            page: this.query.page,
+            name: this.query.name,
+            category_id: this.query.category_id
+          }
+        })
+        var changeUrl = this.$store.getters.changeUrl
         $.ajax({
-          url: '/admin/api/v1/service_items?page=' + page,
+          url: changeUrl,
           beforeSend: function() {
             _this.loading = true
           },
@@ -331,6 +358,24 @@ export default {
       width: 100%;
       height: 100%;
       font-size: 18px;
+    }
+  }
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .query {
+    margin: 30px 0;
+    text-align: center;
+    span {
+      display: inline-block;
+      font-size: 14px;
+      width: 300px;
+      height: 40px;
+      line-height: 40px;
+      cursor: pointer;
+      background-color: #027ee5;
+      color: #ffffff;
     }
   }
 }
