@@ -101,10 +101,6 @@ export default {
     return {
       conditions: [
         {
-          value: 'Paid',
-          label: '已支付'
-        },
-        {
           value: 'Canceled',
           label: '已取消'
         },

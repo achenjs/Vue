@@ -293,9 +293,6 @@ export default {
         case '已取消':
           this.details.status = 'Canceled'
           break;
-        case '已支付':
-          this.details.status = 'Paid'
-          break;
         case '待提交':
           this.details.status = 'Submitting'
           break;

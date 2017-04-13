@@ -94,9 +94,6 @@ export default {
           for (var i in data.items) {
             var status = data.items[i].status
             switch (status) {
-              case 'Paid':
-                data.items[i].status = '已支付'
-                break;
               case 'Canceled':
                 data.items[i].status = '已取消'
                 break;

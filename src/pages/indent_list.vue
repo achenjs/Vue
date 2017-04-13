@@ -264,10 +264,6 @@ export default {
           label: '全部状态'
         },
         {
-          value: 'Paid',
-          label: '已支付'
-        },
-        {
           value: 'Canceled',
           label: '已取消'
         },
@@ -578,9 +574,6 @@ export default {
       switch (status) {
         case '已取消':
           this.details.status = 'Canceled'
-          break;
-        case '已支付':
-          this.details.status = 'Paid'
           break;
         case '待提交':
           this.details.status = 'Submitting'
