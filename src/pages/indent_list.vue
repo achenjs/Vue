@@ -310,29 +310,28 @@ export default {
   created() {
     var _this = this
     this.id = this.$route.params.id
-
     if (this.id == undefined) {
       this.id = ''
+      //  获取所有服务包类
+      $.ajax({
+        url: '/admin/api/v1/service_categories?page=1',
+        success: function(result) {
+          var data = result.result
+          for (let i in data.items) {
+            _this.servers.push(data.items[i])
+          }
+          // _this.servers = data.items
+        },
+        error: function(err) {
+          if (err.status == '401') {
+            _this.$message.error(JSON.parse(err.responseText).message)
+            _this.$router.push('/signin')
+          }
+        }
+      })
+      //  系统服务项
+      this.query(1)
     }
-    //  获取所有服务包类
-    $.ajax({
-      url: '/admin/api/v1/service_categories?page=1',
-      success: function(result) {
-        var data = result.result
-        for (let i in data.items) {
-          _this.servers.push(data.items[i])
-        }
-        // _this.servers = data.items
-      },
-      error: function(err) {
-        if (err.status == '401') {
-          _this.$message.error(JSON.parse(err.responseText).message)
-          _this.$router.push('/signin')
-        }
-      }
-    })
-    //  系统服务项
-    this.query(1)
   },
   watch: {
     '$route' (to, from) {

@@ -6,7 +6,7 @@ export default {
       var len = Object.keys(parameter).length
       var str = ''
       for (let i in parameter) {
-        if (parameter[i] === '' || parameter[i] === undefined) {
+        if (parameter[i] === '' || parameter[i] === undefined || parameter[i] === null) {
           delete parameter[i]
         } else {
           str += '&' + i + '=' + parameter[i]

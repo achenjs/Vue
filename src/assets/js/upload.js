@@ -10,7 +10,9 @@ function createXmlHttpRequest(){
 
 module.exports = function uploadFile(f, type, fn){
   var file = document.getElementById(f.id).files[0]
-  console.log(file)
+
+  var size = file.size / 1024 / 1024
+
   var filename = file.name
   $('#filename').val(filename)
 
@@ -18,7 +20,14 @@ module.exports = function uploadFile(f, type, fn){
   if (type === 1) {
     // 上传头像
     var url1 = 'https://apl-static.oss-cn-beijing.aliyuncs.com'
-    if(!/.(png|jpg|jpeg|gif|ico)$/.test(k)){
+    if (size > 5) {
+      $('.xs').text('文件大小超过5M')
+      $('.xs').stop().animate({'top': '10px'}, 100)
+      setTimeout(function(){
+         $('.xs').stop().animate({'top':'-53px'}, 200)
+      }, 1500)
+      return false
+    } else if(!/.(png|jpg|jpeg|gif|ico)$/.test(k)){
        $('.xs').text('文件格式有误')
        $('.xs').stop().animate({'top': '10px'}, 100)
        setTimeout(function(){
@@ -70,7 +79,14 @@ module.exports = function uploadFile(f, type, fn){
        })
      }
   } else {
-    if(!/.(doc|docx|ppt|pptx|xls|xlsx|txt|rtf|ppt|bmp|png|jpg|jpeg|zip|prt|stp|dxf|dwg|sch|pcb|dsn|brd|pdf)$/.test(k)){
+    if (size > 100) {
+      $('.xs').text('文件大小超过100M')
+      $('.xs').stop().animate({'top': '10px'}, 100)
+      setTimeout(function(){
+         $('.xs').stop().animate({'top':'-53px'}, 200)
+      }, 1500)
+      return false
+    } else if(!/.(doc|docx|ppt|pptx|xls|xlsx|txt|rtf|ppt|bmp|png|jpg|jpeg|zip|prt|stp|dxf|dwg|sch|pcb|dsn|brd|pdf)$/.test(k)){
        $('.xs').text('文件格式有误')
        $('.xs').stop().animate({'top': '10px'}, 100)
        setTimeout(function(){

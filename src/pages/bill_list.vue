@@ -107,22 +107,9 @@ export default {
 
   },
   methods: {
-    IninParams() {
-      for (let i in this.$data.form) {
-        if (!this.$data.form[i]) {
-          this.$data.form[i] = undefined
-        }
-      }
-    },
     query(page) {
       var _this = this
       this.form.page = page
-      this.IninParams()
-      this.$store.dispatch('increment', {
-        path: '/admin/api/v1/bills',
-        parameter: this.form
-      })
-      var changeUrl = this.$store.getters.changeUrl
       if (this.form.starttime === '') {
         this.form.starttime = ''
       } else {
@@ -134,7 +121,7 @@ export default {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
       $.ajax({
-        url: '/admin/api/v1/bills' + changeUrl,
+        url: '/admin/api/v1/bills?page=' + this.form.page + '&project_name=' + this.form.project_name + '&id=' + this.form.id + '&service_name=' + this.form.service_name + '&starttime=' + this.form.starttime + '&endtime=' + this.form.endtime,
         beforeSend: function() {
           _this.loading = true
         },

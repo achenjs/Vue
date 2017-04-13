@@ -8,7 +8,7 @@
       <el-table-column
         align="center"
         prop="id"
-        label="订单号"
+        label="服务号"
         width="60"
         show-overflow-tooltip>
       </el-table-column>
@@ -35,16 +35,24 @@
       <el-table-column
         align="center"
         prop="price"
-        label="订单金额(硬豆)"
+        label="服务金额(硬豆)"
         width="110"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         align="center"
         prop="status"
-        label="订单状态"
+        label="服务状态"
         width="70"
         show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        label="附件"
+        width="60">
+        <template scope="scope">
+          <a v-if="scope.row.file_name != '#'" :href="scope.row.file_name">下载</a>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -63,9 +71,9 @@
             <span>修改服务项</span>
           </div>
           <div class="modal-content">
-            <label for="">订单金额（硬豆）</label>
-            <el-input placeholder="订单金额（硬豆）" v-model="details.price"></el-input>
-            <label for="">订单状态</label>
+            <label for="">服务金额（硬豆）</label>
+            <el-input placeholder="服务金额（硬豆）" v-model="details.price"></el-input>
+            <label for="">服务状态</label>
             <el-select placeholder="请选择" v-model="details.status">
               <el-option
               v-for="item in conditions"
@@ -98,15 +106,15 @@
             <div class="message" v-if="item.admin_id === null">
               <p class="date">{{item.gmt_create}}</p>
               <div class="content">
-                {{item.content}}
-                <a :href="item.file_name" v-if="item.file_name != '#'">下载</a>
+                <span>{{item.content}}</span>
+                <a :href="item.uploadName" v-if="item.uploadName != '#'">{{item.file_name}}</a>
               </div>
             </div>
             <div class="message right" v-else>
               <p class="date">{{item.gmt_create}}</p>
               <div class="content">
-                {{item.content}}
-                <a :href="item.file_name" v-if="item.file_name != '#'">下载</a>
+                <span>{{item.content}}</span>
+                <a :href="item.uploadName" v-if="item.uploadName != '#'">{{item.file_name}}</a>
               </div>
             </div>
           </div>
@@ -115,6 +123,7 @@
           <a href="javascript:;" class="file" style="vertical-align: middle;">上传附件
             <input type="file" name="" id="upLog" @change="uploadFile($event)">
           </a>
+          <p class="upload_format" title="doc|docx|ppt|pptx|xls|xlsx|txt|rtf|ppt|bmp|png|jpg|jpeg|zip|prt|stp|dxf|dwg|sch|pcb|dsn|brd|pdf">文件格式为:doc|docx|ppt|pptx|xls|xlsx|txt|rtf|ppt|bmp|png|jpg|jpeg|zip|prt|stp|dxf|dwg|sch|pcb|dsn|brd|pdf</p>
           <input type="hidden" id="hiddens">
           <el-input type="textarea" :row="5" placeholder="在此输入回复内容" v-model="form.content"></el-input>
         </div>
@@ -131,6 +140,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import upload from '../assets/js/upload'
 const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 export default {
@@ -192,6 +202,19 @@ export default {
           const data = result.result
           const userService = data.user_service
           const status = userService.status
+          if (userService.file_name != '' && userService.file_name != null) {
+            axios.get('/main/api/v1/files/' + userService.file_name)
+              .then((result) => {
+                const Url = result.data
+                if (Url == '') {
+                  userService.file_name = '#'
+                } else {
+                  userService.file_name = Url
+                }
+              })
+          } else {
+            userService.file_name = '#'
+          }
           switch (status) {
             case '已取消':
               _this.details.status = 'Canceled'
@@ -225,15 +248,15 @@ export default {
             }
             //  判断是否有上传附件
             if (data.items[i].file_name === null || data.items[i].file_name === '') {
-              data.items[i].file_name = '#'
+              data.items[i].file_name = ''
             } else {
               $.ajax({
                 url: '/main/api/v1/files/' + data.items[i].file_name,
                 success: function(result) {
                   if (result == '') {
-                    data.items[i].file_name = '#'
+                    data.items[i].uploadName = ''
                   } else {
-                    data.items[i].file_name = result
+                    data.items[i].uploadName = result
                   }
                 }
               })
@@ -372,23 +395,32 @@ export default {
             color: #807f8a;
           }
           &.right {
-            .date {
-              text-align: right;
-            }
             float: right;
+            text-align: right;
           }
           .content {
+            display: inline-block;
             background-color: #EFEFEF;
             color: #027EE5;
             border: 1px solid #cccccc;
             border-radius: 10px;
             padding: 10px;
+            a {
+              color: red;
+              cursor: pointer;
+            }
           }
         }
       }
     }
     .reply {
       border: 1px solid #efefef;
+      .upload_format {
+        width: 200px;
+        text-overflow: ellipsis;
+        white-space:nowrap;
+        overflow: hidden;
+      }
       textarea {
         border: none !important;
       }

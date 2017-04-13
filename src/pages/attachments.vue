@@ -35,7 +35,7 @@
             label="附件"
             width="60">
             <template scope="scope">
-              <span v-if="scope.row.url == '#'" style="color: #ececec; text-decoration: line-through;">下载</span>
+              <span v-if="scope.row.url == '#'"></span>
               <a v-else :href="scope.row.url">下载</a>
             </template>
           </el-table-column>
@@ -159,47 +159,42 @@ export default {
       query(page) {
         var _this = this
         this.page = page
-        $.ajax({
-          url: '/admin/api/v1/attachments?page=' + page,
-          beforeSend: function() {
+        axios({
+          url: '/admin/api/v1/attachments?page=' + this.page,
+          transformResponse: [(data) => {
             _this.loading = true
-          },
-          timeout: 10000,
-          success: function(result) {
-            var data = result.result
+            return data
+          }],
+          timeout: 10000
+        })
+          .then((result) => {
+            const data = JSON.parse(result.data).result
             _this.loading = false
             _this.total = data.total
             for (let i in data.items) {
               if (data.items[i].url === '' || data.items[i].url === null) {
                   data.items[i].url = '#'
               } else {
-                $.ajax({
-                  url: '/main/api/v1/files/' + data.items[i].url,
-                  success: function(result) {
-                    if (result == '') {
+                axios.get('/main/api/v1/files/' + data.items[i].url)
+                  .then((result) => {
+                    if (result.data == '') {
                       data.items[i].url = '#'
                     } else {
-                      data.items[i].url = result
+                      data.items[i].url = result.data
                     }
-                  }
-                })
+                  })
               }
             }
             _this.tableData = data.items
-          },
-          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-                _this.loading = false
-      　　　　　  _this.$message.error('请求超时！请稍后重试')
-      　　　　}
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
+          })
+          .catch((err) => {
+            if (err.indexOf('timeout') >= 0) {
+              _this.loading = false
+              _this.$message.error('请求超时!')
+            } else {
+              _this.$message.error(err.message)
             }
-          }
-        })
+          })
       },
       //  根据id查看详情和修改
       midClick(id) {

@@ -31,8 +31,8 @@
               <el-form-item label="联系人职位">
                 <el-input placeholder="请输入联系人职位" v-model="form.contact_title"></el-input>
               </el-form-item>
-              <el-form-item label="联系方式">
-                <el-input placeholder="请输入联系方式" v-model="form.contact_phone"></el-input>
+              <el-form-item label="联系电话">
+                <el-input placeholder="请输入联系电话" v-model="form.contact_phone"></el-input>
               </el-form-item>
               <el-form-item label="员工人数">
                 <el-input placeholder="请输入员工人数" v-model="form.employees"></el-input>
@@ -433,6 +433,8 @@ import upload from '../assets/js/upload'
         var _this = this
         this.form.city = this.city_id
         this.form.bp_url = $("#hiddens").val()
+        var financing_sum = this.form.financing_sum
+        var valuation = this.form.valuation
         if (/^[\u4e00-\u9fa5]+$/.test(this.form.industry)) {
           for(let i in this.industries) {
             if(this.industries[i] === this.form.industry) {
@@ -442,12 +444,14 @@ import upload from '../assets/js/upload'
         }
         var fraction = this.form.score_team + this.form.score_risk + this.form.score_mode + this.form.score_industry
         + this.form.score_needs + this.form.score_product + this.form.score_resource + this.form.score_evaluation
-        if (fraction != 10) {
+        if (fraction != 10 && fraction != 0) {
           this.$message.error('评分总数不正常！')
           return false
         }
-        var financing_sum = this.form.financing_sum
-        var valuation = this.form.valuation
+        if (!(/^[0-9]*$/.test(this.form.employees))) {
+          this.$message.error('请输入正确的员工人数')
+          return false
+        }
         if (parseFloat(financing_sum) || parseFloat(financing_sum) === 0) {
           this.form.financing_sum = parseFloat(financing_sum)
         } else {
@@ -457,7 +461,23 @@ import upload from '../assets/js/upload'
         if (parseFloat(valuation) || parseFloat(valuation) === 0) {
           this.form.valuation = parseFloat(valuation)
         } else {
-          this.$message.error('输入的预期估值格式不对，应该为数字！')
+          this.$message.error('输入的预期融资额格式不对，应该为数字！')
+          return false
+        }
+        if (this.form.project_name === '') {
+          this.$message.error('请输入正确的项目名称!')
+          return false
+        }
+        if (this.form.contact === '') {
+          this.$message.error('请输入正确的联系人!')
+          return false
+        }
+        if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.form.contact_phone))) {
+          this.$message.error('请输入正确的联系电话!')
+          return false
+        }
+        if (this.form.industry === '') {
+          this.$message.error('请输入正确的所属行业!')
           return false
         }
         if (this.form.start_from === '') {

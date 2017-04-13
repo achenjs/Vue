@@ -236,13 +236,13 @@ export default {
     this.search(1)
   },
   methods: {
-    IninParams() {
-      for (let i in this.$data.query) {
-        if (!this.$data.query[i]) {
-          this.$data.query[i] = undefined
-        }
-      }
-    },
+    // IninParams() {
+    //   for (let i in this.$data.query) {
+    //     if (!this.$data.query[i]) {
+    //       this.$data.query[i] = undefined
+    //     }
+    //   }
+    // },
     industr() {
       var _this = this
       // 获取全部行业
@@ -263,27 +263,26 @@ export default {
     search(page) {
       var _this = this
       this.query.page = page
-      this.IninParams()
-      this.$store.dispatch('increment', {
-        path: '/admin/api/v1/users',
-        parameter: this.query
-      })
-      var changeUrl = this.$store.getters.changeUrl
-      //  会员列表
-      // axios({
-      //   url: '/admin/api/v1/users' + changeUrl,
-      //
+      // this.IninParams()
+      // this.$store.dispatch('increment', {
+      //   path: '/admin/api/v1/users',
+      //   parameter: this.query
       // })
-      $.ajax({
-        url: '/admin/api/v1/users' + changeUrl,
-        beforeSend: function() {
+      // var changeUrl = this.$store.getters.changeUrl
+      //  会员列表
+      axios({
+        url: '/admin/api/v1/users?page=' + this.query.page + '&id=' + this.query.id + '&name=' + this.query.name + '&phone=' + this.query.phone + '&email=' + this.query.email + '&company_industry=' + this.query.company_industry
+        + '&company_name=' + this.query.company_name + '&type=' + this.query.type,
+        transformResponse: [(data) => {
           _this.loading = true
-        },
-        timeout: 10000,
-        success: function(result) {
-          var data = result.result
+          return data
+        }],
+        timeout: 10000
+      })
+        .then((result) => {
+          const data = JSON.parse(result.data).result
           _this.loading = false
-          for (var i in data.items) {
+          for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
   					timer.setTime(timer.getTime()+0)
@@ -298,20 +297,15 @@ export default {
           }
           _this.total = data.total
           _this.tableData = data.items
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-          if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            _this.loading = false
+            _this.$message.error('请求超时!')
+          } else {
+            _this.$message.error(err.message)
           }
-        }
-      })
+        })
     },
     //  编辑信息
     midClick(id) {

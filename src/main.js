@@ -42,6 +42,8 @@ axios.interceptors.response.use(
         case 401:
         router.push('/signin')
       }
+    } else {
+      return Promise.reject(error.message)
     }
     return Promise.reject(error.response.data)   // 返回接口返回的错误信息
   }
