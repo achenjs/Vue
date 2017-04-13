@@ -115,14 +115,14 @@ export default {
       }
     },
     query(page) {
+      var _this = this
+      this.form.page = page
       this.IninParams()
       this.$store.dispatch('increment', {
         path: '/admin/api/v1/bills',
         parameter: this.form
       })
       var changeUrl = this.$store.getters.changeUrl
-      var _this = this
-      this.form.page = page
       if (this.form.starttime === '') {
         this.form.starttime = ''
       } else {

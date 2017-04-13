@@ -203,7 +203,7 @@ export default {
         company_industry: '',
         company_name: '',
         type: '',
-        query: 1
+        page: 1
       },
       form: {
         name: '',
@@ -236,6 +236,13 @@ export default {
     this.search(1)
   },
   methods: {
+    IninParams() {
+      for (let i in this.$data.query) {
+        if (!this.$data.query[i]) {
+          this.$data.query[i] = undefined
+        }
+      }
+    },
     industr() {
       var _this = this
       // 获取全部行业
@@ -256,9 +263,19 @@ export default {
     search(page) {
       var _this = this
       this.query.page = page
+      this.IninParams()
+      this.$store.dispatch('increment', {
+        path: '/admin/api/v1/users',
+        parameter: this.query
+      })
+      var changeUrl = this.$store.getters.changeUrl
       //  会员列表
+      // axios({
+      //   url: '/admin/api/v1/users' + changeUrl,
+      //
+      // })
       $.ajax({
-        url: '/admin/api/v1/users?id='+this.query.id+'&type='+this.query.type+'&name='+this.query.name+'&email='+this.query.email+'&phone='+this.query.phone+'&company_name='+this.query.company_name+'&company_industry='+this.query.company_industry+'&page='+this.query.page,
+        url: '/admin/api/v1/users' + changeUrl,
         beforeSend: function() {
           _this.loading = true
         },

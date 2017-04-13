@@ -200,6 +200,13 @@ export default {
     },
     ensure() {
       var _this = this
+      if (/^[\u4e00-\u9fa5]+$/.test(this.details.status)) {
+        for(let i in this.conditions) {
+          if(this.conditions[i].label === this.details.status) {
+            this.details.status = this.conditions[i].value
+          }
+        }
+      }
       $.ajax({
         url: '/admin/api/v1/custom_service_items/' + this.id,
         type: 'post',

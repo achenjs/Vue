@@ -90,6 +90,13 @@
         <el-table-column
           show-overflow-tooltip
           align="center"
+          prop="owner"
+          width="170"
+          label="会员账户">
+        </el-table-column>
+        <el-table-column
+          show-overflow-tooltip
+          align="center"
           prop="industry"
           width="120"
           label="所在行业">
