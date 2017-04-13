@@ -272,7 +272,7 @@ export default {
       var changeUrl = this.$store.getters.changeUrl
       //  会员列表
       axios({
-        url: '/admin/api/v1/users' + changeUrl,
+        url: changeUrl,
         transformResponse: [(data) => {
           _this.loading = true
           return data
