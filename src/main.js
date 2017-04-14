@@ -34,34 +34,6 @@ import Message from 'element-ui/lib/message'
 import MessageBox from 'element-ui/lib/message-box'
 import Checkbox from 'element-ui/lib/checkbox'
 import Notification from 'element-ui/lib/notification'
-// import {
-//   Autocomplete,
-//   Col,
-//   Row,
-//   Menu,
-//   Submenu,
-//   MenuItem,
-//   Select,
-//   Option,
-//   Button,
-//   Table,
-//   TableColumn,
-//   Input,
-//   Form,
-//   FormItem,
-//   Breadcrumb,
-//   BreadcrumbItem,
-//   Pagination,
-//   Loading,
-//   DatePicker,
-//   Tabs,
-//   TabPane,
-//   InputNumber,
-//   Message,
-//   MessageBox,
-//   Checkbox,
-//   Notification
-// } from 'element-ui'
 
 Vue.use(Autocomplete)
 Vue.use(Row)
