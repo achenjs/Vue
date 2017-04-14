@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import 'element-ui/lib/theme-default/index.css'
 import './assets/css/reset.scss'
-require('es6-promise').polyfill()
 import axios from 'axios'
 import route from './router'
 import store from './vuex/store'
