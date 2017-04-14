@@ -104,6 +104,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
     data() {
@@ -142,7 +143,7 @@ export default {
         this.selection = selection
       },
       reset(){
-        for(var name in this.$data.form) {
+        for(let name in this.$data.form) {
           this.$data.form[name] = ''
         }
       },
@@ -154,7 +155,6 @@ export default {
         this.addShow = false
       },
       ensure(){
-        var _this = this
         var arr = []
         for (var i=0; i < this.selection.length; i++) {
           arr.push(this.selection[i].id)
@@ -165,119 +165,99 @@ export default {
         } else {
           if (this.id === '') {
             //  新建
-            $.ajax({
-              url: '/admin/api/v1/phases',
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
-                _this.$message({
-                  message: result.message,
+            axios.post('/admin/api/v1/phases', this.form)
+              .then((result) => {
+                this.$message({
+                  message: result.data.message,
                   type: 'success'
                 })
-                _this.query(1)
-                _this.addShow = false
-              }
-            })
+                this.query(1)
+                this.addShow = false
+              })
+              .catch((err) => {
+                this.$message.error(err.message)
+              })
           }
           else {
             //  修改
-            $.ajax({
-              url: '/admin/api/v1/phases/' + this.id,
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
-                _this.$message({
-                  message: result.message,
+            axios.post('/admin/api/v1/phases/' + this.id, this.form)
+              .then((result) => {
+                this.$message({
+                  message: result.data.message,
                   type: 'success'
                 })
-                _this.addShow = false
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+                this.addShow = false
+              })
+              .catch((err) => {
+                this.$message.error(err.message)
+              })
           }
         }
       },
       //  查询列表
       query(page) {
-        var _this = this
-        $.ajax({
+        axios({
           url: '/admin/api/v1/phases?page=' + page,
-          beforeSend: function() {
-            _this.loading = true
-          },
           timeout: 10000,
-          success: function(result) {
-            var data = result.result
-            _this.loading = false
-            _this.total = data.total
-            _this.tableData = data.items
-          },
-          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-                _this.loading = false
-      　　　　　  _this.$message.error('请求超时！请稍后重试')
-      　　　　}
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
+          transformResponse: [(data) => {
+            this.loading = true
+            return data
+          }]
         })
+          .then((result) => {
+            const data = JSON.parse(result.data).result
+            this.loading = false
+            this.total = data.total
+            this.tableData = data.items
+          })
+          .catch((err) => {
+            if (err.indexOf('timeout') >= 0) {
+              this.loading = false
+              this.$message.error('请求超时!')
+            } else {
+              this.$message.error(err.message)
+            }
+          })
       },
       //  根据id查看详情
       midClick(id) {
-        var _this = this
         this.addShow = true
         this.id = id
-        $.ajax({
-          url: '/admin/api/v1/phases/' + id,
-          success: function(result) {
-            var data = result.result
-            _this.form.name = data.name
-            _this.form.description = data.description
+        axios.get('/admin/api/v1/phases/' + id)
+          .then((result) => {
+            const data = result.data.result
+            this.form.name = data.name
+            this.form.description = data.description
             var arrId = data.atts
-            _this.arrId = arrId
+            this.arrId = arrId
             for(var i = 0; i < arrId.length; i++) {
-              _this.$refs.table.toggleRowSelection(_this.tableData1.find(d => d.id === arrId[i].id))
+              this.$refs.table.toggleRowSelection(this.tableData1.find(d => d.id === arrId[i].id))
             }
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+          })
       },
       queryAttachment(page) {
-        var _this = this
-        $.ajax({
+        axios({
           url: '/admin/api/v1/attachments?page=' + page,
-          beforeSend: function() {
-            _this.loading = true
-          },
-          success: function(result) {
-            let data = result.result
-            _this.loading = false
-            _this.total1 = data.total
-            _this.tableData1 = data.items
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
+          timeout: 10000,
+          transformResponse: [(data) => {
+            this.loading = true
+            return data
+          }]
         })
+          .then((result) => {
+            const data = JSON.parse(result.data).result
+            this.loading = false
+            this.total1 = data.total
+            this.tableData1 = data.items
+          })
+          .catch((err) => {
+            if (err.indexOf('timeout') >= 0) {
+              this.loading = false
+              this.$message.error('请求超时!')
+            } else {
+              this.$message.error(err.message)
+            }
+          })
       }
     },
     watch: {

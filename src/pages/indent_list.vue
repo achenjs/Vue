@@ -80,7 +80,7 @@
          <el-button class="export" type="primary">导出</el-button>
        </div> -->
        <div class="query">
-         <span @click="search">查&nbsp;&nbsp;询</span>
+         <span @click="search(1)">查&nbsp;&nbsp;询</span>
        </div>
        <div class="tabIsCustom">
          <button class="tab-button" :class="{active: !isActive}" @click="tabQuery">系统服务项</button>
@@ -297,7 +297,8 @@ export default {
         status: '',
         title: '',
         project_name: '',
-        category_id: ''
+        category_id: '',
+        page: 1
       },
       tableData: [],
       loading: false,
@@ -315,22 +316,16 @@ export default {
     if (this.id == undefined) {
       this.id = ''
       //  获取所有服务包类
-      $.ajax({
-        url: '/admin/api/v1/service_categories?page=1',
-        success: function(result) {
-          var data = result.result
+      axios.get('/admin/api/v1/service_categories?page=1')
+        .then((result) => {
+          const data = result.data.result
           for (let i in data.items) {
             _this.servers.push(data.items[i])
           }
-          // _this.servers = data.items
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
       //  系统服务项
       this.query(1)
     }
@@ -377,21 +372,16 @@ export default {
     CustomDetail(id) {
       this.addShow = true
       var _this = this
-      $.ajax({
-        url: '/admin/api/v1/custom_service_items/' + id,
-        success: function(result) {
-          var data = result.result
+      axios.get('/admin/api/v1/custom_service_items/' + id)
+        .then((result) => {
+          const data = result.data.result
           _this.CustomDetails.title = data.title
           _this.details.category_id = data.category_id
           _this.details.status = data.status
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     },
     reset() {
       for(var name in this.$data.form) {
@@ -411,12 +401,7 @@ export default {
     query(page) {
       var _this = this
       this.isCustom = true
-      var page
-      if (typeof page != 'object') {
-        page = page
-      } else {
-        page = 1
-      }
+      this.form.page = page
       if (this.form.starttime === '') {
         this.form.starttime = ''
       } else {
@@ -427,14 +412,32 @@ export default {
       } else {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
-      $.ajax({
-        url: '/admin/api/v1/user_service_items?id='+this.form.id+'&project_name='+this.form.project_name+'&service_category_id='+this.form.service_category_id+'&title='+this.form.title+'&status='+this.form.status+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
-        beforeSend: function() {
-          _this.loading = true
-        },
+      this.$store.dispatch('increment', {
+        path: '/admin/api/v1/user_service_items',
+        parameter: {
+          starttime: this.form.starttime,
+          service_category_id: this.form.service_category_id,
+          description: this.form.description,
+          endtime: this.form.endtime,
+          id: this.form.id,
+          status: this.form.status,
+          title: this.form.title,
+          project_name: this.form.project_name,
+          category_id: this.form.category_id,
+          page: 1
+        }
+      })
+      var changeUrl = this.$store.getters.changeUrl
+      axios({
+        url: changeUrl,
         timeout: 10000,
-        success: function(result) {
-          var data = result.result
+        transformResponse: [(data) => {
+          _this.loading = true
+          return data
+        }]
+      })
+        .then((result) => {
+          const data = JSON.parse(result.data).result
           _this.total = data.total
           for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
@@ -476,30 +479,24 @@ export default {
           setTimeout(function() {
             _this.loading = false
           }, 500)
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            _this.loading = false
+            _this.$message.error('请求超时!')
+          } else {
+            _this.$message.error(err.message)
           }
-        }
-      })
+        })
     },
     //  自定义服务项列表
     SearchCustomService(page) {
       this.isCustom = false
       var _this = this
-      var page
       if (typeof page != 'object') {
-        page = page
+        this.form.page = page
       } else {
-        page = 1
+        this.form.page = 1
         this.currenPage = 1
       }
       if (this.form.starttime === '') {
@@ -512,14 +509,32 @@ export default {
       } else {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
-      $.ajax({
-        url: '/admin/api/v1/custom_service_items?id='+this.form.id+'&project_name='+this.form.project_name+'&category_id='+this.form.category_id+'&title='+this.form.title+'&status='+this.form.status+'&starttime='+this.form.starttime+'&endtime='+this.form.endtime+'&page=' + page,
-        beforeSend: function() {
-          _this.loading = true
-        },
+      this.$store.dispatch('increment', {
+        path: '/admin/api/v1/custom_service_items',
+        parameter: {
+          starttime: this.form.starttime,
+          service_category_id: this.form.service_category_id,
+          description: this.form.description,
+          endtime: this.form.endtime,
+          id: this.form.id,
+          status: this.form.status,
+          title: this.form.title,
+          project_name: this.form.project_name,
+          category_id: this.form.category_id,
+          page: 1
+        }
+      })
+      var changeUrl = this.$store.getters.changeUrl
+      axios({
+        url: changeUrl,
         timeout: 10000,
-        success: function(result) {
-          var data = result.result
+        transformResponse: [(data) => {
+          _this.loading = true
+          return data
+        }]
+      })
+        .then((result) => {
+          const data = JSON.parse(result.data).result
           _this.total = data.total
           for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
@@ -547,20 +562,15 @@ export default {
           setTimeout(function() {
             _this.loading = false
           }, 500)
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            _this.loading = false
+            _this.$message.error('请求超时!')
+          } else {
+            _this.$message.error(err.message)
           }
-        }
-      })
+        })
     },
     search() {
       if (!this.isCustom) {
@@ -593,25 +603,17 @@ export default {
         status: this.details.status,
       }
       var _this = this
-      $.ajax({
-        url: '/admin/api/v1/custom_service_items/' + this.customId,
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify(obj),
-        success: function(result) {
+      axios.post('/admin/api/v1/custom_service_items/' + this.customId, obj)
+        .then((result) => {
           _this.addShow = false
           _this.$message({
-            message: result.message,
+            message: result.data.message,
             type: 'success'
           })
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
       this.addShow = false
     },
     cancel() {

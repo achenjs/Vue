@@ -15,8 +15,8 @@
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
-          <label for="">邮箱账号</label>
-          <el-input placeholder="邮箱账号" type="email" v-model="query.email"></el-input>
+          <label for=""><i>*</i>邮箱账号</label>
+          <el-input placeholder="邮箱账号" type="email" v-model="query.email" @blur="isEmail($event)"></el-input>
         </div>
       </el-col>
     </div>
@@ -227,7 +227,8 @@ export default {
       tableData: [],
       total: 1,
       loading: false,
-      addShow: false
+      addShow: false,
+      isEmails: false
     }
   },
   created() {
@@ -236,6 +237,18 @@ export default {
     this.search(1)
   },
   methods: {
+    //  判断email是否合法
+    isEmail(el) {
+      const val = el.target.value.trim()
+      if (val.length!=0) {
+         const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+         if (!reg.test(val)) {
+           this.$message.error("请输入正确的邮箱!")
+         } else {
+           this.isEmails = true
+         }
+      }
+    },
     industr() {
       var _this = this
       // 获取全部行业
@@ -321,6 +334,7 @@ export default {
           _this.$message.error(err.message)
         })
     },
+    //  修改
     ensure() {
       var _this = this
       if (this.id === '') {
@@ -338,17 +352,21 @@ export default {
             this.form.gender = i
           }
         }
-        axios.post('/admin/api/v1/users/' + this.id, this.form)
-          .then((result) => {
-            _this.addShow = false
-            _this.$message({
-              message: result.data.message,
-              type: 'success'
+        if (isEmails) {
+          axios.post('/admin/api/v1/users/' + this.id, this.form)
+            .then((result) => {
+              _this.addShow = false
+              _this.$message({
+                message: result.data.message,
+                type: 'success'
+              })
             })
-          })
-          .catch((err) => {
-            _this.$message.error(err.message)
-          })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
+        } else {
+          this.$message.error("请输入正确的邮箱!")
+        }
       }
     },
     cancel() {

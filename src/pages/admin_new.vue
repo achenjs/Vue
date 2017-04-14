@@ -67,7 +67,7 @@ export default {
     },
     methods: {
       reset() {
-        for(var name in this.$data.form) {
+        for(let name in this.$data.form) {
           this.$data.form[name] = ''
         }
       },
@@ -86,7 +86,7 @@ export default {
         if (val.length!=0) {
            const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
            if (!reg.test(val)) {
-             this.$message.error("对不起，您输入的字符串类型格式不正确!")
+             this.$message.error("请输入正确的邮箱!")
            } else {
              this.isEmails = true
            }

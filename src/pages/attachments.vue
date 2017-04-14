@@ -201,19 +201,14 @@ export default {
         var _this = this
         this.addShow = true
         this.id = id
-        $.ajax({
-          url: '/admin/api/v1/attachments/' + id,
-          success: function(result) {
-            var data = result.result
+        axios.get('/admin/api/v1/attachments/' + id)
+          .then((result) => {
+            const data = result.data.result
             _this.form = data
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       }
     },
     created() {

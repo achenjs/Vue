@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
   data() {
@@ -82,16 +83,18 @@ export default {
     //  阶段列表
     nextPhases(page) {
       var _this = this
-      $.ajax({
+      axios({
         url: '/admin/api/v1/projects_phases?page=' + page,
-        beforeSend: function() {
-          _this.loading = true
-        },
         timeout: 10000,
-        success: function(result) {
+        transformResponse: [(data) => {
+          _this.loading = true
+          return data
+        }]
+      })
+        .then((result) => {
           _this.loading = false
-          var data = result.result
-          for (var i in data.items) {
+          const data = JSON.parse(result.data).result
+          for (let i in data.items) {
             var status = data.items[i].status
             switch (status) {
               case 'Canceled':
@@ -113,20 +116,15 @@ export default {
           }
           _this.total = data.total
           _this.tableData = data.items
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            _this.loading = false
+            _this.$message.error('请求超时!')
+          } else {
+            _this.$message.error(err.message)
           }
-        }
-      })
+        })
     },
     //  阶段下详情
     midClick(id) {

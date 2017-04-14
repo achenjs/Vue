@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -60,45 +61,35 @@ export default {
     }
   },
   created() {
-    var _this = this
-    //  所属行业
-    $.ajax({
-      url: '/main/api/v1/industries',
-      success: function(result) {
-        var data = result.result
-        _this.industries = data.industries
-      },
-      error: function(err) {
-        if (err.status == '401') {
-          _this.$message.error(JSON.parse(err.responseText).message)
-          _this.$router.push('/signin')
-        }
-      }
-    })
+    this.industrs()
     this.ProjectDetailsId = this.$route.params.id
     this.projects()
   },
   methods: {
+    //  所属行业
+    industrs() {
+      axios.get('/main/api/v1/industries')
+        .then((result) => {
+          const data = result.data.result
+          this.industries = data.industries
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
+    },
     //  详情
     projects() {
-      var _this = this
-      $.ajax({
-        url: '/admin/api/v1/projects/' + this.ProjectDetailsId,
-        success: function(result) {
-          var data = result.result
-          _this.form = data
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+      axios.get('/admin/api/v1/projects/' + this.ProjectDetailsId)
+        .then((result) => {
+          const data = result.data.result
+          this.form = data
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
     },
     //  修改
     ensure() {
-      var _this = this
       if (this.form.gmt_modified === '') {
         this.form.gmt_modified = ''
       } else {
@@ -120,30 +111,22 @@ export default {
           break;
       }
       var industry = this.form.industry
-      for (var i in this.industries) {
+      for (let i in this.industries) {
         if (industry == this.industries[i]) {
           this.form.industry = i
         }
       }
-      $.ajax({
-        url: '/admin/api/v1/projects/' + this.ProjectDetailsId,
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify(this.form),
-        success: function(result) {
-          _this.$message({
-            message: result.message,
+      axios.post('/admin/api/v1/projects/' + this.ProjectDetailsId, this.form)
+        .then((result) => {
+          this.$message({
+            message: result.data.message,
             type: 'success'
           })
-          _this.$router.push('/project_list')
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+          this.$router.push('/project_list')
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
     },
     cancel() {
       this.$router.push('/project_list')

@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
     data() {
@@ -124,64 +125,49 @@ export default {
       ensure() {
         var _this = this
         if (this.id === '') {
-          $.ajax({
-            url: '/admin/api/v1/permissions',
-            type: 'post',
-            contentType:'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.$message({
+          axios.post('/admin/api/v1/permissions', this.form)
+            .then((result) => {
+              this.$message({
                 message: '创建成功!',
                 type: 'success'
               })
-              _this.addShow = false
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
-              }
-            }
-          })
+              this.addShow = false
+            })
+            .catch((err) => {
+              this.$message.error(err.message)
+            })
         } else {
-          $.ajax({
-            url: '/admin/api/v1/permissions/' + this.id,
-            type: 'post',
-            contentType:'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.$message({
-                message: '创建成功!',
+          axios.post('/admin/api/v1/permissions/' + this.id, this.form)
+            .then((result) => {
+              this.$message({
+                message: '修改成功!',
                 type: 'success'
               })
-              _this.query(_this.page)
-              _this.addShow = false
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
-              }
-            }
-          })
+              this.query(this.page)
+              this.addShow = false
+            })
+            .catch((err) => {
+              this.$message.error(err.message)
+            })
         }
-
       },
       //  查询列表
       query(page) {
         var _this = this
         this.page = page
         //  获取所有权限
-        $.ajax({
+        axios({
           url: '/admin/api/v1/permissions?page=' + page,
-          beforeSend: function() {
-            _this.loading = true
-          },
           timeout: 10000,
-          success: function(result) {
-            _this.loading = false
-            var data = result.result
-            _this.total = data.total
+          transformResponse: [(data) => {
+            _this.loading = true
+            return data
+          }]
+        })
+          .then((result) => {
+            this.loading = false
+            var data = JSON.parse(result.data).result
+            this.total = data.total
             for(var i=0; i<data.items.length; i++) {
               if (data.items[i].status == true) {
                 data.items[i].status = 'true'
@@ -190,39 +176,29 @@ export default {
               }
             }
             _this.tableData = data.items
-          },
-          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-                _this.loading = false
-      　　　　　  _this.$message.error('请求超时！请稍后重试')
-      　　　　}
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
+          })
+          .catch((err) => {
+            if (err.indexOf('timeout') >= 0) {
+              _this.loading = false
+              _this.$message.error('请求超时!')
+            } else {
+              _this.$message.error(err.message)
             }
-          }
-        })
+          })
       },
       //  根据id查看详情和修改
       midClick(id) {
         var _this = this
         this.addShow = true
         this.id = id
-        $.ajax({
-          url: '/admin/api/v1/permissions/' + id,
-          success: function(result) {
-            var data = result.result
+        axios.get('/admin/api/v1/permissions/' + id)
+          .then((result) => {
+            const data = result.data.result
             _this.form = data
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+          })
+          .catch((err) => {
+            this.$message.error(err.message)
+          })
       },
     },
     components: {

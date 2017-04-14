@@ -116,6 +116,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
     data() {
@@ -152,36 +153,32 @@ export default {
       var _this = this
       //  操作员列表
       this.query(1)
-      //  部门列表
-      $.ajax({
-        url: '/admin/api/v1/departments?page=1',
-        success: function(result) {
-          let data = result.result
-          _this.departments = data.items
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
-      //  角色列表
-      $.ajax({
-        url: '/admin/api/v1/roles?page=1',
-        success: function(result) {
-          let data = result.result
-          _this.roles = data.items
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+      this.department(1)
+      this.role(1)
     },
     methods: {
+      //  角色列表
+      role(page) {
+        axios.get('/admin/api/v1/roles?page=' + page)
+          .then((result) => {
+            let data = result.data.result
+            this.roles = data.items
+          })
+          .catch((err) => {
+            this.$message.error(err.message)
+          })
+      },
+      //  部门列表
+      department(page) {
+        axios.get('/admin/api/v1/departments?page=' + page)
+          .then((result) => {
+            let data = result.data.result
+            this.departments = data.items
+          })
+          .catch((err) => {
+            this.$message.error(err.message)
+          })
+      },
       //  判断name是否合法
       isName(el) {
         const val = el.target.value.trim()
@@ -215,7 +212,7 @@ export default {
         }
       },
       reset() {
-        for(var name in this.$data.form) {
+        for(let name in this.$data.form) {
           this.$data.form[name] = ''
         }
       },
@@ -239,66 +236,52 @@ export default {
               type: 'warning'
             })
           } else {
-            $.ajax({
-              url: '/admin/api/v1/admins',
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
+            axios.post('/admin/api/v1/admins', this.form)
+              .then((result) => {
                 _this.addShow = false
                 _this.reset()
                 _this.$message({
-                  message: result.message,
+                  message: result.data.message,
                   type: 'success'
                 })
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+              })
+              .catch((err) => {
+                _this.$message.error(err.message)
+              })
           }
         } else {
           //  修改
-          $.ajax({
-            url: '/admin/api/v1/admins/' + this.id,
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
+          axios.post('/admin/api/v1/admins/' + this.id, this.form)
+            .then((result) => {
               _this.addShow = false
               _this.reset()
               _this.$message({
-                message: result.message,
+                message: result.data.message,
                 type: 'success'
               })
               _this.query(_this.page)
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
-              }
-            }
-          })
+            })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
         }
       },
       query(page) {
         var _this = this
         this.page = page
-        $.ajax({
+        axios({
           url: '/admin/api/v1/admins?page=' + page,
-          beforeSend: function() {
-            _this.loading = true
-          },
           timeout: 10000,
-          success: function(result) {
-            let data = result.result
+          transformResponse: [(data) => {
+            _this.loading = true
+            return data
+          }]
+        })
+          .then((result) => {
+            let data = JSON.parse(result.data).result
             _this.loading = false
             _this.total = data.total
-            for (var i in data.items) {
+            for (let i in data.items) {
               var DateTime = data.items[i].gmt_create
     					var timer = new Date(DateTime)
     					timer.setTime(timer.getTime()+0)
@@ -326,29 +309,23 @@ export default {
               }
             }
             _this.tableData = data.items
-          },
-          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-                _this.loading = false
-      　　　　　  _this.$message.error('请求超时！请稍后重试')
-      　　　　}
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
+          })
+          .catch((err) => {
+            if (err.indexOf('timeout') >= 0) {
+              _this.loading = false
+              _this.$message.error('请求超时!')
+            } else {
+              _this.$message.error(err.message)
             }
-          }
-        })
+          })
       },
       //  查看
       queryClick(id) {
         var _this = this
-        $.ajax({
-          url: '/admin/api/v1/admins/' + id,
-          success: function(result) {
+        axios.get('/admin/api/v1/admins/' + id)
+          .then((result) => {
             _this.addShow = true
-            let data = result.result
+            let data = result.data.result
             _this.form.email = data.email
             _this.form.name = data.name
             for(var i=0; i<_this.departments.length; i++) {
@@ -362,14 +339,10 @@ export default {
               }
             }
             _this.form.active = data.active
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       },
       //  修改
       midClick(id) {

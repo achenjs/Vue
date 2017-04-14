@@ -155,6 +155,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
   data () {
@@ -207,7 +208,7 @@ export default {
     }
   },
   created() {
-    this.categorys()
+    this.categorys(1)
     this.search(1)
   },
   mounted() {
@@ -220,29 +221,23 @@ export default {
   },
   methods: {
     reset() {
-      for(var name in this.$data.form) {
+      for(let name in this.$data.form) {
         this.$data.form[name] = ''
       }
     },
     //  全部类别
-    categorys() {
-      var _this = this
-      $.ajax({
-        url: '/admin/api/v1/service_categories?page=1',
-        success: function(result) {
-          _this.loading = false
-          var data = result.result
-          _this.total = data.total
-          _this.Categorys = data.items
-          _this.Categorys.unshift({name: '全部类别', id: ''})
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+    categorys(page) {
+      axios.get('/admin/api/v1/service_categories?page=' + page)
+        .then((result) => {
+          this.loading = false
+          const data = result.data.result
+          this.total = data.total
+          this.Categorys = data.items
+          this.Categorys.unshift({name: '全部类别', id: ''})
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
     },
     addOpen() {
       this.reset()
@@ -252,7 +247,6 @@ export default {
       this.addShow = false
     },
     search(page) {
-      var _this = this
       this.query.page = page
       this.$store.dispatch('increment', {
         path: '/admin/api/v1/custom_service_items',
@@ -277,50 +271,44 @@ export default {
       } else {
         this.query.endtime = Date.parse(new Date(this.query.endtime))
       }
-      $.ajax({
+      axios({
         url: changeUrl,
-        beforeSend: function() {
-          _this.loading = true
-        },
         timeout: 10000,
-        success: function(result) {
-          let data = result.result
-          _this.loading = false
-          _this.total = data.total
+        transformResponse: [(data) => {
+          this.loading = true
+          return data
+        }]
+      })
+        .then((result) => {
+          const data = JSON.parse(result.data).result
+          this.loading = false
+          this.total = data.total
           for (let i in data.items) {
             if (data.items[i].file_name === null || data.items[i].file_name === '') {
                 data.items[i].file_name = '#'
             } else {
-              $.ajax({
-                url: '/main/api/v1/files/' + data.items[i].file_name,
-                success: function(result) {
-                  if (result == '') {
+              axios.get('/main/api/v1/files/' + data.items[i].file_name)
+                .then((result) => {
+                  if (result.data == '') {
                     data.items[i].file_name = '#'
                   } else {
-                    data.items[i].file_name = result
+                    data.items[i].file_name = result.data
                   }
-                }
-              })
+                })
             }
           }
-          _this.tableData = data.items
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
+          this.tableData = data.items
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            this.loading = false
+            this.$message.error('请求超时!')
+          } else {
+            this.$message.error(err.message)
           }
-        }
-      })
+        })
     },
     ensure() {
-      var _this = this
       if (/^[\u4e00-\u9fa5]+$/.test(this.details.status)) {
         for(let i in this.conditions) {
           if(this.conditions[i].label === this.details.status) {
@@ -328,45 +316,31 @@ export default {
           }
         }
       }
-      $.ajax({
-        url: '/admin/api/v1/custom_service_items/' + this.id,
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify(this.details),
-        success: function(result) {
-          _this.addShow = false
-          _this.$message({
-            message: result.message,
+      axios.post('/admin/api/v1/custom_service_items/' + this.id, this.details)
+        .then((result) => {
+          this.addShow = false
+          this.$message({
+            message: result.data.message,
             type: 'success'
           })
-          _this.search(_this.page)
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+          this.search(this.page)
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
     },
     //  根据id查看详情和修改
     midClick(id) {
-      var _this = this
       this.addShow = true
       this.id = id
-      $.ajax({
-        url: '/admin/api/v1/custom_service_items/' + id,
-        success: function(result) {
-          var data = result.result
-          _this.details = data
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+      axios.get('/admin/api/v1/custom_service_items/' + id)
+        .then((result) => {
+          const data = result.data.result
+          this.details = data
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
     },
   },
   components: {

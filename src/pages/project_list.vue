@@ -134,6 +134,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
   data () {
@@ -174,41 +175,37 @@ export default {
     if (this.id == undefined) {
       this.id = ''
     }
-    var _this = this
-    //  所属行业
-    $.ajax({
-      url: '/main/api/v1/industries',
-      success: function(result) {
-        var data = result.result
-        Object.assign(_this.industries, data.industries)
-      },
-      error: function(err) {
-        if (err.status == '401') {
-          _this.$message.error(JSON.parse(err.responseText).message)
-          _this.$router.push('/admin/signin')
-        }
-      }
-    })
-    //  阶段
-    $.ajax({
-      url: '/admin/api/v1/phases?page=1',
-      success: function(result) {
-        var data = result.result
-        for (let i in data.items) {
-          _this.phases.push(data.items[i])
-        }
-      },
-      error: function(err) {
-        if (err.status == '401') {
-          _this.$message.error(JSON.parse(err.responseText).message)
-          _this.$router.push('/admin/signin')
-        }
-      }
-    })
+    this.industrs()
+    this.pahs(1)
     //  项目列表
     this.query(1)
   },
   methods: {
+    //  所属行业
+    industrs() {
+      axios.get('/main/api/v1/industries')
+        .then((result) => {
+          const data = result.data.result
+          this.industries = data.industries
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
+    },
+    //  阶段
+    pahs(page) {
+      //  阶段
+      axios.get('/admin/api/v1/phases?page=' + page)
+        .then((result) => {
+          const data = result.data.result
+          for (let i in data.items) {
+            this.phases.push(data.items[i])
+          }
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
+    },
     query(page) {
       this.form.page = page
       if (this.form.starttime === '') {
@@ -221,17 +218,18 @@ export default {
       } else {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
-      var _this = this
-      $.ajax({
-        url: '/admin/api/v1/projects?id='+ this.form.id +'&name='+ this.form.name +'&industry='+ this.form.industry +'&phase_index='+ this.form.phase_index + '&starttime='+ this.form.starttime +'&endtime='+ this.form.endtime +'&page=' + this.form.page,
-        beforeSend: function() {
-          _this.loading = true
-        },
+      axios({
+        url: changeUrl,
         timeout: 10000,
-        success: function(result) {
-          let data = result.result
-          _this.loading = false
-          _this.total = data.total
+        transformResponse: [(data) => {
+          _this.loading = true
+          return data
+        }]
+      })
+        .then((result) => {
+          const data = JSON.parse(result.data).result
+          this.loading = false
+          this.total = data.total
           for(let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
@@ -252,21 +250,16 @@ export default {
               }
             }
           }
-          _this.tableData = data.items
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/admin/signin')
+          this.tableData = data.items
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            _this.loading = false
+            _this.$message.error('请求超时!')
+          } else {
+            _this.$message.error(err.message)
           }
-        }
-      })
+        })
     },
     //  详情
     midClick(id) {

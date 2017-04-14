@@ -134,6 +134,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 import upload from '../assets/js/upload'
 export default {
@@ -165,44 +166,39 @@ export default {
     },
     created() {
       this.search(1)
-      this.categoryInfo()
+      this.categoryInfo(1)
     },
     methods: {
       //  服务类别
-      categoryInfo() {
-        var _this = this
-        $.ajax({
-          url: '/admin/api/v1/service_categories?page=1',
-          beforeSend: function() {
-            _this.loading = true
-          },
+      categoryInfo(page) {
+        axios({
+          url: '/admin/api/v1/service_categories?page=' + page,
           timeout: 10000,
-          success: function(result) {
-            _this.loading = false
-            var data = result.result
-            _this.categorys = data.items
-          },
-          complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-      　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-                _this.loading = false
-      　　　　　  _this.$message.error('请求超时！请稍后重试')
-      　　　　}
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
+          transformResponse: [(data) => {
+            this.loading = true
+            return data
+          }]
+        })
+        .then((result) => {
+          this.loading = false
+          const data = JSON.parse(result.data).result
+          this.categorys = data.items
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            this.loading = false
+            this.$message.error('请求超时!')
+          } else {
+            this.$message.error(err.message)
           }
         })
       },
       //  上传
       uploadFile(ele) {
-        var _this = this
         upload(ele.target, '')
       },
       reset() {
-        for(var name in this.$data.form) {
+        for(let name in this.$data.form) {
           this.$data.form[name] = ''
         }
         this.$data.id = ''
@@ -215,63 +211,45 @@ export default {
         this.addShow = false
       },
       ensure() {
-        var _this = this
         this.form.zip_url = $("#hiddens").val()
         if (this.id === '') {
           //  新增
           if (this.form.name === '' || this.form.price === '' || this.form.category_id === '') {
             this.$message.error('必填字段不能为空！')
           } else {
-            $.ajax({
-              url: '/admin/api/v1/service_items',
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
-                _this.addShow = false
-                _this.$message({
-                  message: result.message,
+            axios.post('/admin/api/v1/service_items', this.form)
+              .then((result) => {
+                this.addShow = false
+                this.$message({
+                  message: result.data.message,
                   type: 'success'
                 })
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+              })
+              .catch((err) => {
+                this.$message.error(err.message)
+              })
           }
         } else {
           //  修改
           if (this.form.name === '' || this.form.price === '' || this.form.category_id === '') {
             this.$message.error('必填字段不能为空！')
           } else {
-            $.ajax({
-              url: '/admin/api/v1/service_items/' + this.id,
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
-                _this.addShow = false
-                _this.$message({
-                  message: result.message,
+            axios.post('/admin/api/v1/service_items/' + this.id, this.form)
+              .then((result) => {
+                this.addShow = false
+                this.$message({
+                  message: result.data.message,
                   type: 'success'
                 })
-                _this.query(_this.page)
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+                this.query(this.page)
+              })
+              .catch((err) => {
+                this.$message.error(err.message)
+              })
           }
         }
       },
       search(page) {
-        var _this = this
         this.query.page = page
         this.$store.dispatch('increment', {
           path: '/admin/api/v1/service_items',
@@ -282,59 +260,55 @@ export default {
           }
         })
         var changeUrl = this.$store.getters.changeUrl
-        $.ajax({
+        axios({
           url: changeUrl,
-          beforeSend: function() {
-            _this.loading = true
-          },
-          success: function(result) {
-            let data = result.result
-            _this.loading = false
-            _this.total = data.total
-            for (let i in data.items) {
-              if (data.items[i].zip_url === null || data.items[i].zip_url === '') {
-                  data.items[i].zip_url = '#'
-              } else {
-                $.ajax({
-                  url: '/main/api/v1/files/' + data.items[i].zip_url,
-                  success: function(result) {
-                    if (result == '') {
-                      data.items[i].zip_url = '#'
-                    } else {
-                      data.items[i].zip_url = result
-                    }
+          timeout: 10000,
+          transformResponse: [(data) => {
+            this.loading = true
+            return data
+          }]
+        })
+        .then((result) => {
+          const data = JSON.parse(result.data).result
+          this.loading = false
+          this.total = data.total
+          for (let i in data.items) {
+            if (data.items[i].zip_url === null || data.items[i].zip_url === '') {
+                data.items[i].zip_url = '#'
+            } else {
+              axios.get('/main/api/v1/files/' + data.items[i].zip_url)
+                .then((result) => {
+                  if (result.data == '') {
+                    data.items[i].zip_url = '#'
+                  } else {
+                    data.items[i].zip_url = result.data
                   }
                 })
-              }
             }
-            _this.tableData = data.items
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
+          }
+          this.tableData = data.items
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            this.loading = false
+            this.$message.error('请求超时!')
+          } else {
+            this.$message.error(err.message)
           }
         })
       },
       //  根据id查看详情和修改
       midClick(id) {
-        var _this = this
         this.addShow = true
         this.id = id
-        $.ajax({
-          url: '/admin/api/v1/service_items/' + id,
-          success: function(result) {
-            var data = result.result
-            _this.form = data
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+        axios.get('/admin/api/v1/service_items/' + id)
+          .then((result) => {
+            const data = result.data.result
+            this.form = data
+          })
+          .catch((err) => {
+            this.$message.error(err.message)
+          })
       },
     },
     components: { 'v-pages': pages }

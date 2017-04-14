@@ -196,10 +196,9 @@ export default {
     UserDetail() {
       const _this = this
       this.tableData = []
-      $.ajax({
-        url: '/admin/api/v1/user_service_item/messages/' + this.form.usiid,
-        success: function(result) {
-          const data = result.result
+      axios.get('/admin/api/v1/user_service_item/messages/' + this.form.usiid)
+        .then((result) => {
+          const data = result.data.result
           const userService = data.user_service
           const status = userService.status
           if (userService.file_name != '' && userService.file_name != null) {
@@ -250,16 +249,14 @@ export default {
             if (data.items[i].file_name === null || data.items[i].file_name === '') {
               data.items[i].file_name = ''
             } else {
-              $.ajax({
-                url: '/main/api/v1/files/' + data.items[i].file_name,
-                success: function(result) {
-                  if (result == '') {
+              axios.get('/main/api/v1/files/' + data.items[i].file_name)
+                .then((result) => {
+                  if (result.data == '') {
                     data.items[i].uploadName = ''
                   } else {
-                    data.items[i].uploadName = result
+                    data.items[i].uploadName = result.data
                   }
-                }
-              })
+                })
             }
           }
           var timer = userService.gmt_create
@@ -276,14 +273,10 @@ export default {
           _this.tableData.push(userService)
           _this.message = data.items
           _this.$refs.box.scrollTop = _this.$refs.box.scrollHeight
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     },
     //  上传
     uploadFile(ele) {
@@ -293,21 +286,16 @@ export default {
     messages() {
       const _this = this
       this.form.file_name = $('#hiddens').val()
-      $.ajax({
-        url: '/admin/api/v1/user_service_items/message',
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify(this.form),
-        success: function(result) {
+      axios.post('/admin/api/v1/user_service_items/message', this.form)
+        .then((result) => {
           _this.$message({
-            message: result.result,
+            message: result.data.result,
             type: 'success'
           })
           _this.UserDetail()
           _this.form.content = ''
           _this.form.file_name = ''
-        }
-      })
+        })
     },
     midService() {
       //  修改系统服务项
@@ -330,26 +318,18 @@ export default {
           break;
       }
       var _this = this
-      $.ajax({
-        url: '/admin/api/v1/user_service_items/' + this.form.usiid,
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify(this.details),
-        success: function(result) {
+      axios.post('/admin/api/v1/user_service_items/' + this.form.usiid, this.details)
+        .then((result) => {
           _this.addShow = false
           _this.$message({
-            message: result.message,
+            message: result.data.message,
             type: 'success'
           })
           _this.UserDetail()
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+        })
+        .catch((err) => {
+          _this.$message.error(err.message)
+        })
     }
   },
 }

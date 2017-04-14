@@ -84,8 +84,8 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
-import { mapGetters, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -105,8 +105,13 @@ export default {
   created() {
     this.query(1)
   },
-  computed: {
-
+  mounted() {
+    var _this = this
+    document.onkeydown = (ev) => {
+      if (ev.keyCode == 13) {
+        _this.query(1)
+      }
+    }
   },
   methods: {
     query(page) {
@@ -122,44 +127,53 @@ export default {
       } else {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
-      $.ajax({
-        url: '/admin/api/v1/bills?page=' + this.form.page + '&project_name=' + this.form.project_name + '&id=' + this.form.id + '&service_name=' + this.form.service_name + '&starttime=' + this.form.starttime + '&endtime=' + this.form.endtime,
-        beforeSend: function() {
-          _this.loading = true
-        },
+      this.$store.dispatch('increment', {
+        path: '/admin/api/v1/bills',
+        parameter: {
+          project_name: this.form.project_name,
+          id: this.form.id,
+          starttime: this.form.starttime,
+          endtime: this.form.endtime,
+          service_name: this.form.service_name,
+          page: 1
+        }
+      })
+      var changeUrl = this.$store.getters.changeUrl
+      axios({
+        url: changeUrl,
         timeout: 10000,
-        success: function(result) {
+        transformResponse: [(data) => {
+          _this.loading = true
+          return data
+        }]
+      })
+        .then((result) => {
           _this.loading = false
-          var data = result.result
+          const data = JSON.parse(result.data).result
           _this.total = data.total
-          for (var i in data.items) {
+          for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
   					timer.setTime(timer.getTime()+0)
-			      var  year = timer.getUTCFullYear(),
-          			 month = timer.getUTCMonth()+1,
-          			 date = timer.getUTCDate(),
-          			 hour = timer.getUTCHours(),
-          			 minute = timer.getUTCMinutes(),
-          			 second = timer.getUTCSeconds(),
-         			   time = year + "-" + month + "-" + date
+			      var year = timer.getUTCFullYear(),
+        			  month = timer.getUTCMonth()+1,
+        			  date = timer.getUTCDate(),
+          			hour = timer.getUTCHours(),
+          			minute = timer.getUTCMinutes(),
+          			second = timer.getUTCSeconds(),
+         			  time = year + "-" + month + "-" + date
             data.items[i].gmt_create = time
           }
           _this.tableData = data.items
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
+        })
+        .catch((err) => {
+          if (err.indexOf('timeout') >= 0) {
+            _this.loading = false
+            _this.$message.error('请求超时!')
+          } else {
+            _this.$message.error(err.message)
           }
-        }
-      })
+        })
     }
   },
   components: {

@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
     data() {
@@ -110,20 +111,15 @@ export default {
       query(page) {
         var _this = this
         this.page = page
-        $.ajax({
-          url: '/admin/api/v1/departments?page=' + page,
-          success: function(result) {
-            let data = result.result
+        axios.get('/admin/api/v1/departments?page=' + page)
+          .then((result) => {
+            let data = result.data.result
             _this.total = data.total
             _this.tableData = data.items
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       },
       addOpen() {
         this.reset()
@@ -138,51 +134,35 @@ export default {
           if (this.form.name === '' || this.form.status === '') {
             this.$message.error('必填字段不能为空!')
           } else {
-            $.ajax({
-              url: '/admin/api/v1/departments',
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
+            axios.post('/admin/api/v1/departments', this.form)
+              .then((result) => {
                 _this.addShow = false
                 _this.$message({
-                  message: result.message,
+                  message: result.data.message,
                   type: 'success'
                 })
                 _this.query(_this.page)
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+              })
+              .catch((err) => {
+                _this.$message.error(err.message)
+              })
           }
         } else {
           if (this.form.name === '' || this.form.status === '') {
             this.$message.error('必填字段不能为空!')
           } else {
-            $.ajax({
-              url: '/admin/api/v1/departments/' + this.id,
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
+            axios.post('/admin/api/v1/departments/' + this.id, this.form)
+              .then((result) => {
                 _this.addShow = false
                 _this.$message({
-                  message: result.message,
+                  message: result.data.message,
                   type: 'success'
                 })
                 _this.query(_this.page)
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+              })
+              .catch((err) => {
+                _this.$message.error(err.message)
+              })
           }
         }
       },
@@ -191,13 +171,14 @@ export default {
         var _this = this
         this.addShow = true
         this.id = id
-        $.ajax({
-          url: '/admin/api/v1/departments/' + id,
-          success: function(result) {
-            var data = result.result
+        axios.get('/admin/api/v1/departments/' + id)
+          .then((result) => {
+            var data = result.data.result
             _this.form = data
-          }
-        })
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       },
     },
     components: { 'v-pages': pages }

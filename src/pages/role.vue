@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
     data() {
@@ -128,7 +129,7 @@ export default {
     },
     methods: {
       reset() {
-        for(var name in this.$data.form) {
+        for(let name in this.$data.form) {
           this.$data.form[name] = ''
         }
       },
@@ -136,27 +137,21 @@ export default {
         this.multipleSelection = val
       },
       queryClick(id) {
-        var _this = this
         this.addShow = true
         this.searchGet = false
-        $.ajax({
-          url: '/admin/api/v1/roles/' + id,
-          success: function(result) {
-            let data = result.result
-            _this.form.name = data.name
-            _this.form.description = data.description
+        axios.get('/admin/api/v1/roles/' + id)
+          .then((result) => {
+            const data = result.data.result
+            this.form.name = data.name
+            this.form.description = data.description
             for(var i=0; i<data.permissions.length; i++) {
-              _this.$refs.table.toggleRowSelection(_this.tableData3.find(d => d.key === data.permissions[i]))
+              this.$refs.table.toggleRowSelection(this.tableData3.find(d => d.key === data.permissions[i]))
             }
-            _this.form.status = data.status
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+            this.form.status = data.status
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       },
       midClick(id) {
         this.reset()
@@ -175,7 +170,6 @@ export default {
         this.addShow = false
       },
       ensure() {
-        var _this = this
         var arr = []
         for (var i=0; i<this.multipleSelection.length; i++) {
           arr.push(this.multipleSelection[i].key)
@@ -186,99 +180,71 @@ export default {
           if (this.form.name === '' || this.form.status === '' || this.form.permissions === '') {
             this.$message.error('必填字段不能为空！')
           } else {
-            $.ajax({
-              url: '/admin/api/v1/roles',
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
-                _this.addShow = false
-                _this.$message({
-                  message: result.message,
+            axios.post('/admin/api/v1/roles', this.form)
+              .then((result) => {
+                this.addShow = false
+                this.$message({
+                  message: result.data.message,
                   type: 'success'
                 })
-                _this.query(1)
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+                this.query(1)
+              })
+              .catch((err) => {
+                this.$message.error(err.message)
+              })
           }
         } else {
           //  修改
           if (this.form.name === '' || this.form.status === '' || this.form.permissions === '') {
             this.$message.error('必填字段不能为空！')
           } else {
-            $.ajax({
-              url: '/admin/api/v1/roles/' + this.id,
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
-                _this.addShow = false
-                _this.$message({
-                  message: result.message,
+            axios.post('/admin/api/v1/roles/' + this.id, this.form)
+              .then((result) => {
+                this.addShow = false
+                this.$message({
+                  message: result.data.message,
                   type: 'success'
                 })
-                _this.query(_this.page)
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+                this.query(this.page)
+              })
+              .catch((err) => {
+                this.$message.error(err.message)
+              })
           }
         }
       },
       query(page) {
-        var _this = this
         this.page = page
-        $.ajax({
-          url: '/admin/api/v1/roles?page=' + page,
-          success: function(result) {
-            var data = result.result
-            _this.total = data.total
-            _this.tableData = data.items
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+        axios.get('/admin/api/v1/roles?page=' + page)
+          .then((result) => {
+            const data = result.data.result
+            this.total = data.total
+            this.tableData = data.items
+          })
+          .catch((err) => {
+            this.$message.error(err.message)
+          })
       }
     },
     created() {
-      var _this = this
       //  所有角色
       this.query(1)
       //  所有权限
-      $.ajax({
-        url: '/admin/api/v1/permissions',
-        success: function(result) {
-          var data = result.result
-          for (var i in data) {
+      axios.get('/admin/api/v1/permissions')
+        .then((result) => {
+          const data = result.data.result
+          for (let i in data) {
             data[i]['key'] = i
           }
           var arr = []
-          for (var i in data) {
+          for (let i in data) {
             arr.push(data[i])
           }
-          _this.tableData3 = arr
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+          this.tableData3 = arr
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
     },
     components: {
       'v-pages': pages

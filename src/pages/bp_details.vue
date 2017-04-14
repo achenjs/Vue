@@ -384,27 +384,21 @@ import upload from '../assets/js/upload'
       details() {
         var _this = this
           new Promise((resolve, reject) => {
-            $.ajax({
-              url: '/admin/api/v1/bps/' + this.bpDetailsId,
-              success: function(result) {
-                var data = result.result
+            axios.get('/admin/api/v1/bps/' + this.bpDetailsId)
+              .then((result) => {
+                const data = result.data.result
                 data.start_from = Number(data.start_from)
                 _this.form.start_from = new Date(data.start_from)
                 Object.assign(_this.form, data)
                 return resolve(data.city)
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+              })
+              .catch((err) => {
+                _this.$message.error(err.message)
+              })
           }).then((city) => {
-            $.ajax({
-              url: '/main/api/v1/region_detail/' + city + '?page=1',
-              success: function(result) {
-                var data = result.result
+            axios.get('/main/api/v1/region_detail/' + city + '?page=1')
+              .then((result) => {
+                const data = result.data.result
                 //  省
                 _this.region_name = data[0].area_id
                 _this.isChangCity = data[0].area_id
@@ -414,19 +408,14 @@ import upload from '../assets/js/upload'
                 _this.region()
                 //  区/县
                 _this.city_id = data[2].area_id
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
+              })
+              .catch((err) => {
+                _this.$message.error(err.message)
+              })
             })
-          })
       },
       //  上传
       uploadFile(ele) {
-        var _this = this
         upload(ele.target, '')
       },
       //  修改BP
@@ -486,42 +475,29 @@ import upload from '../assets/js/upload'
         } else {
           this.form.start_from = Date.parse(new Date(this.form.start_from))
         }
-        $.ajax({
-          url: '/admin/api/v1/bps/' + this.bpDetailsId,
-          type: 'post',
-          contentType: 'application/json',
-          data: JSON.stringify(this.form),
-          success: function(result) {
+        axios.post('/admin/api/v1/bps/' + this.bpDetailsId, this.form)
+          .then((result) => {
             _this.$message({
-              message: result.message,
+              message: result.data.message,
               type: 'success'
             })
             _this.$router.push('/bp_list')
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       },
       //  获取省级
       region() {
         var _this = this
-        $.ajax({
-          url: '/main/api/v1/region?page=1',
-          success: function(result) {
-            var data = result.result
+        axios.get('/main/api/v1/region?page=1')
+          .then((result) => {
+            const data = result.data.result
             _this.regions = data
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+          })
+          .catch((err) => {
+            _this.$message.error(err.message)
+          })
       },
       //  获取市级
       city(id) {
@@ -529,22 +505,17 @@ import upload from '../assets/js/upload'
         if (/^[\u4e00-\u9fa5]+$/.test(id)) {
           return false
         } else {
-          $.ajax({
-            url: '/main/api/v1/region/' + id +'?page=1',
-            success: function(result) {
-              var data = result.result
+          axios.get('/main/api/v1/region/' + id +'?page=1')
+            .then((result) => {
+              const data = result.data.result
               _this.citys = data
               if (_this.region_name != _this.isChangCity) {
                 _this.city_name = data[0].area_id
               }
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
-              }
-            }
-          })
+            })
+            .catch((err) => {
+              _this.$message.error(err.message)
+            })
         }
       },
       // 获取区

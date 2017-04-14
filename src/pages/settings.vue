@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import axios from 'axios'
   export default {
     data() {
       return {
@@ -39,29 +40,20 @@
         this.$data.add_pwd = ''
       },
       submitForm(formName) {
-        var _this = this
         if (this.form.new_pwd === this.add_pwd) {
-          $.ajax({
-            url: '/admin/api/v1/reset_password',
-            type: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify(this.form),
-            success: function(result) {
-              _this.$message({
-                 message: result.message,
+          axios.post('/admin/api/v1/reset_password', this.form)
+            .then((result) => {
+              this.$message({
+                 message: result.data.message,
                  type: 'success'
               })
-              _this.reset()
-            },
-            error: function(err) {
-              if (err.status == '401') {
-                _this.$message.error(JSON.parse(err.responseText).message)
-                _this.$router.push('/signin')
-              }
-            }
-          })
+              this.reset()
+            })
+            .catch((err) => {
+              this.$message.error(err.message)
+            })
         } else {
-            _this.$message.error('二次输入的密码不一致！')
+            this.$message.error('二次输入的密码不一致！')
         }
       }
     }

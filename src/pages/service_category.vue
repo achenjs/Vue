@@ -3,43 +3,41 @@
       <el-col :span="4" class="add_item">
         <span @click="addOpen">新增服务项类别</span>
       </el-col>
-      <div class="">
-        <el-table
-        :data="tableData"
-        v-loading="loading"
-        border
-        element-loading-text="拼命加载中"
-        style="width: 100%">
-          <el-table-column
-            align="center"
-            prop="id"
-            label="编号"
-            width="50"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="name"
-            label="类别名称"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="description"
-            label="类别描述"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            fixed="right"
-            width="60"
-            label="操作">
-            <template scope="scope">
-              <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+      <el-table
+      :data="tableData"
+      v-loading="loading"
+      border
+      element-loading-text="拼命加载中"
+      style="width: 100%">
+        <el-table-column
+          align="center"
+          prop="id"
+          label="编号"
+          width="50"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="name"
+          label="类别名称"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="description"
+          label="类别描述"
+          show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          fixed="right"
+          width="60"
+          label="操作">
+          <template scope="scope">
+            <el-button @click="midClick(scope.row.id)" type="text" size="small">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       <transition name="fade">
         <div class="modal" v-if="addShow">
           <div class="modal-dialog">
@@ -65,6 +63,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import pages from '../components/pages/pages.vue'
 export default {
     data() {
@@ -84,37 +83,36 @@ export default {
       }
     },
     created() {
-      var _this = this
-      //  获取所有服务项
-      $.ajax({
-        url: '/admin/api/v1/service_categories?page=1',
-        timeout: 10000,
-        beforeSend: function() {
-          _this.loading = true
-        },
-        success: function(result) {
-          _this.loading = false
-          var data = result.result
-          _this.total = data.total
-          _this.tableData = data.items
-        },
-        complete: function(XMLHttpRequest, status){ //请求完成后最终执行参数
-    　　　　if(status == 'timeout'){ //超时,status还有success,error等值的情况
-              _this.loading = false
-    　　　　　  _this.$message.error('请求超时！请稍后重试')
-    　　　　}
-        },
-        error: function(err) {
-          if (err.status == '401') {
-            _this.$message.error(JSON.parse(err.responseText).message)
-            _this.$router.push('/signin')
-          }
-        }
-      })
+      this.category(1)
     },
     methods: {
+      category(page) {
+        //  获取所有服务项
+        axios({
+          url: '/admin/api/v1/service_categories?page=' + page,
+          timeout: 10000,
+          transformResponse: [(data) => {
+            this.loading = true
+            return data
+          }]
+        })
+          .then((result) => {
+            this.loading = false
+            const data = JSON.parse(result.data).result
+            this.total = data.total
+            this.tableData = data.items
+          })
+          .catch((err) => {
+            if (err.indexOf('timeout') >= 0) {
+              this.loading = false
+              this.$message.error('请求超时!')
+            } else {
+              this.$message.error(err.message)
+            }
+          })
+      },
       reset() {
-        for(var name in this.$data.form) {
+        for(let name in this.$data.form) {
           this.$data.form[name] = ''
         }
       },
@@ -126,98 +124,78 @@ export default {
         this.addShow = false
       },
       ensure() {
-        var _this = this
         if (this.id === '') {
           if (this.form.name === '') {
             this.$message.error('服务项类别名称不能为空!')
           } else {
-            $.ajax({
-              url: '/admin/api/v1/service_categories',
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
-                _this.addShow = false
-                _this.$message({
-                  message: result.message,
+            axios.post('/admin/api/v1/service_categories', this.form)
+              .then((result) => {
+                this.addShow = false
+                this.$message({
+                  message: result.data.message,
                   type: 'success'
                 })
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+              })
+              .catch((err) => {
+                this.$message.error(err.message)
+              })
           }
         } else {
           if (this.form.name === '') {
             this.$message.error('服务项类别名称不能为空!')
           } else {
-            $.ajax({
-              url: '/admin/api/v1/service_categories/' + this.id,
-              type: 'post',
-              contentType: 'application/json',
-              data: JSON.stringify(this.form),
-              success: function(result) {
-                _this.addShow = false
-                _this.$message({
-                  message: result.message,
+            axios.post('/admin/api/v1/service_categories/' + this.id, this.form)
+              .then((result) => {
+                this.addShow = false
+                this.$message({
+                  message: result.data.message,
                   type: 'success'
                 })
-                _this.query(_this.page)
-              },
-              error: function(err) {
-                if (err.status == '401') {
-                  _this.$message.error(JSON.parse(err.responseText).message)
-                  _this.$router.push('/signin')
-                }
-              }
-            })
+                this.query(this.page)
+              })
+              .catch((err) => {
+                this.$message.error(err.message)
+              })
           }
         }
       },
       query(page) {
-        var _this = this
         this.page = page
-        $.ajax({
+        axios({
           url: '/admin/api/v1/service_categories?page=' + page,
-          beforeSend: function() {
-            _this.loading = true
-          },
-          success: function(result) {
-            _this.loading = false
-            var data = result.result
-            _this.total = data.total
-            _this.tableData = data.items
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
+          timeout: 10000,
+          transformResponse: [(data) => {
+            this.loading = true
+            return data
+          }]
         })
+          .then((result) => {
+            this.loading = false
+            const data = JSON.parse(result.data).result
+            this.total = data.total
+            this.tableData = data.items
+          })
+          .catch((err) => {
+            if (err.indexOf('timeout') >= 0) {
+              this.loading = false
+              this.$message.error('请求超时!')
+            } else {
+              this.$message.error(err.message)
+            }
+          })
       },
       //  根据id查看详情和修改
       midClick(id) {
-        var _this = this
         this.addShow = true
         this.id = id
-        $.ajax({
-          url: '/admin/api/v1/service_categories/' + id,
-          success: function(result) {
-            var data = result.result
-            _this.form = data
-          },
-          error: function(err) {
-            if (err.status == '401') {
-              _this.$message.error(JSON.parse(err.responseText).message)
-              _this.$router.push('/signin')
-            }
-          }
-        })
+        axios.get('/admin/api/v1/service_categories/' + id)
+          .then((result) => {
+            const data = result.data.result
+            this.form = data
+          })
+          .catch((err) => {
+            this.$message.error(err.message)
+          })
       },
     },
     components: {
