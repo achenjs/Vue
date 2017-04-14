@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import upload from '../assets/js/upload'
 import header from '../components/header/header.vue'
 import profile from '../assets/json/profile'
@@ -92,65 +93,52 @@ const URL = 'https://apl-static.oss-cn-beijing.aliyuncs.com/'
 			}
 
 		 	this.updateUser()
-			this.autoHeight()
   	},
 		methods: {
-			autoHeight() {
-				const height = $('.main').height()
-				this.menuHeight = height - 20 + 'px'
-			},
 			//	获取用户信息
 			updateUser() {
-				var _this = this
-				$.ajax({
-					url: '/admin/api/v1/profile',
-					success: function (result) {
-						var data = result.result
-						_this.User.email = data.email
-						_this.User.name = data.name
-						_this.User.role_name = data.role_name
+				axios.get('/admin/api/v1/profile')
+					.then((result) => {
+						const data = result.data.result
+						this.User.email = data.email
+						this.User.name = data.name
+						this.User.role_name = data.role_name
 						if (data.avatar_url === null || data.avatar_url === '') {
-							_this.User.avatar_url = '#'
+							this.User.avatar_url = '#'
 						} else {
-							_this.User.avatar_url = URL + data.avatar_url
+							this.User.avatar_url = URL + data.avatar_url
 						}
-					}
-				})
+					})
 			},
 			//  上传
       uploadFile(ele) {
-        var _this = this
         upload(ele.target, 1, () => {
           const obj = {
 						url: $("#url").val()
 					}
-					$.ajax({
-						url: '/admin/api/v1/profile',
-						type: 'post',
-						contentType: 'application/json',
-						data: JSON.stringify(obj),
-						success: function(result) {
-							_this.$message({
-	              message: result.message,
+					axios.post('/admin/api/v1/profile', obj)
+						.then((result) => {
+							this.$message({
+	              message: result.data.message,
 	              type: 'success'
 	            })
-							_this.updateUser()
-						}
-					})
+							this.updateUser()
+						})
         })
       },
 			handleopen() {
-				//console.log('handleopen');
+				//console.log('handleopen')
 			},
 			handleclose() {
-				//console.log('handleclose');
+				//console.log('handleclose')
 			},
 			handleselect: function (a, b) {
-				// this.$router.push(b)
+				// this.$router.push(a)
 			},
 		},
 		mounted() {
-
+			const height = $('.main').height()
+			this.menuHeight = height - 20 + 'px'
 		},
 		components: { 'v-header': header }
 	}
