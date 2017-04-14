@@ -196,8 +196,9 @@ export default {
              type: 'success'
            })
            this.addShow = false
+           var _this = this
            setTimeout(function() {
-             this.$router.push('/nextAtta')
+             _this.$router.push('/nextAtta')
            }, 500)
            this.reset()
          }).catch((err) => {
@@ -244,8 +245,9 @@ export default {
              type: 'success'
            })
            this.addShow = false
+           var _this = this
            setTimeout(function() {
-             this.$router.push('/nextAtta')
+             _this.$router.push('/nextAtta')
            }, 500)
            this.reset()
          }).catch((err) => {

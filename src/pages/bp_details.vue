@@ -10,7 +10,7 @@
         <div class="Modular">
           <el-col :span="24">
             <el-form :label-position="right" label-width="120px">
-              <el-form-item label="项目名称">
+              <el-form-item required label="项目名称">
                 <el-input placeholder="请输入项目名称" v-model="form.project_name"></el-input>
               </el-form-item>
               <el-form-item label="公司名称">
@@ -25,13 +25,13 @@
               <el-form-item label="当前融资情况">
                 <el-input type="textarea" :rows="3" placeholder="请输入当前融资情况" v-model="form.current_financing_status"></el-input>
               </el-form-item>
-              <el-form-item label="联系人">
+              <el-form-item required label="联系人">
                 <el-input placeholder="请输入联系人" v-model="form.contact"></el-input>
               </el-form-item>
               <el-form-item label="联系人职位">
                 <el-input placeholder="请输入联系人职位" v-model="form.contact_title"></el-input>
               </el-form-item>
-              <el-form-item label="联系电话">
+              <el-form-item required label="联系电话">
                 <el-input placeholder="请输入联系电话" v-model="form.contact_phone"></el-input>
               </el-form-item>
               <el-form-item label="员工人数">
@@ -39,6 +39,7 @@
               </el-form-item>
               <el-form-item label="成立时间">
                 <el-date-picker
+                  :editable="false"
                   v-model="form.start_from"
                   type="date"
                   placeholder="请输入成立时间">
@@ -86,7 +87,7 @@
               <el-form-item label="项目来源">
                 <el-input placeholder="请输入项目来源" v-model="form.source"></el-input>
               </el-form-item>
-              <el-form-item label="所属行业">
+              <el-form-item required label="所属行业">
                 <el-select placeholder="请选择" v-model="form.industry">
                   <el-option
                   v-for="(key, index) in industries"

@@ -2,13 +2,68 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import 'element-ui/lib/theme-default/index.css'
 import './assets/css/reset.scss'
-import ElementUI from 'element-ui'
 require('es6-promise').polyfill()
 import axios from 'axios'
-import 'element-ui/lib/theme-default/index.css'
 import route from './router'
 import store from './vuex/store'
+import {
+  Autocomplete,
+  Col,
+  Row,
+  Menu,
+  Submenu,
+  MenuItem,
+  Select,
+  Option,
+  Button,
+  Table,
+  TableColumn,
+  Input,
+  Form,
+  FormItem,
+  Breadcrumb,
+  BreadcrumbItem,
+  Pagination,
+  Loading,
+  DatePicker,
+  Tabs,
+  TabPane,
+  InputNumber,
+  Message,
+  MessageBox,
+  Checkbox,
+  Notification
+} from 'element-ui'
+
+Vue.use(Autocomplete)
+Vue.use(Row)
+Vue.use(Col)
+Vue.use(Menu)
+Vue.use(Submenu)
+Vue.use(MenuItem)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(Button)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Input)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Pagination)
+Vue.use(Loading)
+Vue.use(DatePicker)
+Vue.use(Tabs)
+Vue.use(TabPane)
+Vue.use(InputNumber)
+Vue.use(Checkbox)
+
+Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$notify = Notification
 
 const VueCookie = require('vue-cookie')
 const router = route.router
@@ -50,7 +105,6 @@ axios.interceptors.response.use(
 )
 
 Vue.use(VueCookie)
-Vue.use(ElementUI)
 
 /* eslint-disable no-new */
 new Vue({

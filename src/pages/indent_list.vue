@@ -61,12 +61,14 @@
          <el-col :span="15">
            <label for="">交付时间</label>
            <el-date-picker
+             :editable="false"
              v-model="form.starttime"
              type="date"
              placeholder="选择日期">
            </el-date-picker>
            <span>至</span>
            <el-date-picker
+             :editable="false"
              v-model="form.endtime"
              type="date"
              placeholder="选择日期">

@@ -16,12 +16,14 @@
        <el-col :span="14">
          <label for="">交易日期</label>
          <el-date-picker
+           :editable="false"
            v-model="query.starttime"
            type="date"
            placeholder="选择日期">
          </el-date-picker>
          <span>至</span>
          <el-date-picker
+           :editable="false"
            v-model="query.endtime"
            type="date"
            placeholder="选择日期">

@@ -2,13 +2,13 @@
    <div class="settings">
       <el-col :span="8" :offset="8">
         <el-form label-width="100px" class="demo-ruleForm">
-          <el-form-item label="原密码">
+          <el-form-item required label="原密码">
             <el-input type="password" v-model="form.old_pwd"></el-input>
           </el-form-item>
-          <el-form-item label="新密码">
+          <el-form-item required label="新密码">
             <el-input type="password" v-model="form.new_pwd"></el-input>
           </el-form-item>
-          <el-form-item label="确认密码">
+          <el-form-item required label="确认密码">
             <el-input type="password" v-model="add_pwd"></el-input>
           </el-form-item>
           <el-form-item>
