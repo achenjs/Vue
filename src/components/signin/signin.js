@@ -1,5 +1,5 @@
 const axios = require('axios')
-const index = require('../../router/index.js')
+const index = require('../../router')
 module.exports = {
   data() {
     return {
@@ -29,10 +29,9 @@ module.exports = {
     }
   },
   mounted() {
-    var _this = this
     document.onkeydown = (ev) => {
       if (ev.keyCode == 13) {
-        _this.signin()
+        this.signin()
       }
     }
 
@@ -46,28 +45,26 @@ module.exports = {
   methods: {
     //  验证码
     captcha() {
-      var _this = this
       axios.get('/main/api/v1/captcha?time=' + new Date().getTime())
         .then((result) => {
-          _this.imgUrl = result.data
+          this.imgUrl = result.data
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     },
     signin() {
-      var _this = this
       axios.post('/admin/api/v1/',this.form)
         .then((result) => {
-          _this.$message({
+          this.$message({
             message: result.data.message,
             type: 'success'
           })
           //  是否勾选保存用户信息
-          if (_this.checked) {
-            _this.$cookie.set('userInfo', _this.form.username, 7)
+          if (this.checked) {
+            this.$cookie.set('userInfo', this.form.username, 7)
           } else {
-            _this.$cookie.delete('userInfo')
+            this.$cookie.delete('userInfo')
           }
           axios.get('/admin/api/v1/profile')
             .then((result) => {
@@ -78,27 +75,26 @@ module.exports = {
 
               index.default.init_route()
 
-              _this.$router.push({path: '/', query: {id: 1}})
+              this.$router.push({path: '/', query: {id: 1}})
             })
             .catch((err) => {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             })
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     },
     isLogin() {
-      var _this = this
       axios.get('/admin/api/v1/')
         .then((result) => {
-          if (_this.$router.options.routes[0].children) {
-            var start_path = _this.$router.options.routes[0].children[0].path
-            _this.$router.push(start_path)
+          if (this.$router.options.routes[0].children) {
+            var start_path = this.$router.options.routes[0].children[0].path
+            this.$router.push(start_path)
           }
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     },
     getExplorerInfo() {
