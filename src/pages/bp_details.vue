@@ -369,48 +369,46 @@ import upload from '../assets/js/upload'
     },
     methods: {
       industr() {
-        var _this = this
         // 获取全部行业
         axios.get('/main/api/v1/industries')
           .then((result) => {
             const data = result.data.result
-            Object.assign(_this.industries, data.industries)
+            Object.assign(this.industries, data.industries)
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       //  详情
       details() {
-        var _this = this
           new Promise((resolve, reject) => {
             axios.get('/admin/api/v1/bps/' + this.bpDetailsId)
               .then((result) => {
                 const data = result.data.result
                 data.start_from = Number(data.start_from)
-                _this.form.start_from = new Date(data.start_from)
-                Object.assign(_this.form, data)
+                this.form.start_from = new Date(data.start_from)
+                Object.assign(this.form, data)
                 return resolve(data.city)
               })
               .catch((err) => {
-                _this.$message.error(err.message)
+                this.$message.error(err.message)
               })
           }).then((city) => {
             axios.get('/main/api/v1/region_detail/' + city + '?page=1')
               .then((result) => {
                 const data = result.data.result
                 //  省
-                _this.region_name = data[0].area_id
-                _this.isChangCity = data[0].area_id
+                this.region_name = data[0].area_id
+                this.isChangCity = data[0].area_id
                 //  市
-                _this.city_name = data[1].area_id
-                _this.isChangArea = data[1].area_id
-                _this.region()
+                this.city_name = data[1].area_id
+                this.isChangArea = data[1].area_id
+                this.region()
                 //  区/县
-                _this.city_id = data[2].area_id
+                this.city_id = data[2].area_id
               })
               .catch((err) => {
-                _this.$message.error(err.message)
+                this.$message.error(err.message)
               })
             })
       },
@@ -420,7 +418,6 @@ import upload from '../assets/js/upload'
       },
       //  修改BP
       submitBP() {
-        var _this = this
         this.form.city = this.city_id
         this.form.bp_url = $("#hiddens").val()
         var financing_sum = this.form.financing_sum
@@ -477,60 +474,57 @@ import upload from '../assets/js/upload'
         }
         axios.post('/admin/api/v1/bps/' + this.bpDetailsId, this.form)
           .then((result) => {
-            _this.$message({
+            this.$message({
               message: result.data.message,
               type: 'success'
             })
-            _this.$router.push('/bp_list')
+            this.$router.push('/bp_list')
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       //  获取省级
       region() {
-        var _this = this
         axios.get('/main/api/v1/region?page=1')
           .then((result) => {
             const data = result.data.result
-            _this.regions = data
+            this.regions = data
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       //  获取市级
       city(id) {
-        var _this = this
         if (/^[\u4e00-\u9fa5]+$/.test(id)) {
           return false
         } else {
           axios.get('/main/api/v1/region/' + id +'?page=1')
             .then((result) => {
               const data = result.data.result
-              _this.citys = data
-              if (_this.region_name != _this.isChangCity) {
-                _this.city_name = data[0].area_id
+              this.citys = data
+              if (this.region_name != this.isChangCity) {
+                this.city_name = data[0].area_id
               }
             })
             .catch((err) => {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             })
         }
       },
       // 获取区
       area(id) {
-        var _this = this
         axios.get('/main/api/v1/region/' + id +'?page=1')
           .then((result) => {
             const data = result.data.result
-            _this.areas = data
-            if (_this.isChangArea != _this.city_name) {
-              _this.city_id = data[0].area_id
+            this.areas = data
+            if (this.isChangArea != this.city_name) {
+              this.city_id = data[0].area_id
             }
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       }
     }

@@ -180,6 +180,13 @@ export default {
     //  项目列表
     this.query(1)
   },
+  mounted() {
+    document.onkeydown = (ev) => {
+      if (ev.keyCode == 13) {
+        this.query(1)
+      }
+    }
+  },
   methods: {
     //  所属行业
     industrs() {
@@ -218,11 +225,24 @@ export default {
       } else {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
+      this.$store.dispatch('increment', {
+        path: '/admin/api/v1/users',
+        parameter: {
+          id: this.form.id,
+          name: this.form.name,
+          industry: this.form.industry,
+          phase_index: this.form.phase_index,
+          starttime: this.form.starttime,
+          endtime: this.form.endtime,
+          page: 1
+        }
+      })
+      var changeUrl = this.$store.getters.changeUrl
       axios({
         url: changeUrl,
         timeout: 10000,
         transformResponse: [(data) => {
-          _this.loading = true
+          this.loading = true
           return data
         }]
       })
@@ -254,10 +274,10 @@ export default {
         })
         .catch((err) => {
           if (err.indexOf('timeout') >= 0) {
-            _this.loading = false
-            _this.$message.error('请求超时!')
+            this.loading = false
+            this.$message.error('请求超时!')
           } else {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           }
         })
     },

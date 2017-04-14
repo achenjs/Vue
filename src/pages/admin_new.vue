@@ -65,6 +65,13 @@ export default {
         isPass: false
       }
     },
+    mounted() {
+      document.onkeydown = (ev) => {
+        if (ev.keyCode == 13) {
+          this.addUser()
+        }
+      }
+    },
     methods: {
       reset() {
         for(let name in this.$data.form) {
@@ -105,7 +112,6 @@ export default {
       },
       //  创建
       addUser() {
-        var _this = this
         if (this.isNames && this.isEmails && this.isPass) {
           if (this.form.total_money == '') {
             this.$message.error('初始硬豆必填!')
@@ -120,14 +126,14 @@ export default {
           axios.post('/admin/api/v1/users', this.form)
             .then((result) => {
               const data = result.data
-              _this.reset()
-              _this.$message({
+              this.reset()
+              this.$message({
                 message: data.message,
                 type: 'success'
               })
             })
             .catch((err) => {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             })
         } else {
           this.$message.error('必填字段不能为空！')

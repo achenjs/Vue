@@ -311,7 +311,6 @@ export default {
     }
   },
   created() {
-    var _this = this
     this.id = this.$route.params.id
     if (this.id == undefined) {
       this.id = ''
@@ -320,11 +319,11 @@ export default {
         .then((result) => {
           const data = result.data.result
           for (let i in data.items) {
-            _this.servers.push(data.items[i])
+            this.servers.push(data.items[i])
           }
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
       //  系统服务项
       this.query(1)
@@ -337,6 +336,17 @@ export default {
       if (toDepth === 2) {
         this.id = ''
         this.query(1)
+      }
+    }
+  },
+  mounted() {
+    document.onkeydown = (ev) => {
+      if (ev.keyCode == 13) {
+        if(this.isCustom) {
+          this.query(1)
+        } else {
+          this.search(1)
+        }
       }
     }
   },
@@ -371,16 +381,15 @@ export default {
     //  自定义服务项详情
     CustomDetail(id) {
       this.addShow = true
-      var _this = this
       axios.get('/admin/api/v1/custom_service_items/' + id)
         .then((result) => {
           const data = result.data.result
-          _this.CustomDetails.title = data.title
-          _this.details.category_id = data.category_id
-          _this.details.status = data.status
+          this.CustomDetails.title = data.title
+          this.details.category_id = data.category_id
+          this.details.status = data.status
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     },
     reset() {
@@ -399,7 +408,6 @@ export default {
     },
     //  系统服务项列表
     query(page) {
-      var _this = this
       this.isCustom = true
       this.form.page = page
       if (this.form.starttime === '') {
@@ -432,13 +440,14 @@ export default {
         url: changeUrl,
         timeout: 10000,
         transformResponse: [(data) => {
-          _this.loading = true
+          this.loading = true
           return data
         }]
       })
         .then((result) => {
           const data = JSON.parse(result.data).result
-          _this.total = data.total
+          this.total = data.total
+          this.loading = false
           for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
@@ -475,24 +484,23 @@ export default {
                 })
             }
           }
-          _this.tableData = data.items
+          this.tableData = data.items
           setTimeout(function() {
-            _this.loading = false
+            this.loading = false
           }, 500)
         })
         .catch((err) => {
           if (err.indexOf('timeout') >= 0) {
-            _this.loading = false
-            _this.$message.error('请求超时!')
+            this.loading = false
+            this.$message.error('请求超时!')
           } else {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           }
         })
     },
     //  自定义服务项列表
     SearchCustomService(page) {
       this.isCustom = false
-      var _this = this
       if (typeof page != 'object') {
         this.form.page = page
       } else {
@@ -529,13 +537,13 @@ export default {
         url: changeUrl,
         timeout: 10000,
         transformResponse: [(data) => {
-          _this.loading = true
+          this.loading = true
           return data
         }]
       })
         .then((result) => {
           const data = JSON.parse(result.data).result
-          _this.total = data.total
+          this.total = data.total
           for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
@@ -558,17 +566,17 @@ export default {
          		var	 time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
             data.items[i].gmt_create = time
           }
-          _this.tableData = data.items
+          this.tableData = data.items
           setTimeout(function() {
-            _this.loading = false
+            this.loading = false
           }, 500)
         })
         .catch((err) => {
           if (err.indexOf('timeout') >= 0) {
-            _this.loading = false
-            _this.$message.error('请求超时!')
+            this.loading = false
+            this.$message.error('请求超时!')
           } else {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           }
         })
     },
@@ -602,17 +610,16 @@ export default {
       var obj = {
         status: this.details.status,
       }
-      var _this = this
       axios.post('/admin/api/v1/custom_service_items/' + this.customId, obj)
         .then((result) => {
-          _this.addShow = false
-          _this.$message({
+          this.addShow = false
+          this.$message({
             message: result.data.message,
             type: 'success'
           })
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
       this.addShow = false
     },

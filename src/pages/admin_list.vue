@@ -236,6 +236,13 @@ export default {
     //  会员列表
     this.search(1)
   },
+  mounted() {
+    document.onkeydown = (ev) => {
+      if (ev.keyCode == 13) {
+        this.search(1)
+      }
+    }
+  },
   methods: {
     //  判断email是否合法
     isEmail(el) {
@@ -250,15 +257,14 @@ export default {
       }
     },
     industr() {
-      var _this = this
       // 获取全部行业
       axios.get('/main/api/v1/industries')
         .then((result) => {
           const data = result.data.result
-          Object.assign(_this.industries, data.industries)
+          Object.assign(this.industries, data.industries)
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     },
     reset() {
@@ -267,7 +273,6 @@ export default {
       }
     },
     search(page) {
-      var _this = this
       this.query.page = page
       this.$store.dispatch('increment', {
         path: '/admin/api/v1/users',
@@ -287,14 +292,14 @@ export default {
       axios({
         url: changeUrl,
         transformResponse: [(data) => {
-          _this.loading = true
+          this.loading = true
           return data
         }],
         timeout: 10000
       })
         .then((result) => {
           const data = JSON.parse(result.data).result
-          _this.loading = false
+          this.loading = false
           for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
@@ -308,35 +313,33 @@ export default {
          			   time = year + "-" + month + "-" + date
             data.items[i].gmt_create = time
           }
-          _this.total = data.total
-          _this.tableData = data.items
+          this.total = data.total
+          this.tableData = data.items
         })
         .catch((err) => {
           if (err.indexOf('timeout') >= 0) {
-            _this.loading = false
-            _this.$message.error('请求超时!')
+            this.loading = false
+            this.$message.error('请求超时!')
           } else {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           }
         })
     },
     //  编辑信息
     midClick(id) {
-      var _this = this
       this.addShow = true
       this.id = id
       axios.get('/admin/api/v1/users/' + id)
         .then((result) => {
           const data = result.data.result
-          Object.assign(_this.form, data)
+          Object.assign(this.form, data)
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     },
     //  修改
     ensure() {
-      var _this = this
       if (this.id === '') {
         this.addShow = false
       } else {
@@ -355,14 +358,14 @@ export default {
         if (isEmails) {
           axios.post('/admin/api/v1/users/' + this.id, this.form)
             .then((result) => {
-              _this.addShow = false
-              _this.$message({
+              this.addShow = false
+              this.$message({
                 message: result.data.message,
                 type: 'success'
               })
             })
             .catch((err) => {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             })
         } else {
           this.$message.error("请输入正确的邮箱!")

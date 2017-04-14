@@ -106,16 +106,14 @@ export default {
     this.query(1)
   },
   mounted() {
-    var _this = this
     document.onkeydown = (ev) => {
       if (ev.keyCode == 13) {
-        _this.query(1)
+        this.query(1)
       }
     }
   },
   methods: {
     query(page) {
-      var _this = this
       this.form.page = page
       if (this.form.starttime === '') {
         this.form.starttime = ''
@@ -143,14 +141,14 @@ export default {
         url: changeUrl,
         timeout: 10000,
         transformResponse: [(data) => {
-          _this.loading = true
+          this.loading = true
           return data
         }]
       })
         .then((result) => {
-          _this.loading = false
+          this.loading = false
           const data = JSON.parse(result.data).result
-          _this.total = data.total
+          this.total = data.total
           for (let i in data.items) {
             var DateTime = data.items[i].gmt_create
   					var timer = new Date(DateTime)
@@ -164,14 +162,14 @@ export default {
          			  time = year + "-" + month + "-" + date
             data.items[i].gmt_create = time
           }
-          _this.tableData = data.items
+          this.tableData = data.items
         })
         .catch((err) => {
           if (err.indexOf('timeout') >= 0) {
-            _this.loading = false
-            _this.$message.error('请求超时!')
+            this.loading = false
+            this.$message.error('请求超时!')
           } else {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           }
         })
     }

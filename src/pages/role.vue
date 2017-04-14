@@ -150,7 +150,7 @@ export default {
             this.form.status = data.status
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       midClick(id) {

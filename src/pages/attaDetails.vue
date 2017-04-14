@@ -111,7 +111,6 @@ export default {
       }
     },
     details(page) {
-      var _this = this
       axios.get('/admin/api/v1/attachment_details?uaid=' + this.attaDetailsId + '&page=' + page)
         .then((result) => {
           const data = result.data.result
@@ -130,26 +129,25 @@ export default {
                 })
             }
           }
-          _this.tableData = data.items
-          _this.attaLength = data.items.length - 1
+          this.tableData = data.items
+          this.attaLength = data.items.length - 1
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     },
     //  判断提交状态
     isStatus() {
-      var _this = this
       axios.get('/admin/api/v1/user_attachments/' + this.attaDetailsId)
         .then((result) => {
           const data = result.data.result
-          for(let i in _this.tableData) {
-            _this.tableData[i].attachment_name = data.attachment.name
+          for(let i in this.tableData) {
+            this.tableData[i].attachment_name = data.attachment.name
           }
-          _this.status = data.status
+          this.status = data.status
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     },
     //  审核
@@ -159,7 +157,6 @@ export default {
     },
     //  通过
     ensure() {
-      var _this = this
       if (this.status === '请求忽略') {
         this.form.status = 'Ignored'
       } else {
@@ -178,7 +175,7 @@ export default {
               return resolve()
             })
             .catch((err) => {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             })
          })
          var commentReq = new Promise((resolve, reject) => {
@@ -187,7 +184,7 @@ export default {
               return resolve()
             })
             .catch((err) => {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             })
          })
          Promise.all([statusReq, commentReq]).then(([status, comment]) => {
@@ -213,7 +210,6 @@ export default {
     },
     //  驳回
     cancel() {
-      var _this = this
       this.addShow = false
       this.form.status = 'Rejected'
       this.$confirm('是否继续?', '提示', {
@@ -227,7 +223,7 @@ export default {
               return resolve()
             })
             .catch((err) => {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             })
          })
          var commentReq = new Promise((resolve, reject) => {
@@ -236,7 +232,7 @@ export default {
               return resolve()
             })
             .catch((err) => {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             })
          })
          Promise.all([statusReq, commentReq]).then(() => {

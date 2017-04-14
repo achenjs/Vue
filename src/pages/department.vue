@@ -109,16 +109,15 @@ export default {
         }
       },
       query(page) {
-        var _this = this
         this.page = page
         axios.get('/admin/api/v1/departments?page=' + page)
           .then((result) => {
             let data = result.data.result
-            _this.total = data.total
-            _this.tableData = data.items
+            this.total = data.total
+            this.tableData = data.items
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       addOpen() {
@@ -129,22 +128,21 @@ export default {
         this.addShow = false
       },
       ensure() {
-        var _this = this
         if (this.id === '') {
           if (this.form.name === '' || this.form.status === '') {
             this.$message.error('必填字段不能为空!')
           } else {
             axios.post('/admin/api/v1/departments', this.form)
               .then((result) => {
-                _this.addShow = false
-                _this.$message({
+                this.addShow = false
+                this.$message({
                   message: result.data.message,
                   type: 'success'
                 })
-                _this.query(_this.page)
+                this.query(this.page)
               })
               .catch((err) => {
-                _this.$message.error(err.message)
+                this.$message.error(err.message)
               })
           }
         } else {
@@ -153,31 +151,30 @@ export default {
           } else {
             axios.post('/admin/api/v1/departments/' + this.id, this.form)
               .then((result) => {
-                _this.addShow = false
-                _this.$message({
+                this.addShow = false
+                this.$message({
                   message: result.data.message,
                   type: 'success'
                 })
-                _this.query(_this.page)
+                this.query(this.page)
               })
               .catch((err) => {
-                _this.$message.error(err.message)
+                this.$message.error(err.message)
               })
           }
         }
       },
       //  根据id查看详情和修改
       midClick(id) {
-        var _this = this
         this.addShow = true
         this.id = id
         axios.get('/admin/api/v1/departments/' + id)
           .then((result) => {
             var data = result.data.result
-            _this.form = data
+            this.form = data
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
     },

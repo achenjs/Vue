@@ -150,7 +150,6 @@ export default {
       }
     },
     created() {
-      var _this = this
       //  操作员列表
       this.query(1)
       this.department(1)
@@ -227,60 +226,58 @@ export default {
         this.addShow = false
       },
       ensure() {
-        var _this = this
         if (this.id === '') {
           //  新增
           if (this.form.dept_id == '' || this.form.role_id == '' || !this.isEmails || !this.isPass || !this.isNames) {
-            _this.$message({
+            this.$message({
               message: '请填写完整的信息!',
               type: 'warning'
             })
           } else {
             axios.post('/admin/api/v1/admins', this.form)
               .then((result) => {
-                _this.addShow = false
-                _this.reset()
-                _this.$message({
+                this.addShow = false
+                this.reset()
+                this.$message({
                   message: result.data.message,
                   type: 'success'
                 })
               })
               .catch((err) => {
-                _this.$message.error(err.message)
+                this.$message.error(err.message)
               })
           }
         } else {
           //  修改
           axios.post('/admin/api/v1/admins/' + this.id, this.form)
             .then((result) => {
-              _this.addShow = false
-              _this.reset()
-              _this.$message({
+              this.addShow = false
+              this.reset()
+              this.$message({
                 message: result.data.message,
                 type: 'success'
               })
-              _this.query(_this.page)
+              this.query(this.page)
             })
             .catch((err) => {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             })
         }
       },
       query(page) {
-        var _this = this
         this.page = page
         axios({
           url: '/admin/api/v1/admins?page=' + page,
           timeout: 10000,
           transformResponse: [(data) => {
-            _this.loading = true
+            this.loading = true
             return data
           }]
         })
           .then((result) => {
             let data = JSON.parse(result.data).result
-            _this.loading = false
-            _this.total = data.total
+            this.loading = false
+            this.total = data.total
             for (let i in data.items) {
               var DateTime = data.items[i].gmt_create
     					var timer = new Date(DateTime)
@@ -308,40 +305,39 @@ export default {
                 data.items[i].active = '禁用'
               }
             }
-            _this.tableData = data.items
+            this.tableData = data.items
           })
           .catch((err) => {
             if (err.indexOf('timeout') >= 0) {
-              _this.loading = false
-              _this.$message.error('请求超时!')
+              this.loading = false
+              this.$message.error('请求超时!')
             } else {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             }
           })
       },
       //  查看
       queryClick(id) {
-        var _this = this
         axios.get('/admin/api/v1/admins/' + id)
           .then((result) => {
-            _this.addShow = true
+            this.addShow = true
             let data = result.data.result
-            _this.form.email = data.email
-            _this.form.name = data.name
-            for(var i=0; i<_this.departments.length; i++) {
-              if (_this.departments[i].name === data.dept_name) {
-                _this.form.dept_id = _this.departments[i].id
+            this.form.email = data.email
+            this.form.name = data.name
+            for(var i=0; i<this.departments.length; i++) {
+              if (this.departments[i].name === data.dept_name) {
+                this.form.dept_id = this.departments[i].id
               }
             }
-            for(var i=0; i<_this.roles.length; i++) {
-              if (_this.roles[i].name === data.role_name) {
-                _this.form.role_id = _this.roles[i].id
+            for(var i=0; i<this.roles.length; i++) {
+              if (this.roles[i].name === data.role_name) {
+                this.form.role_id = this.roles[i].id
               }
             }
-            _this.form.active = data.active
+            this.form.active = data.active
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       //  修改

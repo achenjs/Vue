@@ -365,14 +365,13 @@ import upload from '../assets/js/upload'
     methods: {
       // 获取全部行业
       industr() {
-        var _this = this
         axios.get('/main/api/v1/industries')
           .then((result) => {
             const data = result.data.result
-            Object.assign(_this.industries, data.industries)
+            Object.assign(this.industries, data.industries)
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       //  上传
@@ -381,7 +380,6 @@ import upload from '../assets/js/upload'
       },
       //  创建BP
       submitBP() {
-        var _this = this
         this.form.bp_url = $("#hiddens").val()
         var financing_sum = this.form.financing_sum
         var valuation = this.form.valuation
@@ -430,52 +428,49 @@ import upload from '../assets/js/upload'
         }
         axios.post('/admin/api/v1/bps', this.form)
           .then((result) => {
-            _this.$message({
+            this.$message({
               message: result.data.message,
               type: 'success'
             })
-            _this.$router.push('/bp_list')
+            this.$router.push('/bp_list')
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       //  获取省级
       region() {
-        var _this = this
         axios.get('/main/api/v1/region?page=1')
           .then((result) => {
             const data = result.data.result
-            _this.regions = data
+            this.regions = data
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       //  获取市级
       city(id) {
-        var _this = this
         axios.get('/main/api/v1/region/' + id +'?page=1')
           .then((result) => {
             const data = result.data.result
-            _this.citys = data
-            _this.city_name = data[0].area_id
+            this.citys = data
+            this.city_name = data[0].area_id
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       // 获取区
       area(id) {
-        var _this = this
         axios.get('/main/api/v1/region/' + id +'?page=1')
           .then((result) => {
             const data = result.data.result
-            _this.areas = data
-            _this.form.city = data[0].area_id
+            this.areas = data
+            this.form.city = data[0].area_id
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       }
     }

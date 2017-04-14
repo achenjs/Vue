@@ -100,15 +100,14 @@ export default {
       },
       //  BP列表
       search(page) {
-        var _this = this
         axios.get('/admin/api/v1/bps?page=' + page)
           .then((result) => {
             const data = result.data.result
-            _this.total = data.total
-            _this.tableData = data.items
+            this.total = data.total
+            this.tableData = data.items
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       },
       //  详情修改

@@ -123,7 +123,6 @@ export default {
         this.addShow = false
       },
       ensure() {
-        var _this = this
         if (this.id === '') {
           axios.post('/admin/api/v1/permissions', this.form)
             .then((result) => {
@@ -153,14 +152,13 @@ export default {
       },
       //  查询列表
       query(page) {
-        var _this = this
         this.page = page
         //  获取所有权限
         axios({
           url: '/admin/api/v1/permissions?page=' + page,
           timeout: 10000,
           transformResponse: [(data) => {
-            _this.loading = true
+            this.loading = true
             return data
           }]
         })
@@ -175,26 +173,25 @@ export default {
                 data.items[i].status = 'false'
               }
             }
-            _this.tableData = data.items
+            this.tableData = data.items
           })
           .catch((err) => {
             if (err.indexOf('timeout') >= 0) {
-              _this.loading = false
-              _this.$message.error('请求超时!')
+              this.loading = false
+              this.$message.error('请求超时!')
             } else {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             }
           })
       },
       //  根据id查看详情和修改
       midClick(id) {
-        var _this = this
         this.addShow = true
         this.id = id
         axios.get('/admin/api/v1/permissions/' + id)
           .then((result) => {
             const data = result.data.result
-            _this.form = data
+            this.form = data
           })
           .catch((err) => {
             this.$message.error(err.message)

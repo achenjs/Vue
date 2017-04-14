@@ -31,6 +31,13 @@ import axios from 'axios'
         add_pwd: ''
       }
     },
+    mounted() {
+      document.onkeydown = (ev) => {
+        if (ev.keyCode == 13) {
+          this.submitForm()
+        }
+      }
+    },
     methods: {
       reset() {
         this.$data.form = {
@@ -39,7 +46,7 @@ import axios from 'axios'
         }
         this.$data.add_pwd = ''
       },
-      submitForm(formName) {
+      submitForm() {
         if (this.form.new_pwd === this.add_pwd) {
           axios.post('/admin/api/v1/reset_password', this.form)
             .then((result) => {
@@ -59,9 +66,3 @@ import axios from 'axios'
     }
   }
 </script>
-
-<style lang="scss">
-.settings {
-
-}
-</style>

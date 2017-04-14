@@ -92,57 +92,54 @@ export default {
     },
     //  阶段下交付物列表
     nextAtta(page) {
-      const _this = this
       axios({
         url: '/admin/api/v1/user_attachments?ppid=' + this.nextAttaId + '&page=' + page,
         transformResponse: [(data) => {
-          _this.loading = true
+          this.loading = true
           return data
         }]
       })
         .then((result) => {
           const data = JSON.parse(result.data).result
-          _this.loading = false
-          _this.total = data.total
-          _this.tableData = data.items
+          this.loading = false
+          this.total = data.total
+          this.tableData = data.items
         })
         .catch((err) => {
-          _this.$message.error(err.result)
+          this.$message.error(err.result)
         })
     },
     //  同意进入下一阶段
     ensure() {
-      const _this = this
       var obj = {
         ppid: this.nextAttaId,
         status: 'Confirmed'
       }
       axios.post('/admin/api/v1/project_phase_review/', obj)
         .then((result) => {
-          _this.$message({
+          this.$message({
             message: result.data.message,
             type: 'success'
           })
-          _this.$router.push('/deliverable_list')
+          this.$router.push('/deliverable_list')
         })
         .catch((err) => {
-          _this.$message.error(err.result)
+          this.$message.error(err.result)
         })
     },
     //  驳回
     cancel() {
-      var _this = this
       var obj = {
         ppid: this.nextAttaId,
         status: 'Submitting'
       }
       axios.post('/admin/api/v1/project_phase_review/', obj)
         .then((result) => {
-          _this.$message({
+          this.$message({
             message: result.data.message,
             type: 'success'
           })
-          _this.$router.push('/department_list')
+          this.$router.push('/department_list')
         })
     }
   },

@@ -102,11 +102,10 @@ export default {
     methods: {
       //  上传
       uploadFile(ele) {
-        var _this = this
         upload(ele.target, '')
       },
       reset() {
-        for(var name in this.$data.form) {
+        for(let name in this.$data.form) {
           this.$data.form[name] = ''
         }
       },
@@ -119,7 +118,6 @@ export default {
         this.addShow = false
       },
       ensure() {
-        var _this = this
         if (this.form.name === '') {
           this.$message.error('必填字段不能为空!')
         } else {
@@ -127,50 +125,49 @@ export default {
             //  新增
             axios.post('/admin/api/v1/attachments', this.form)
               .then((result) => {
-                _this.addShow = false
-                _this.$message({
+                this.addShow = false
+                this.$message({
                   message: result.data.message,
                   type: 'success'
                 })
-                _this.query(1)
+                this.query(1)
               })
               .catch((err) => {
-                _this.$message.error(err.message)
+                this.$message.error(err.message)
               })
           } else {
             //  修改
-            _this.form.url = $("#hiddens").val()
+            this.form.url = $("#hiddens").val()
             axios.post('/admin/api/v1/attachments/' + this.id, this.form)
               .then((result) => {
-                _this.addShow = false
-                _this.$message({
+                this.addShow = false
+                this.$message({
                   message: result.data.message,
                   type: 'success'
                 })
-                _this.query(_this.page)
+                this.query(this.page)
               })
               .catch((err) => {
-                _this.$message.error(err.message)
+                this.$message.error(err.message)
               })
           }
         }
       },
       //  列表查询
       query(page) {
-        var _this = this
         this.page = page
         axios({
           url: '/admin/api/v1/attachments?page=' + this.page,
           transformResponse: [(data) => {
-            _this.loading = true
+            this.loading = true
             return data
           }],
           timeout: 10000
         })
           .then((result) => {
             const data = JSON.parse(result.data).result
-            _this.loading = false
-            _this.total = data.total
+            this.loading = false
+            this.total = data.total
             for (let i in data.items) {
               if (data.items[i].url === '' || data.items[i].url === null) {
                   data.items[i].url = '#'
@@ -185,29 +182,28 @@ export default {
                   })
               }
             }
-            _this.tableData = data.items
+            this.tableData = data.items
           })
           .catch((err) => {
             if (err.indexOf('timeout') >= 0) {
-              _this.loading = false
-              _this.$message.error('请求超时!')
+              this.loading = false
+              this.$message.error('请求超时!')
             } else {
-              _this.$message.error(err.message)
+              this.$message.error(err.message)
             }
           })
       },
       //  根据id查看详情和修改
       midClick(id) {
-        var _this = this
         this.addShow = true
         this.id = id
         axios.get('/admin/api/v1/attachments/' + id)
           .then((result) => {
             const data = result.data.result
-            _this.form = data
+            this.form = data
           })
           .catch((err) => {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           })
       }
     },

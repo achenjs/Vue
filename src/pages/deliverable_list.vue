@@ -82,17 +82,16 @@ export default {
   methods: {
     //  阶段列表
     nextPhases(page) {
-      var _this = this
       axios({
         url: '/admin/api/v1/projects_phases?page=' + page,
         timeout: 10000,
         transformResponse: [(data) => {
-          _this.loading = true
+          this.loading = true
           return data
         }]
       })
         .then((result) => {
-          _this.loading = false
+          this.loading = false
           const data = JSON.parse(result.data).result
           for (let i in data.items) {
             var status = data.items[i].status
@@ -114,15 +113,15 @@ export default {
                 break;
             }
           }
-          _this.total = data.total
-          _this.tableData = data.items
+          this.total = data.total
+          this.tableData = data.items
         })
         .catch((err) => {
           if (err.indexOf('timeout') >= 0) {
-            _this.loading = false
-            _this.$message.error('请求超时!')
+            this.loading = false
+            this.$message.error('请求超时!')
           } else {
-            _this.$message.error(err.message)
+            this.$message.error(err.message)
           }
         })
     },

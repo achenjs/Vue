@@ -177,7 +177,6 @@ export default {
   },
   created() {
     this.form.usiid = this.$route.params.id
-    var _this = this
     //  详情
     this.UserDetail()
   },
@@ -194,7 +193,6 @@ export default {
     },
     //  获取系统服务项详情
     UserDetail() {
-      const _this = this
       this.tableData = []
       axios.get('/admin/api/v1/user_service_item/messages/' + this.form.usiid)
         .then((result) => {
@@ -216,16 +214,16 @@ export default {
           }
           switch (status) {
             case '已取消':
-              _this.details.status = 'Canceled'
+              this.details.status = 'Canceled'
               break;
             case '已确认':
-              _this.details.status = 'Confirmed'
+              this.details.status = 'Confirmed'
               break;
             case '已完成':
-              _this.details.status = 'Finished'
+              this.details.status = 'Finished'
               break;
           }
-          _this.details.price = userService.price
+          this.details.price = userService.price
           for (let i in data.items) {
             var timer = data.items[i].gmt_create;
 			      var timer = new Date(timer)
@@ -270,12 +268,12 @@ export default {
           second = timers.getUTCSeconds();
           // time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
           userService.gmt_create = year + "-" + month + "-" + date
-          _this.tableData.push(userService)
-          _this.message = data.items
-          _this.$refs.box.scrollTop = _this.$refs.box.scrollHeight
+          this.tableData.push(userService)
+          this.message = data.items
+          this.$refs.box.scrollTop = this.$refs.box.scrollHeight
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     },
     //  上传
@@ -284,17 +282,16 @@ export default {
     },
     //  回复消息
     messages() {
-      const _this = this
       this.form.file_name = $('#hiddens').val()
       axios.post('/admin/api/v1/user_service_items/message', this.form)
         .then((result) => {
-          _this.$message({
+          this.$message({
             message: result.data.result,
             type: 'success'
           })
-          _this.UserDetail()
-          _this.form.content = ''
-          _this.form.file_name = ''
+          this.UserDetail()
+          this.form.content = ''
+          this.form.file_name = ''
         })
     },
     midService() {
@@ -317,18 +314,17 @@ export default {
           this.details.status = 'Finished'
           break;
       }
-      var _this = this
       axios.post('/admin/api/v1/user_service_items/' + this.form.usiid, this.details)
         .then((result) => {
-          _this.addShow = false
-          _this.$message({
+          this.addShow = false
+          this.$message({
             message: result.data.message,
             type: 'success'
           })
-          _this.UserDetail()
+          this.UserDetail()
         })
         .catch((err) => {
-          _this.$message.error(err.message)
+          this.$message.error(err.message)
         })
     }
   },

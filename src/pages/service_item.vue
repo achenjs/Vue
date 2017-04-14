@@ -168,6 +168,13 @@ export default {
       this.search(1)
       this.categoryInfo(1)
     },
+    mounted() {
+      document.onkeydown = (ev) => {
+        if (ev.keyCode == 13) {
+          this.search(1)
+        }
+      }
+    },
     methods: {
       //  服务类别
       categoryInfo(page) {

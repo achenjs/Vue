@@ -212,10 +212,9 @@ export default {
     this.search(1)
   },
   mounted() {
-    var _this = this
     document.onkeydown = (ev) => {
       if (ev.keyCode == 13) {
-        _this.search(1)
+        this.search(1)
       }
     }
   },
