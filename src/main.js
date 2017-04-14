@@ -8,34 +8,60 @@ require('es6-promise').polyfill()
 import axios from 'axios'
 import route from './router'
 import store from './vuex/store'
-import {
-  Autocomplete,
-  Col,
-  Row,
-  Menu,
-  Submenu,
-  MenuItem,
-  Select,
-  Option,
-  Button,
-  Table,
-  TableColumn,
-  Input,
-  Form,
-  FormItem,
-  Breadcrumb,
-  BreadcrumbItem,
-  Pagination,
-  Loading,
-  DatePicker,
-  Tabs,
-  TabPane,
-  InputNumber,
-  Message,
-  MessageBox,
-  Checkbox,
-  Notification
-} from 'element-ui'
+import Autocomplete from 'element-ui/lib/autocomplete'
+import Col from 'element-ui/lib/col'
+import Row from 'element-ui/lib/row'
+import Menu from 'element-ui/lib/menu'
+import Submenu from 'element-ui/lib/submenu'
+import MenuItem from 'element-ui/lib/menu-item'
+import Select from 'element-ui/lib/select'
+import Option from 'element-ui/lib/option'
+import Button from 'element-ui/lib/button'
+import Table from 'element-ui/lib/table'
+import TableColumn from 'element-ui/lib/table-column'
+import Input from 'element-ui/lib/input'
+import Form from 'element-ui/lib/form'
+import FormItem from 'element-ui/lib/form-item'
+import Breadcrumb from 'element-ui/lib/breadcrumb'
+import BreadcrumbItem from 'element-ui/lib/breadcrumb-item'
+import Pagination from 'element-ui/lib/pagination'
+import Loading from 'element-ui/lib/loading'
+import DatePicker from 'element-ui/lib/date-picker'
+import Tabs from 'element-ui/lib/tabs'
+import TabPane from 'element-ui/lib/tab-pane'
+import InputNumber from 'element-ui/lib/input-number'
+import Message from 'element-ui/lib/message'
+import MessageBox from 'element-ui/lib/message-box'
+import Checkbox from 'element-ui/lib/checkbox'
+import Notification from 'element-ui/lib/notification'
+// import {
+//   Autocomplete,
+//   Col,
+//   Row,
+//   Menu,
+//   Submenu,
+//   MenuItem,
+//   Select,
+//   Option,
+//   Button,
+//   Table,
+//   TableColumn,
+//   Input,
+//   Form,
+//   FormItem,
+//   Breadcrumb,
+//   BreadcrumbItem,
+//   Pagination,
+//   Loading,
+//   DatePicker,
+//   Tabs,
+//   TabPane,
+//   InputNumber,
+//   Message,
+//   MessageBox,
+//   Checkbox,
+//   Notification
+// } from 'element-ui'
 
 Vue.use(Autocomplete)
 Vue.use(Row)
