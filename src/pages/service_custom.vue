@@ -256,7 +256,7 @@ export default {
           status: this.query.status,
           keyword: this.query.keyword,
           category_id: this.query.category_id,
-          page: 1
+          page: this.query.page
         }
       })
       var changeUrl = this.$store.getters.changeUrl

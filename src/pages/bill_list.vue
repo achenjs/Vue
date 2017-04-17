@@ -133,7 +133,7 @@ export default {
           starttime: this.form.starttime,
           endtime: this.form.endtime,
           service_name: this.form.service_name,
-          page: 1
+          page: this.form.page
         }
       })
       var changeUrl = this.$store.getters.changeUrl

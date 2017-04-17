@@ -234,7 +234,7 @@ export default {
           phase_index: this.form.phase_index,
           starttime: this.form.starttime,
           endtime: this.form.endtime,
-          page: 1
+          page: this.form.page
         }
       })
       var changeUrl = this.$store.getters.changeUrl

@@ -432,7 +432,7 @@ export default {
           title: this.form.title,
           project_name: this.form.project_name,
           category_id: this.form.category_id,
-          page: 1
+          page: this.form.page
         }
       })
       var changeUrl = this.$store.getters.changeUrl
@@ -529,7 +529,7 @@ export default {
           title: this.form.title,
           project_name: this.form.project_name,
           category_id: this.form.category_id,
-          page: 1
+          page: this.form.page
         }
       })
       var changeUrl = this.$store.getters.changeUrl
