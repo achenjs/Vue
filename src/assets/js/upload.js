@@ -10,8 +10,9 @@ function createXmlHttpRequest(){
 
 function upload (obj, fn) {
   var fd = new FormData()
+  var t = new Date().getTime()
   $.ajax({
-    url:'/main/api/v1/sts_info',
+    url:'/main/api/v1/sts_info?time=' + t,
     success:function(e){
       e.key = e.key + obj.k
       e["x:filename"] = obj.filename
