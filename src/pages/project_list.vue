@@ -113,9 +113,11 @@
         <el-table-column
           show-overflow-tooltip
           align="center"
-          prop="gmt_create"
           width="80"
           label="创建时间">
+          <template scope="scope">
+            {{scope.row.gmt_create|dateFormat}}
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -226,7 +228,7 @@ export default {
         this.form.endtime = Date.parse(new Date(this.form.endtime))
       }
       this.$store.dispatch('increment', {
-        path: '/admin/api/v1/users',
+        path: '/admin/api/v1/projects',
         parameter: {
           id: this.form.id,
           name: this.form.name,
@@ -251,18 +253,6 @@ export default {
           this.loading = false
           this.total = data.total
           for(let i in data.items) {
-            var DateTime = data.items[i].gmt_create
-  					var timer = new Date(DateTime)
-  					timer.setTime(timer.getTime()+0)
-			      var  year = timer.getUTCFullYear(),
-          			 month = timer.getUTCMonth()+1,
-          			 date = timer.getUTCDate(),
-          			 hour = timer.getUTCHours(),
-          			 minute = timer.getUTCMinutes(),
-          			 second = timer.getUTCSeconds(),
-         			   time = year + "-" + month + "-" + date
-            data.items[i].gmt_create = time
-
             var phase_index = data.items[i].phase_index
             for(let j in data.items[i].phases) {
               if (phase_index === data.items[i].phases[j].id) {

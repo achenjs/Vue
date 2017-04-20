@@ -72,10 +72,13 @@
          </el-table-column>
          <el-table-column
             align="center"
-            prop="gmt_create"
             label="下单时间"
             show-overflow-tooltip
             width="80">
+            <template scope="scope">
+              {{scope.row.gmt_create|dateFormat}}
+            </template>
+          </el-table-column>
          </el-table-column>
        </el-table>
      </div>
@@ -149,19 +152,6 @@ export default {
           this.loading = false
           const data = JSON.parse(result.data).result
           this.total = data.total
-          for (let i in data.items) {
-            var DateTime = data.items[i].gmt_create
-  					var timer = new Date(DateTime)
-  					timer.setTime(timer.getTime()+0)
-			      var year = timer.getUTCFullYear(),
-        			  month = timer.getUTCMonth()+1,
-        			  date = timer.getUTCDate(),
-          			hour = timer.getUTCHours(),
-          			minute = timer.getUTCMinutes(),
-          			second = timer.getUTCSeconds(),
-         			  time = year + "-" + month + "-" + date
-            data.items[i].gmt_create = time
-          }
           this.tableData = data.items
         })
         .catch((err) => {

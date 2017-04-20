@@ -102,6 +102,15 @@
        </el-table-column>
        <el-table-column
          align="center"
+         label="交易日期"
+         width="80"
+         show-overflow-tooltip>
+         <template scope="scope">
+           {{scope.row.gmt_create|dateFormat}}
+         </template>
+       </el-table-column>
+       <el-table-column
+         align="center"
          prop="status"
          label="状态"
          width="60">

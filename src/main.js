@@ -102,6 +102,40 @@ axios.interceptors.response.use(
   }
 )
 
+Vue.filter('dateFormat', (value, format) => {
+  const timer = new Date(value)
+  const formats = format
+  timer.setTime(timer.getTime() + 0)
+  var  year = timer.getUTCFullYear()
+  var  month = timer.getUTCMonth() + 1
+  var  date = timer.getUTCDate()
+  var  hour = timer.getUTCHours()
+  var  minute = timer.getUTCMinutes()
+  var  second = timer.getUTCSeconds()
+  if (hour < 10) {
+    hour = '0' + hour
+  }
+  if (minute < 10) {
+    minute = '0' + minute
+  }
+  if (second < 10) {
+    second = '0' + second
+  }
+  var  time = year + "-" + month + "-" + date
+  var  times = year + "-" + month + "-" + date + ' ' + hour + ':' + minute + ':' + second
+  switch (formats) {
+    case 'Y-M-D':
+      return time
+      break;
+    case 'Y-M-D h-m-s':
+      return times
+      break;
+    default:
+      return time
+      break;
+  }
+})
+
 Vue.use(VueCookie)
 
 /* eslint-disable no-new */

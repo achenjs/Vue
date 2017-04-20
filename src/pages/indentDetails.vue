@@ -27,10 +27,13 @@
       </el-table-column>
       <el-table-column
         align="center"
-        prop="gmt_create"
         width="80"
         label="下单时间"
         show-overflow-tooltip>
+        <template scope="scope">
+          {{scope.row.gmt_create|dateFormat('Y-M-D h-m-s')}}
+        </template>
+      </el-table-column>
       </el-table-column>
       <el-table-column
         align="center"
@@ -104,14 +107,14 @@
               <span class="name">{{item.admin_name}}</span>
             </div>
             <div class="message" v-if="item.admin_id === null">
-              <p class="date">{{item.gmt_create}}</p>
+              <p class="date">{{item.gmt_create|dateFormat('Y-M-D h-m-s')}}</p>
               <div class="content">
                 <span>{{item.content}}</span>
                 <a :href="item.uploadName" v-if="item.uploadName != '#'">{{item.file_name}}</a>
               </div>
             </div>
             <div class="message right" v-else>
-              <p class="date">{{item.gmt_create}}</p>
+              <p class="date">{{item.gmt_create|dateFormat('Y-M-D h-m-s')}}</p>
               <div class="content">
                 <span>{{item.content}}</span>
                 <a :href="item.uploadName" v-if="item.uploadName != '#'">{{item.file_name}}</a>
@@ -225,17 +228,6 @@ export default {
           }
           this.details.price = userService.price
           for (let i in data.items) {
-            var timer = data.items[i].gmt_create;
-			      var timer = new Date(timer)
-					  timer.setTime(timer.getTime() + 0)
-		        var year = timer.getUTCFullYear(),
-      			month = timer.getUTCMonth() + 1,
-      			date = timer.getUTCDate(),
-      			hour = timer.getUTCHours(),
-      			minute = timer.getUTCMinutes(),
-      			second = timer.getUTCSeconds(),
-     			  time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
-      		  data.items[i].gmt_create = time
             //  判断是否有头像
             var avatar_url = data.items[i].avatar_url
             if (avatar_url === null || avatar_url === '') {
@@ -257,17 +249,6 @@ export default {
                 })
             }
           }
-          var timer = userService.gmt_create
-          var timers = new Date(timer)
-          timers.setTime(timers.getTime()+0)
-          var year = timers.getUTCFullYear(),
-          month = timers.getUTCMonth()+1,
-          date = timers.getUTCDate(),
-          hour = timers.getUTCHours(),
-          minute = timers.getUTCMinutes(),
-          second = timers.getUTCSeconds();
-          // time = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
-          userService.gmt_create = year + "-" + month + "-" + date
           this.tableData.push(userService)
           this.message = data.items
           this.$refs.box.scrollTop = this.$refs.box.scrollHeight

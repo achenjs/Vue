@@ -146,10 +146,12 @@
            </el-table-column>
            <el-table-column
              align="center"
-             prop="gmt_create"
              width="140"
              label="下单时间"
              show-overflow-tooltip>
+             <template scope="scope">
+               {{scope.row.gmt_create|dateFormat('Y-M-D h-m-s')}}
+             </template>
            </el-table-column>
            <el-table-column
              v-if="isCustom"
@@ -449,27 +451,6 @@ export default {
           this.total = data.total
           this.loading = false
           for (let i in data.items) {
-            var DateTime = data.items[i].gmt_create
-  					var timer = new Date(DateTime)
-  					timer.setTime(timer.getTime()+0)
-			      var  year = timer.getUTCFullYear(),
-          			 month = timer.getUTCMonth()+1,
-          			 date = timer.getUTCDate(),
-          			 hour = timer.getUTCHours(),
-          			 minute = timer.getUTCMinutes(),
-          			 second = timer.getUTCSeconds();
-                 if (hour < 10) {
-                   hour = '0' + hour
-                 }
-                 if (minute < 10) {
-                   minute = '0' + minute
-                 }
-                 if (second < 10) {
-                   second = '0' + second
-                 }
-       			var  time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
-            data.items[i].gmt_create = time
-
             if (data.items[i].file_name === null || data.items[i].file_name === '') {
                 data.items[i].file_name = '#'
             } else {
@@ -544,28 +525,6 @@ export default {
         .then((result) => {
           const data = JSON.parse(result.data).result
           this.total = data.total
-          for (let i in data.items) {
-            var DateTime = data.items[i].gmt_create
-  					var timer = new Date(DateTime)
-  					timer.setTime(timer.getTime()+0)
-			      var  year = timer.getUTCFullYear(),
-          			 month = timer.getUTCMonth()+1,
-          			 date = timer.getUTCDate(),
-          			 hour = timer.getUTCHours(),
-          			 minute = timer.getUTCMinutes(),
-          			 second = timer.getUTCSeconds();
-                 if (hour < 10) {
-                   hour = '0' + hour
-                 }
-                 if (minute < 10) {
-                   minute = '0' + minute
-                 }
-                 if (second < 10) {
-                   second = '0' + second
-                 }
-         		var	 time = year + "-" + month + "-" + date + ' ' + hour + ":" + minute + ":" + second
-            data.items[i].gmt_create = time
-          }
           this.tableData = data.items
           setTimeout(function() {
             this.loading = false
