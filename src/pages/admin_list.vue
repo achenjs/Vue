@@ -246,10 +246,6 @@ export default {
     }
   },
   methods: {
-    formatter(row, column) {
-      console.log(row)
-      console.log(column)
-    },
     //  判断email是否合法
     isEmail(el) {
       const val = el.target.value.trim()
@@ -306,20 +302,6 @@ export default {
         .then((result) => {
           const data = JSON.parse(result.data).result
           this.loading = false
-          // for (let i in data.items) {
-          //   var DateTime = data.items[i].gmt_create
-  				// 	var timer = new Date(DateTime)
-  				// 	timer.setTime(timer.getTime()+0)
-			    //   var  year = timer.getUTCFullYear(),
-          // 			 month = timer.getUTCMonth()+1,
-          // 			 date = timer.getUTCDate(),
-          // 			 hour = timer.getUTCHours(),
-          // 			 minute = timer.getUTCMinutes(),
-          // 			 second = timer.getUTCSeconds(),
-         // 			   time = year + "-" + month + "-" + date
-          //   data.items[i].gmt_create = time
-          // }
-
           this.total = data.total
           this.tableData = data.items
         })

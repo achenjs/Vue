@@ -317,13 +317,6 @@ export default {
         })
     },
     ensure() {
-      if (/^[\u4e00-\u9fa5]+$/.test(this.details.status)) {
-        for(let i in this.conditions) {
-          if(this.conditions[i].label === this.details.status) {
-            this.details.status = this.conditions[i].value
-          }
-        }
-      }
       axios.post('/admin/api/v1/custom_service_items/' + this.id, this.details)
         .then((result) => {
           this.addShow = false
@@ -344,6 +337,12 @@ export default {
       axios.get('/admin/api/v1/custom_service_items/' + id)
         .then((result) => {
           const data = result.data.result
+          const status = data.status
+          for(let i in this.conditions) {
+            if(this.conditions[i].label === status) {
+              data.status = this.conditions[i].value
+            }
+          }
           this.details = data
         })
         .catch((err) => {

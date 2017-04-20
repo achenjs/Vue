@@ -357,9 +357,7 @@ import upload from '../assets/js/upload'
         regions: [],
         citys: [],
         areas: [],
-        industries: {
-          '': '全部行业'
-        }
+        industries: {}
       }
     },
     created() {
@@ -387,6 +385,12 @@ import upload from '../assets/js/upload'
                 const data = result.data.result
                 data.start_from = Number(data.start_from)
                 this.form.start_from = new Date(data.start_from)
+                const industry = data.industry
+                for(let i in this.industries) {
+                  if(this.industries[i] === industry) {
+                    data.industry = i
+                  }
+                }
                 Object.assign(this.form, data)
                 return resolve(data.city)
               })
@@ -422,13 +426,6 @@ import upload from '../assets/js/upload'
         this.form.bp_url = $("#hiddens").val()
         var financing_sum = this.form.financing_sum
         var valuation = this.form.valuation
-        if (/^[\u4e00-\u9fa5]+$/.test(this.form.industry)) {
-          for(let i in this.industries) {
-            if(this.industries[i] === this.form.industry) {
-              this.form.industry = i
-            }
-          }
-        }
         var fraction = this.form.score_team + this.form.score_risk + this.form.score_mode + this.form.score_industry
         + this.form.score_needs + this.form.score_product + this.form.score_resource + this.form.score_evaluation
         if (fraction != 10 && fraction != 0) {
@@ -497,21 +494,17 @@ import upload from '../assets/js/upload'
       },
       //  获取市级
       city(id) {
-        if (/^[\u4e00-\u9fa5]+$/.test(id)) {
-          return false
-        } else {
-          axios.get('/main/api/v1/region/' + id +'?page=1')
-            .then((result) => {
-              const data = result.data.result
-              this.citys = data
-              if (this.region_name != this.isChangCity) {
-                this.city_name = data[0].area_id
-              }
-            })
-            .catch((err) => {
-              this.$message.error(err.message)
-            })
-        }
+        axios.get('/main/api/v1/region/' + id +'?page=1')
+          .then((result) => {
+            const data = result.data.result
+            this.citys = data
+            if (this.region_name != this.isChangCity) {
+              this.city_name = data[0].area_id
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err.message)
+          })
       },
       // 获取区
       area(id) {
