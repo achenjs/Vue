@@ -35,6 +35,14 @@
     <div class="admin_line clearfix">
       <el-col :span="8" :offset="8">
         <div style="width: 100%;">
+          <label for="">线下已花费硬豆</label>
+          <el-input placeholder="线下已花费硬豆" v-model="form.spend_money"></el-input>
+        </div>
+      </el-col>
+    </div>
+    <div class="admin_line clearfix">
+      <el-col :span="8" :offset="8">
+        <div style="width: 100%;">
           <label for="">电话</label>
           <el-input placeholder="电话" v-model="form.phone"></el-input>
         </div>
@@ -58,7 +66,8 @@ export default {
           email: '',
           phone: '',
           total_money: '',
-          password: ''
+          password: '',
+          spend_money: ''
         },
         isNames: false,
         isEmails: false,
@@ -123,6 +132,7 @@ export default {
             this.$message.error('初始硬豆值应该为数字类型!')
             return false
           }
+          this.form.spend_money = parseFloat(this.form.spend_money)
           axios.post('/admin/api/v1/users', this.form)
             .then((result) => {
               const data = result.data

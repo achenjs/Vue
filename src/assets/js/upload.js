@@ -1,13 +1,5 @@
 //  限制大小。  图片5M，文件100M
 
-function createXmlHttpRequest(){
-  if (window.ActiveXObject) { //如果是IE浏览器
-    return new ActiveXObject("Microsoft.XMLHTTP")
-  } else if (window.XMLHttpRequest) { //非IE浏览器
-    return new XMLHttpRequest()
-  }
-}
-
 function upload (obj, fn) {
   var fd = new FormData()
   var t = new Date().getTime()
