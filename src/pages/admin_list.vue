@@ -15,8 +15,8 @@
       </el-col>
       <el-col :span="8">
         <div style="width: 80%;">
-          <label for=""><i>*</i>邮箱账号</label>
-          <el-input placeholder="邮箱账号" type="email" v-model="query.email" @blur="isEmail($event)"></el-input>
+          <label for="">邮箱账号</label>
+          <el-input placeholder="邮箱账号" type="email" v-model="query.email"></el-input>
         </div>
       </el-col>
     </div>
@@ -148,7 +148,7 @@
                 <label for="">会员名称</label>
                 <el-input placeholder="会员名称" v-model="form.name"></el-input>
                 <label for="">邮箱账号</label>
-                <el-input placeholder="邮箱账号" v-model="form.email"></el-input>
+                <el-input placeholder="邮箱账号" v-model="form.email" @blur="isEmail($event)" ref="email"></el-input>
                 <label for="">手机号码</label>
                 <el-input placeholder="手机号码" v-model="form.phone"></el-input>
                 <label for="">所属行业</label>
@@ -248,9 +248,14 @@ export default {
   methods: {
     //  判断email是否合法
     isEmail(el) {
-      const val = el.target.value.trim()
-      if (val.length!=0) {
-         const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+      var val = null
+      if (el == undefined) {
+        val = this.$refs.email.value.trim()
+      } else {
+        val = el.target.value.trim()
+      }
+      if (val.length != 0) {
+         const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
          if (!reg.test(val)) {
            this.$message.error("请输入正确的邮箱!")
          } else {
@@ -329,6 +334,7 @@ export default {
     },
     //  修改
     ensure() {
+      this.isEmail()
       if (this.id === '') {
         this.addShow = false
       } else {
@@ -344,7 +350,7 @@ export default {
             this.form.gender = i
           }
         }
-        if (isEmails) {
+        if (this.isEmails) {
           axios.post('/admin/api/v1/users/' + this.id, this.form)
             .then((result) => {
               this.addShow = false
@@ -352,6 +358,7 @@ export default {
                 message: result.data.message,
                 type: 'success'
               })
+              this.search(this.query.page)
             })
             .catch((err) => {
               this.$message.error(err.message)

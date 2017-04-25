@@ -28,7 +28,7 @@
       <el-col :span="8" :offset="8">
         <div style="width: 100%;">
           <label for=""><i>*</i>初始硬豆</label>
-          <el-input placeholder="请输入初始硬豆" v-model="form.total_money" @blur="isPas($event)"></el-input>
+          <el-input placeholder="请输入初始硬豆" v-model="form.total_money"></el-input>
         </div>
       </el-col>
     </div>
@@ -99,8 +99,8 @@ export default {
       //  判断email是否合法
       isEmail(el) {
         const val = el.target.value.trim()
-        if (val.length!=0) {
-           const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+        if (val.length != 0) {
+           const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
            if (!reg.test(val)) {
              this.$message.error("请输入正确的邮箱!")
            } else {
@@ -111,9 +111,7 @@ export default {
       //  判断密码是否合法
       isPas(el) {
         const val = el.target.value.trim()
-        if (val.length == 0) {
-          this.$message.error('密码只能是字母和数字组成！')
-        } else if (val.length < 6 || val.length > 12) {
+        if (val.length < 6 || val.length > 12) {
           this.$message.error('密码在6-12个字符之间！')
         } else {
           this.isPass = true
