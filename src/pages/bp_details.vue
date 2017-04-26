@@ -28,13 +28,13 @@
               <el-form-item label="当前融资情况">
                 <el-input type="textarea" :rows="3" placeholder="请输入当前融资情况" v-model="form.current_financing_status"></el-input>
               </el-form-item>
-              <el-form-item required label="联系人">
+              <el-form-item label="联系人">
                 <el-input placeholder="请输入联系人" v-model="form.contact"></el-input>
               </el-form-item>
               <el-form-item label="联系人职位">
                 <el-input placeholder="请输入联系人职位" v-model="form.contact_title"></el-input>
               </el-form-item>
-              <el-form-item required label="联系电话">
+              <el-form-item label="联系电话">
                 <el-input placeholder="请输入联系电话" v-model="form.contact_phone"></el-input>
               </el-form-item>
               <el-form-item label="员工人数">
@@ -304,7 +304,7 @@ import upload from '../assets/js/upload'
           "dest_customers": "",
           "employees": "",
           "financing_plan": "",
-          "financing_sum": "",
+          "financing_sum": 0,
           "full_time": "",
           "future_aim": "",
           "future_plan": "",
@@ -344,7 +344,7 @@ import upload from '../assets/js/upload'
           "team_desc": "",
           "tech_evaluation": "",
           "timestamp": "",
-          "valuation": ""
+          "valuation": 0
         },
         countrys: [
           {name: '中国', value: 'china'}
@@ -457,14 +457,6 @@ import upload from '../assets/js/upload'
         }
         if (this.form.project_name === '') {
           this.$message.error('请输入正确的项目名称!')
-          return false
-        }
-        if (this.form.contact === '') {
-          this.$message.error('请输入正确的联系人!')
-          return false
-        }
-        if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.form.contact_phone))) {
-          this.$message.error('请输入正确的联系电话!')
           return false
         }
         if (this.form.industry === '') {
