@@ -139,7 +139,7 @@ export default {
             message: result.data.message,
             type: 'success'
           })
-          this.$router.push('/department_list')
+          this.$router.push('/deliverable_list')
         })
     }
   },
