@@ -3,6 +3,9 @@
     <a href="javascript:;" class="file">上传BP
       <input type="file" name="" id="upLog" @change="uploadFile($event)">
     </a>
+    <div class="">
+      <input type="text" id="filename" value="" disabled>
+    </div>
     <input type="hidden" id="hiddens" v-model="form.bp_url">
     <div class="xs"></div>
     <el-tabs type="border-card" style="margin-top: 30px;">
@@ -383,6 +386,12 @@ import upload from '../assets/js/upload'
             axios.get('/admin/api/v1/bps/' + this.bpDetailsId)
               .then((result) => {
                 const data = result.data.result
+                if (data.bp_url) {
+                  axios.get('/main/api/v1/file_name/' + data.bp_url)
+                    .then((result) => {
+                      $('#filename').val(result.data)
+                    })
+                }
                 data.start_from = Number(data.start_from)
                 this.form.start_from = new Date(data.start_from)
                 const industry = data.industry
@@ -398,22 +407,26 @@ import upload from '../assets/js/upload'
                 this.$message.error(err.message)
               })
           }).then((city) => {
-            axios.get('/main/api/v1/region_detail/' + city + '?page=1')
-              .then((result) => {
-                const data = result.data.result
-                //  省
-                this.region_name = data[0].area_id
-                this.isChangCity = data[0].area_id
-                //  市
-                this.city_name = data[1].area_id
-                this.isChangArea = data[1].area_id
-                this.region()
-                //  区/县
-                this.city_id = data[2].area_id
-              })
-              .catch((err) => {
-                this.$message.error(err.message)
-              })
+            if (!city) {
+              this.region()
+            } else {
+              axios.get('/main/api/v1/region_detail/' + city + '?page=1')
+                .then((result) => {
+                  const data = result.data.result
+                  //  省
+                  this.region_name = data[0].area_id
+                  this.isChangCity = data[0].area_id
+                  //  市
+                  this.city_name = data[1].area_id
+                  this.isChangArea = data[1].area_id
+                  this.region()
+                  //  区/县
+                  this.city_id = data[2].area_id
+                })
+                .catch((err) => {
+                  this.$message.error(err.message)
+                })
+              }
             })
       },
       //  上传
@@ -426,12 +439,6 @@ import upload from '../assets/js/upload'
         this.form.bp_url = $("#hiddens").val()
         var financing_sum = this.form.financing_sum
         var valuation = this.form.valuation
-        var fraction = this.form.score_team + this.form.score_risk + this.form.score_mode + this.form.score_industry
-        + this.form.score_needs + this.form.score_product + this.form.score_resource + this.form.score_evaluation
-        if (fraction != 10 && fraction != 0) {
-          this.$message.error('评分总数不正常！')
-          return false
-        }
         if (!(/^[0-9]*$/.test(this.form.employees))) {
           this.$message.error('请输入正确的员工人数')
           return false

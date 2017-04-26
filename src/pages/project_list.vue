@@ -1,5 +1,5 @@
 <template>
-  <div class="admin_list">
+  <div class="project_list">
     <div v-if="id === ''">
       <div class="admin_line admin_line_1 clearfix">
         <el-col :span="8">
@@ -282,7 +282,7 @@ export default {
 </script>
 
 <style lang="scss">
-.admin_list {
+.project_list {
   .admin_line {
     margin-bottom: 10px;
     label {

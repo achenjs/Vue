@@ -391,7 +391,7 @@ export default {
     }
   }
  .query {
-    margin-top: 30px;
+    margin: 30px;
     text-align: center;
     span {
         display: inline-block;

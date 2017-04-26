@@ -3,6 +3,9 @@
     <a href="javascript:;" class="file">上传BP
       <input type="file" name="" id="upLog" @change="uploadFile($event)">
     </a>
+    <div class="">
+      <input type="text" id="filename" value="" disabled>
+    </div>
     <input type="hidden" id="hiddens" v-model="form.bp_url">
     <div class="xs"></div>
     <el-tabs type="border-card" style="margin-top: 30px;">
@@ -387,12 +390,6 @@ import upload from '../assets/js/upload'
           this.form.start_from = ''
         } else {
           this.form.start_from = Date.parse(new Date(this.form.start_from))
-        }
-        var fraction = this.form.score_team + this.form.score_risk + this.form.score_mode + this.form.score_industry
-        + this.form.score_needs + this.form.score_product + this.form.score_resource + this.form.score_evaluation
-        if (fraction != 10 || fraction != 0) {
-          this.$message.error('请输入正确的评分总数!')
-          return false
         }
         if (!(/^[0-9]*$/.test(this.form.employees))) {
           this.$message.error('请输入正确的员工人数')

@@ -1,30 +1,30 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import signin from '@/components/signin/signin.vue'
-import Home from '@/components/home.vue'
-import admin_list from '@/pages/admin_list.vue'
-import admin_new from '@/pages/admin_new.vue'
-import project_list from '@/pages/project_list.vue'
-import project_details from '@/pages/project_details.vue'
-import stage_manage from '@/pages/stage_manage.vue'
-import attachments from '@/pages/attachments.vue'
-import service_category from '@/pages/service_category.vue'
-import service_item from '@/pages/service_item.vue'
-import service_custom from '@/pages/service_custom.vue'
-import deliverable_list from '@/pages/deliverable_list.vue'
-import nextAtta from '@/pages/nextAtta.vue'
-import attaDetails from '@/pages/attaDetails.vue'
-import indent_list from '@/pages/indent_list.vue'
-import indentDetails from '@/pages/indentDetails.vue'
-import managers from '@/pages/managers.vue'
-import department from '@/pages/department.vue'
-import role from '@/pages/role.vue'
-import bill_list from '@/pages/bill_list.vue'
-import settings from '@/pages/settings.vue'
-import bp_list from '@/pages/bp_list.vue'
-import bp_manage from '@/pages/bp_manage.vue'
-import bp_details from '@/pages/bp_details.vue'
-import NotFound from '@/pages/notFound.vue'
+const signin = resolve => require(['@/components/signin/signin.vue'], resolve)
+const Home = resolve => require(['@/components/Home.vue'], resolve)
+const admin_list = resolve => require(['@/pages/admin_list.vue'], resolve)
+const admin_new = resolve => require(['@/pages/admin_new.vue'], resolve)
+const project_list = resolve => require(['@/pages/project_list.vue'], resolve)
+const project_details = resolve => require(['@/pages/project_details.vue'], resolve)
+const stage_manage = resolve => require(['@/pages/stage_manage.vue'], resolve)
+const attachments = resolve => require(['@/pages/attachments.vue'], resolve)
+const service_category = resolve => require(['@/pages/service_category.vue'], resolve)
+const service_item = resolve => require(['@/pages/service_item.vue'], resolve)
+const service_custom = resolve => require(['@/pages/service_custom.vue'], resolve)
+const deliverable_list = resolve => require(['@/pages/deliverable_list.vue'], resolve)
+const nextAtta = resolve => require(['@/pages/nextAtta.vue'], resolve)
+const attaDetails = resolve => require(['@/pages/attaDetails.vue'], resolve)
+const indent_list = resolve => require(['@/pages/indent_list.vue'], resolve)
+const indentDetails = resolve => require(['@/pages/indentDetails.vue'], resolve)
+const managers = resolve => require(['@/pages/managers.vue'], resolve)
+const department = resolve => require(['@/pages/department.vue'], resolve)
+const role = resolve => require(['@/pages/role.vue'], resolve)
+const bill_list = resolve => require(['@/pages/bill_list.vue'], resolve)
+const settings = resolve => require(['@/pages/settings.vue'], resolve)
+const bp_list = resolve => require(['@/pages/bp_list.vue'], resolve)
+const bp_manage = resolve => require(['@/pages/bp_manage.vue'], resolve)
+const bp_details = resolve => require(['@/pages/bp_details.vue'], resolve)
+const NotFound = resolve => require(['@/pages/NotFound.vue'], resolve)
 
 Vue.use(Router)
 

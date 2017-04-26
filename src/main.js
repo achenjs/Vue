@@ -85,6 +85,22 @@ router.beforeEach ((to, from, next) => {
   next()
 })
 
+// axios.interceptors.request.use(
+//   request => {
+//      if (request.method == 'get') {
+//        if (request.url.indexOf('?') > 0) {
+//          request.url += '&_=' + new Date().getTime()
+//        } else {
+//          request.url += '?_=' + new Date().getTime()
+//        }
+//      }
+//      return request
+//    },
+//    error => {
+//      return Promise.reject(error)
+//    }
+//  )
+
 axios.interceptors.response.use(
   response => {
     return response
@@ -106,12 +122,12 @@ Vue.filter('dateFormat', (value, format) => {
   const timer = new Date(value)
   const formats = format
   timer.setTime(timer.getTime() + 0)
-  var  year = timer.getUTCFullYear()
-  var  month = timer.getUTCMonth() + 1
-  var  date = timer.getUTCDate()
-  var  hour = timer.getUTCHours()
-  var  minute = timer.getUTCMinutes()
-  var  second = timer.getUTCSeconds()
+  var year = timer.getUTCFullYear()
+  var month = timer.getUTCMonth() + 1
+  var date = timer.getUTCDate()
+  var hour = timer.getUTCHours()
+  var minute = timer.getUTCMinutes()
+  var second = timer.getUTCSeconds()
   if (hour < 10) {
     hour = '0' + hour
   }
@@ -121,8 +137,8 @@ Vue.filter('dateFormat', (value, format) => {
   if (second < 10) {
     second = '0' + second
   }
-  var  time = year + "-" + month + "-" + date
-  var  times = year + "-" + month + "-" + date + ' ' + hour + ':' + minute + ':' + second
+  var time = year + "-" + month + "-" + date
+  var times = year + "-" + month + "-" + date + ' ' + hour + ':' + minute + ':' + second
   switch (formats) {
     case 'Y-M-D':
       return time
