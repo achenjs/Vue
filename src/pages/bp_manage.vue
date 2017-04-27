@@ -273,7 +273,8 @@
       </el-tab-pane>
     </el-tabs>
     <el-col :span="8" :offset="8" style="text-align: center; margin-top: 20px;">
-      <el-button type="primary" size="large" @click="submitBP">提交</el-button>
+      <el-button type="primary" size="large" @click="submitBP" v-if="isDisabled">提交</el-button>
+      <el-button type="primary" size="large" v-else disabled>提交</el-button>
     </el-col>
   </div>
 </template>
@@ -358,7 +359,8 @@ import upload from '../assets/js/upload'
         regions: [],
         citys: [],
         areas: [],
-        industries: {}
+        industries: {},
+        isDisabled: true
       }
     },
     created() {
@@ -415,17 +417,22 @@ import upload from '../assets/js/upload'
           this.$message.error('请输入正确的所属行业!')
           return false
         }
-        axios.post('/admin/api/v1/bps', this.form)
-          .then((result) => {
-            this.$message({
-              message: result.data.message,
-              type: 'success'
+        if (this.isDisabled) {
+          this.isDisabled = false
+          axios.post('/admin/api/v1/bps', this.form)
+            .then((result) => {
+              this.$message({
+                message: result.data.message,
+                type: 'success'
+              })
+              this.isDisabled = true
+              this.$router.push('/bp_list')
             })
-            this.$router.push('/bp_list')
-          })
-          .catch((err) => {
-            this.$message.error(err.message)
-          })
+            .catch((err) => {
+              this.isDisabled = true
+              this.$message.error(err.message)
+            })
+        }
       },
       //  获取省级
       region() {
