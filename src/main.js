@@ -8,6 +8,7 @@ import './assets/css/reset.scss'
 import axios from 'axios'
 import route from './router'
 import store from './vuex/store'
+
 import Autocomplete from 'element-ui/lib/autocomplete'
 import Col from 'element-ui/lib/col'
 import Row from 'element-ui/lib/row'
@@ -34,6 +35,9 @@ import Message from 'element-ui/lib/message'
 import MessageBox from 'element-ui/lib/message-box'
 import Checkbox from 'element-ui/lib/checkbox'
 import Notification from 'element-ui/lib/notification'
+import Upload from 'element-ui/lib/upload'
+import CheckboxGroup from 'element-ui/lib/checkbox-group'
+import Dialog from 'element-ui/lib/dialog'
 
 Vue.use(Autocomplete)
 Vue.use(Row)
@@ -58,6 +62,9 @@ Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(InputNumber)
 Vue.use(Checkbox)
+Vue.use(Upload)
+Vue.use(CheckboxGroup)
+Vue.use(Dialog)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
@@ -85,21 +92,21 @@ router.beforeEach ((to, from, next) => {
   next()
 })
 
-// axios.interceptors.request.use(
-//   request => {
-//      if (request.method == 'get') {
-//        if (request.url.indexOf('?') > 0) {
-//          request.url += '&_=' + new Date().getTime()
-//        } else {
-//          request.url += '?_=' + new Date().getTime()
-//        }
-//      }
-//      return request
-//    },
-//    error => {
-//      return Promise.reject(error)
-//    }
-//  )
+axios.interceptors.request.use(
+  request => {
+     if (request.method == 'get') {
+       if (request.url.indexOf('?') > 0) {
+         request.url += '&_=' + new Date().getTime()
+       } else {
+         request.url += '?_=' + new Date().getTime()
+       }
+     }
+     return request
+   },
+   error => {
+     return Promise.reject(error)
+   }
+ )
 
 axios.interceptors.response.use(
   response => {
@@ -128,15 +135,9 @@ Vue.filter('dateFormat', (value, format) => {
   var hour = timer.getUTCHours()
   var minute = timer.getUTCMinutes()
   var second = timer.getUTCSeconds()
-  if (hour < 10) {
-    hour = '0' + hour
-  }
-  if (minute < 10) {
-    minute = '0' + minute
-  }
-  if (second < 10) {
-    second = '0' + second
-  }
+  hour = hour < 10 ? '0' + hour : hour
+  minute = minute < 10 ? '0' + minute : minute
+  second = second < 10 ? '0' + second : second
   var time = year + "-" + month + "-" + date
   var times = year + "-" + month + "-" + date + ' ' + hour + ':' + minute + ':' + second
   switch (formats) {

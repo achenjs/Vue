@@ -1,30 +1,32 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const signin = resolve => require(['@/components/signin/signin.vue'], resolve)
-const Home = resolve => require(['@/components/Home.vue'], resolve)
-const admin_list = resolve => require(['@/pages/admin_list.vue'], resolve)
-const admin_new = resolve => require(['@/pages/admin_new.vue'], resolve)
-const project_list = resolve => require(['@/pages/project_list.vue'], resolve)
-const project_details = resolve => require(['@/pages/project_details.vue'], resolve)
-const stage_manage = resolve => require(['@/pages/stage_manage.vue'], resolve)
-const attachments = resolve => require(['@/pages/attachments.vue'], resolve)
-const service_category = resolve => require(['@/pages/service_category.vue'], resolve)
-const service_item = resolve => require(['@/pages/service_item.vue'], resolve)
-const service_custom = resolve => require(['@/pages/service_custom.vue'], resolve)
-const deliverable_list = resolve => require(['@/pages/deliverable_list.vue'], resolve)
-const nextAtta = resolve => require(['@/pages/nextAtta.vue'], resolve)
-const attaDetails = resolve => require(['@/pages/attaDetails.vue'], resolve)
-const indent_list = resolve => require(['@/pages/indent_list.vue'], resolve)
-const indentDetails = resolve => require(['@/pages/indentDetails.vue'], resolve)
-const managers = resolve => require(['@/pages/managers.vue'], resolve)
-const department = resolve => require(['@/pages/department.vue'], resolve)
-const role = resolve => require(['@/pages/role.vue'], resolve)
-const bill_list = resolve => require(['@/pages/bill_list.vue'], resolve)
-const settings = resolve => require(['@/pages/settings.vue'], resolve)
-const bp_list = resolve => require(['@/pages/bp_list.vue'], resolve)
-const bp_manage = resolve => require(['@/pages/bp_manage.vue'], resolve)
-const bp_details = resolve => require(['@/pages/bp_details.vue'], resolve)
-const NotFound = resolve => require(['@/pages/NotFound.vue'], resolve)
+const signin = resolve => require(['@/components/signin/signin'], resolve)
+const Home = resolve => require(['@/components/Home'], resolve)
+const admin_list = resolve => require(['@/pages/admin_list'], resolve)
+const admin_new = resolve => require(['@/pages/admin_new'], resolve)
+const project_list = resolve => require(['@/pages/project_list'], resolve)
+const project_details = resolve => require(['@/pages/project_details'], resolve)
+const stage_manage = resolve => require(['@/pages/stage_manage'], resolve)
+const attachments = resolve => require(['@/pages/attachments'], resolve)
+const service_category = resolve => require(['@/pages/service_category'], resolve)
+const service_item = resolve => require(['@/pages/service_item'], resolve)
+const service_custom = resolve => require(['@/pages/service_custom'], resolve)
+const deliverable_list = resolve => require(['@/pages/deliverable_list'], resolve)
+const nextAtta = resolve => require(['@/pages/nextAtta'], resolve)
+const attaDetails = resolve => require(['@/pages/attaDetails'], resolve)
+const indent_list = resolve => require(['@/pages/indent_list'], resolve)
+const indentDetails = resolve => require(['@/pages/indentDetails'], resolve)
+const managers = resolve => require(['@/pages/managers'], resolve)
+const department = resolve => require(['@/pages/department'], resolve)
+const role = resolve => require(['@/pages/role'], resolve)
+const bill_list = resolve => require(['@/pages/bill_list'], resolve)
+const settings = resolve => require(['@/pages/settings'], resolve)
+const bp_list = resolve => require(['@/pages/bp_list'], resolve)
+const bp_manage = resolve => require(['@/pages/bp_manage'], resolve)
+const bp_details = resolve => require(['@/pages/bp_details'], resolve)
+const cooperation = resolve => require(['@/pages/cooperation'], resolve)
+const addCooperation = resolve => require(['@/pages/addCooperation'], resolve)
+const NotFound = resolve => require(['@/pages/NotFound'], resolve)
 
 Vue.use(Router)
 
@@ -39,8 +41,6 @@ entries.splice(0, entries.length)
 if(permissions != null)
 {
   permissions = permissions.split(',')
-
-  // console.log(permissions)
 
   var kids = []
 
@@ -287,6 +287,27 @@ if(permissions != null)
   // })
 
   entries.push({
+    path: '/',
+    name: '对外合作',
+    component: Home,
+    iconCls: 'icon-serverList',
+    children: [
+      {
+        path: 'cooperation',
+        name: '列表',
+        iconCls: 'icon-page4',
+        component: cooperation
+      },
+      {
+        path: '/addCooperation',
+        name: '新建',
+        iconCls: 'icon-page2',
+        component: addCooperation
+      }
+    ]
+  })
+
+  entries.push({
     path: '*',
     redirect: '/404',
     hidden: true
@@ -304,11 +325,3 @@ var route = {
 const router = new Router(route)
 
 export default {init_route,router}
-// exports.init_route = init_route
-// exports.router = new Router(route)
-
-// export default {
-//   a: init_route,
-//   b: new Router(route)
-// }
-// export default new Router(route)

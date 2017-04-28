@@ -1,6 +1,6 @@
 <template>
    <div class="attachments">
-     <div class="xs"></div>
+      <div class="xs"></div>
       <el-col :span="4" class="add_item">
         <span @click="addOpen">新增交付物</span>
       </el-col>
