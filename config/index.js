@@ -1,8 +1,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 var ServerPost = {
-  'qingge': 'http://172.16.46.53:5000',
-  'wuge': 'http://172.16.39.163:5000'
+  'qingge': 'http://xxx.xxx.xxx.xxx:xxxx',
+  'wuge': 'http://xxx.xxx.xxx.xxx:xxxx'
 }
 module.exports = {
   build: {
